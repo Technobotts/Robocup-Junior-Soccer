@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="Line leader"/>
+	<classpathentry kind="src" path="Fraction"/>
+	<classpathentry kind="lib" path="C:/Program Files/LeJOS NXJ/lib/classes.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
