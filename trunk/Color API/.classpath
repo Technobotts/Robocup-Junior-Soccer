@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry kind="src" path="test"/>
-	<classpathentry kind="src" path="Color classes"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/LeJOS NXJ"/>
-	<classpathentry kind="output" path="bin"/>
-</classpath>
