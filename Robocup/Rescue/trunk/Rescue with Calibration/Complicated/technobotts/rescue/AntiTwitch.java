@@ -19,6 +19,7 @@ public class AntiTwitch extends RescueTask
 	{
 		int left, right;
 		int lastLeft = 0, lastRight = 0;
+		
 		isRunning = true;
 		while(isRunning)
 		{
