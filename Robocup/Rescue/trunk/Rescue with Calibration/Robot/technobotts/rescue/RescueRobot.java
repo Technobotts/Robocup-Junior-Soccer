@@ -38,7 +38,7 @@ public class RescueRobot
 		this.lineSensor = lineSensor;
 		this.colorSensor = colorSensor;
 		this.lamp = lamp;
-		this.pilot = new TachoPilot(3.6f, 12.8f, motors.leftMotor, motors.rightMotor);
+		this.pilot = new TachoPilot(3.6f, 14f, motors.leftMotor, motors.rightMotor);
 		pilot.setMoveSpeed(30);
 		pilot.setTurnSpeed(200);
 	}
@@ -209,36 +209,33 @@ public class RescueRobot
 			Thread.sleep(10);
 		}
 	}
-	
+
 	public boolean hasLine()
 	{
-		if(colors.getSensorColor(colorSensor) != colors.white)
+		if(colors.getSensorColor(colorSensor) == colors.black)
 		{
 			return true;
 		}
 		else
 		{
-			/*
-			 * byte[] sensors = robot.lineSensor.getSensors();
-			 * if(sensors != null)
-			 * {
-			 * return sensors[0] < 50 || sensors[3] < 50 || sensors[4] < 50 || sensors[7] < 50;
-			 * }
-			 * else
-			 */
-			return false;
+
+			int[] sensors = lineSensor.getSensors();
+			if(sensors != null)
+				return sensors[0] < 50 && sensors[1] < 50 || sensors[6] < 50 && sensors[7] < 50;
+			else
+				return false;
 		}
 	}
 
 	public void doLineSearch()
-    {
+	{
 		if(hasLine())
 		{
 			return;
 		}
 		else
 		{
-			int[] angles = new int[] {30, -30, 60, -60, 90, -90, 0};
+			int[] angles = {40, -40, 80, -80, 120, -120, 0};
 			int lastangle = 0;
 			for(int angle : angles)
 			{
@@ -259,5 +256,5 @@ public class RescueRobot
 			}
 			return;
 		}
-    }
+	}
 }
