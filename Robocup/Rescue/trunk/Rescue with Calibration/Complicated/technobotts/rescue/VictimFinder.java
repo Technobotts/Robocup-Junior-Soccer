@@ -10,6 +10,7 @@ public class VictimFinder extends RescueTask
 	public VictimFinder(RescueRobot robot)
 	{
 		super(robot);
+		setName("Victim");
 		lastVictimTime = System.currentTimeMillis() - victimPause;
 	}
 
@@ -33,7 +34,7 @@ public class VictimFinder extends RescueTask
 					_robot.motors.stop();
 					_robot.showVictimFound();
 					lastVictimTime = System.currentTimeMillis();
-					_robot.pilot.travel(5);
+					_robot.pilot.travel(10);
 
 					_robot.doLineSearch();
 				}

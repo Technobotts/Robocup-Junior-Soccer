@@ -11,6 +11,7 @@ public class AntiTwitch extends RescueTask
 	public AntiTwitch(RescueRobot robot)
 	{
 		super(robot);
+		setName("AntiTwitch");
 		setDaemon(true);
 	}
 
@@ -40,7 +41,7 @@ public class AntiTwitch extends RescueTask
 					System.out.println("AntiTwitch has Motors");
 					Sound.beepSequenceUp();
 					LCD.drawString("Lack of progress", 0, 0);
-					_robot.pilot.travel(5);
+					_robot.pilot.travel(10);
 					_robot.doLineSearch();
 					LCD.clear();
 				}

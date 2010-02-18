@@ -38,6 +38,7 @@ public class Follower extends RescueTask
 	public Follower(RescueRobot robot)
 	{
 		super(robot);
+		setName("Follower");
 	}
 
 	@Override
