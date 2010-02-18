@@ -38,7 +38,7 @@ public class RescueRobot
 		this.lineSensor = lineSensor;
 		this.colorSensor = colorSensor;
 		this.lamp = lamp;
-		this.pilot = new TachoPilot(4.32f * 0.6f, 9.4f, motors.leftMotor, motors.rightMotor);
+		this.pilot = new TachoPilot(3.6f, 12.8f, motors.leftMotor, motors.rightMotor);
 		pilot.setMoveSpeed(30);
 		pilot.setTurnSpeed(200);
 	}
@@ -242,7 +242,7 @@ public class RescueRobot
 			int lastangle = 0;
 			for(int angle : angles)
 			{
-				pilot.rotate((lastangle - angle) * 4, true);
+				pilot.rotate((lastangle - angle), true);
 				while(pilot.isMoving())
 				{
 					if(hasLine())
