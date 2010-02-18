@@ -8,6 +8,7 @@ import lejos.nxt.Sound;
 import lejos.nxt.addon.ColorSensor;
 import lejos.nxt.addon.Lamp;
 import lejos.nxt.addon.LineLeader;
+import lejos.robotics.TachoMotor;
 import lejos.robotics.navigation.Pilot;
 import lejos.robotics.navigation.TachoPilot;
 import lejos.util.Delay;
@@ -21,9 +22,36 @@ public class RescueRobot
 	public final Lamp        lamp;
 	public final LineLeader  lineSensor;
 	public final ColorSensor colorSensor;
-	public final TachoPilot  pilot;
+	public final BetterPilot  pilot;
 
-	public RescueColors      colors;
+	public abstract class BetterPilot extends TachoPilot
+	{
+		public BetterPilot(float leftWheelDiameter, float rightWheelDiameter, float trackWidth, TachoMotor leftMotor,
+		                   TachoMotor rightMotor, boolean reverse)
+		{
+			super(leftWheelDiameter, rightWheelDiameter, trackWidth, leftMotor, rightMotor, reverse);
+			// TODO Auto-generated constructor stub
+		}
+
+		public BetterPilot(float wheelDiameter, float trackWidth, TachoMotor leftMotor, TachoMotor rightMotor,
+		                   boolean reverse)
+		{
+			super(wheelDiameter, trackWidth, leftMotor, rightMotor, reverse);
+			// TODO Auto-generated constructor stub
+		}
+
+		public BetterPilot(float wheelDiameter, float trackWidth, TachoMotor leftMotor, TachoMotor rightMotor)
+		{
+			super(wheelDiameter, trackWidth, leftMotor, rightMotor);
+			// TODO Auto-generated constructor stub
+		}
+
+		public abstract float getLeftDegPerDistance();
+
+		public abstract float getRightDegPerDistance();
+	}
+
+	public RescueColors colors;
 
 	public RescueRobot(Motor leftMotor, Motor rightMotor,
 	                   LineLeader lineSensor, ColorSensor colorSensor, Lamp lamp)
@@ -32,7 +60,17 @@ public class RescueRobot
 		this.lineSensor = lineSensor;
 		this.colorSensor = colorSensor;
 		this.lamp = lamp;
-		this.pilot = new TachoPilot(3.6f, 14f, motors.leftMotor, motors.rightMotor);
+		this.pilot = new BetterPilot(3.6f, 14f, motors.leftMotor, motors.rightMotor) {
+			public float getLeftDegPerDistance()
+			         			{
+				return _leftDegPerDistance;
+			}
+
+			public float getRightDegPerDistance()
+			         			{
+				return _rightDegPerDistance;
+			}
+		};
 		pilot.setMoveSpeed(30);
 		pilot.setTurnSpeed(200);
 	}
@@ -159,34 +197,30 @@ public class RescueRobot
 		}
 	}
 
-	public void doLineSearch()
+	public boolean doLineSearch()
 	{
 		if(hasLine())
+			return true;
+		
+		int[] angles = {40, -40, 80, -80, 120, -120, 0};
+		int lastangle = 0;
+		for(int angle : angles)
 		{
-			return;
-		}
-		else
-		{
-			int[] angles = {40, -40, 80, -80, 120, -120, 0};
-			int lastangle = 0;
-			for(int angle : angles)
+			pilot.rotate((lastangle - angle), true);
+			while(pilot.isMoving())
 			{
-				pilot.rotate((lastangle - angle), true);
-				while(pilot.isMoving())
+				if(hasLine())
 				{
-					if(hasLine())
-					{
-						pilot.stop();
-						Sound.beepSequence();
-						return;
-					}
-					Thread.yield();
+					pilot.stop();
+					Sound.beepSequence();
+					return true;
 				}
-				pilot.stop();
-				lastangle = angle;
-				Delay.msDelay(250);
+				Thread.yield();
 			}
-			return;
+			pilot.stop();
+			lastangle = angle;
+			Delay.msDelay(250);
 		}
+		return false;
 	}
 }
