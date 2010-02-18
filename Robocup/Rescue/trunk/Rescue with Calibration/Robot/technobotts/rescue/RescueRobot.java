@@ -17,12 +17,6 @@ import lejos.util.Delay;
  */
 public class RescueRobot
 {
-	public enum State {
-		IDLE, FOLLOW, LINESEARCH, DEBRISAVOID, TWITCHAVOID, VICTIMSIGNAL, REDROOM
-	};
-
-	private State            state = State.IDLE;
-
 	public final Motors      motors;
 	public final Lamp        lamp;
 	public final LineLeader  lineSensor;
@@ -71,70 +65,10 @@ public class RescueRobot
 		lamp.off();
 	}
 
-	public synchronized State getState()
-	{
-		return state;
-	}
-
-	public synchronized void setState(State state)
-	{
-		this.state = state;
-	}
-
 	public static class Motors
 	{
 		private final Motor leftMotor;
 		private final Motor rightMotor;
-
-		public enum Controller {
-			FOLLOW, LINESEARCH, DEBRIS, REDROOM, MAIN, NONE
-		}
-
-		private Controller owner = Controller.NONE;
-
-		public void getMotors(Controller requester)
-		{
-			if(requester == Controller.NONE)
-				throw new IllegalArgumentException();
-			synchronized(owner)
-			{
-				if(requester == owner)
-				{
-					return;
-				}
-				else
-				{
-					System.out.println("requester:" + requester);
-					while(owner != Controller.NONE)
-					{
-						Sound.playTone(880, 25);
-						try
-						{
-							owner.wait();
-						}
-						catch(InterruptedException e)
-						{}
-					}
-					System.out.println("new:" + requester);
-					System.out.println("old:" + owner);
-					System.out.println();
-					owner = requester;
-				}
-			}
-		}
-
-		public void releaseMotors(Controller requester)
-		{
-			synchronized(owner)
-			{
-				if(requester == owner)
-				{
-					System.out.println("releaser:" + requester);
-					owner = Controller.NONE;
-					owner.notify();
-				}
-			}
-		}
 
 		public Motors(Motor leftMotor, Motor rightMotor)
 		{
@@ -169,7 +103,6 @@ public class RescueRobot
 		public synchronized void resetLeftTacho()
 		{
 			leftMotor.resetTachoCount();
-
 		}
 
 		public synchronized int getLeftTacho()
@@ -218,7 +151,6 @@ public class RescueRobot
 		}
 		else
 		{
-
 			int[] sensors = lineSensor.getSensors();
 			if(sensors != null)
 				return sensors[0] < 50 && sensors[1] < 50 || sensors[6] < 50 && sensors[7] < 50;
