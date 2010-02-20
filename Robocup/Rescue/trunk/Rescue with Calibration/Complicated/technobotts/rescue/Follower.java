@@ -51,7 +51,7 @@ public class Follower extends RescueTask
 			{
 				if(_robot.loggerT.lineIsLost())
 				{
-					_robot.pilot.setMoveSpeed(10000);
+					_robot.pilot.setMoveSpeed(100);
 					_robot.pilot.forward();
 				}
 				else
