@@ -57,6 +57,7 @@ public class RescueColors
 
 	public RawColor getUnbiasedColor(RawColor input)
 	{
+		if(input == null) return null;
 		RawColor closest = null;
 		long bestDistance = 0;
 
@@ -74,6 +75,7 @@ public class RescueColors
 
 	public RawColor getColor(RawColor input)
 	{
+		if(input == null) return null;
 		RawColor col = getUnbiasedColor(input);
 		if(col == green)
 		{

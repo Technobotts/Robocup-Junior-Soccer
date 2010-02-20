@@ -8,7 +8,14 @@ public class RawColor
 {
 	public static RawColor fromHTSensor(ColorSensor cs)
 	{
-		return new RawColor(cs.getRawRed(), cs.getRawGreen(), cs.getRawBlue());
+		try
+		{
+			return new RawColor(cs.getRawRed(), cs.getRawGreen(), cs.getRawBlue());
+		}
+		catch(IllegalArgumentException e)
+		{
+			return null;
+		}
 	}
 
 	private int	_r;
@@ -17,6 +24,8 @@ public class RawColor
 
 	public RawColor(int r, int g, int b)
 	{
+		if(_r < 0 || g<0 || b<0)
+			throw new IllegalArgumentException();
 		_r = r;
 		_g = g;
 		_b = b;
