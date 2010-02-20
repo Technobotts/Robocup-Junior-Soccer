@@ -47,7 +47,7 @@ public class Follower extends RescueTask
 		isRunning = true;
 		while(isRunning)
 		{
-			synchronized(_robot.motors)
+			synchronized(_robot.pilot)
 			{
 				System.out.println("Follower has Motors");
 				int[] sensors = _robot.lineSensor.getSensors();
@@ -56,8 +56,8 @@ public class Follower extends RescueTask
 					int leftspeed = calcLeftSpeed(sensors);
 					int rightspeed = calcRightSpeed(sensors);
 					System.out.println(leftspeed +","+rightspeed );
-					_robot.motors.setLeftSpeed(leftspeed);
-					_robot.motors.setRightSpeed(rightspeed);
+					_robot.pilot.setLeftSpeed(leftspeed);
+					_robot.pilot.setRightSpeed(rightspeed);
 				}
 			}
 			yield();

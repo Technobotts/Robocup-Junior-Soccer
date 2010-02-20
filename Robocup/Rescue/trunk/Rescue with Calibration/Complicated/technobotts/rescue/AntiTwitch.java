@@ -23,8 +23,8 @@ public class AntiTwitch extends RescueTask
 		isRunning = true;
 		while(isRunning)
 		{
-			left = _robot.motors.getLeftTacho();
-			right = _robot.motors.getRightTacho();
+			left = _robot.pilot.getLeft().getTachoCount();
+			right = _robot.pilot.getRight().getTachoCount();
 
 			try
 			{
@@ -37,7 +37,7 @@ public class AntiTwitch extends RescueTask
 
 			if(Math.abs(right - lastRight) <= tolerance && Math.abs(left - lastLeft) <= tolerance)
 			{
-				synchronized(_robot.motors)
+				synchronized(_robot.pilot)
 				{
 					System.out.println("AntiTwitch has Motors");
 					Sound.beepSequenceUp();

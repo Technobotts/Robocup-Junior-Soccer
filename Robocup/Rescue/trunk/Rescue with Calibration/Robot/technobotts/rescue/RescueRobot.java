@@ -1,6 +1,5 @@
 package technobotts.rescue;
 
-import lejos.nxt.I2CPort;
 import lejos.nxt.Motor;
 import lejos.nxt.MotorPort;
 import lejos.nxt.SensorPort;
@@ -9,82 +8,89 @@ import lejos.nxt.addon.ColorSensor;
 import lejos.nxt.addon.Lamp;
 import lejos.nxt.addon.LineLeader;
 import lejos.robotics.TachoMotor;
-import lejos.robotics.navigation.Pilot;
 import lejos.robotics.navigation.TachoPilot;
 import lejos.util.Delay;
 
 /**
  * @author Eric
+ *         A class that represents the robot, and stores shared objects.
  */
 public class RescueRobot
 {
-	public final Motors      motors;
-	public final Lamp        lamp;
-	public final LineLeader  lineSensor;
-	public final ColorSensor colorSensor;
-	public final BetterPilot  pilot;
+	public final Lamp             lamp;
+	public final LineLeader       lineSensor;
+	public final ColorSensor      colorSensor;
+	public final BetterTachoPilot pilot;
+	
+	public long timeSinceLastLine;
 
-	public abstract class BetterPilot extends TachoPilot
+	public RescueColors           colors;
+
+	public class BetterTachoPilot extends TachoPilot
 	{
-		public BetterPilot(float leftWheelDiameter, float rightWheelDiameter, float trackWidth, TachoMotor leftMotor,
-		                   TachoMotor rightMotor, boolean reverse)
+		public BetterTachoPilot(float leftWheelDiameter, float rightWheelDiameter, float trackWidth,
+		                        TachoMotor leftMotor,
+		                        TachoMotor rightMotor, boolean reverse)
 		{
 			super(leftWheelDiameter, rightWheelDiameter, trackWidth, leftMotor, rightMotor, reverse);
-			// TODO Auto-generated constructor stub
 		}
 
-		public BetterPilot(float wheelDiameter, float trackWidth, TachoMotor leftMotor, TachoMotor rightMotor,
-		                   boolean reverse)
+		public BetterTachoPilot(float wheelDiameter, float trackWidth, TachoMotor leftMotor, TachoMotor rightMotor,
+		                        boolean reverse)
 		{
 			super(wheelDiameter, trackWidth, leftMotor, rightMotor, reverse);
-			// TODO Auto-generated constructor stub
 		}
 
-		public BetterPilot(float wheelDiameter, float trackWidth, TachoMotor leftMotor, TachoMotor rightMotor)
+		public BetterTachoPilot(float wheelDiameter, float trackWidth, TachoMotor leftMotor, TachoMotor rightMotor)
 		{
 			super(wheelDiameter, trackWidth, leftMotor, rightMotor);
-			// TODO Auto-generated constructor stub
 		}
 
-		public abstract float getLeftDegPerDistance();
+		public float getLeftDegPerDistance()
+		{
+			return _leftDegPerDistance;
+		}
 
-		public abstract float getRightDegPerDistance();
+		public float getRightDegPerDistance()
+		{
+			return _rightDegPerDistance;
+		}
+
+		public synchronized void setLeftSpeed(int speed)
+		{
+			if(Math.signum(speed) == Math.signum(_leftDegPerDistance))
+				_left.forward();
+			else if(Math.signum(speed) != 0)
+				_left.backward();
+
+			_left.setSpeed(Math.abs(speed));
+		}
+
+		public synchronized void setRightSpeed(int speed)
+		{
+			if(Math.signum(speed) == Math.signum(_rightDegPerDistance))
+				_right.forward();
+			else if(Math.signum(speed) != 0)
+				_left.backward();
+
+			_right.setSpeed(Math.abs(speed));
+		}
 	}
 
-	public RescueColors colors;
-
-	public RescueRobot(Motor leftMotor, Motor rightMotor,
-	                   LineLeader lineSensor, ColorSensor colorSensor, Lamp lamp)
+	public RescueRobot(RescueColors colors)
 	{
-		motors = new Motors(leftMotor, rightMotor);
-		this.lineSensor = lineSensor;
-		this.colorSensor = colorSensor;
-		this.lamp = lamp;
-		this.pilot = new BetterPilot(3.6f, 14f, motors.leftMotor, motors.rightMotor) {
-			public float getLeftDegPerDistance()
-			         			{
-				return _leftDegPerDistance;
-			}
-
-			public float getRightDegPerDistance()
-			         			{
-				return _rightDegPerDistance;
-			}
-		};
+		this.colors = colors;
+		this.colorSensor = new ColorSensor(SensorPort.S1);
+		this.lineSensor = new LineLeader(SensorPort.S2);
+		this.lamp = new Lamp(MotorPort.A);
+		this.pilot = new BetterTachoPilot(3.6f, 14f, Motor.C, Motor.B);
 		pilot.setMoveSpeed(30);
 		pilot.setTurnSpeed(200);
 	}
 
-	public RescueRobot(Motor leftMotor, Motor rightMotor, I2CPort linePort,
-	                   SensorPort colorPort, MotorPort lampPort)
-	{
-		this(leftMotor,
-		     rightMotor,
-		     new LineLeader(linePort),
-		     new ColorSensor(colorPort),
-		     new Lamp(lampPort));
-	}
-
+	/**
+	 * Flashes the lamp for 2 seconds while playing oscillating tones
+	 */
 	public synchronized void showVictimFound()
 	{
 		final int duration = 2000;
@@ -103,84 +109,10 @@ public class RescueRobot
 		lamp.off();
 	}
 
-	public static class Motors
-	{
-		private final Motor leftMotor;
-		private final Motor rightMotor;
-
-		public Motors(Motor leftMotor, Motor rightMotor)
-		{
-			this.leftMotor = leftMotor;
-			this.rightMotor = rightMotor;
-		}
-
-		private synchronized void setMotorSpeed(Motor motor, int speed)
-		{
-			if(Math.signum(speed) == 1 && !motor.isForward())
-				motor.forward();
-			else if(Math.signum(speed) == -1 && !motor.isBackward())
-				motor.backward();
-
-			motor.setSpeed(Math.abs(speed));
-		}
-
-		public synchronized void spin(int angle, int speed)
-		{
-			stop();
-			leftMotor.setSpeed(speed);
-			rightMotor.setSpeed(speed);
-			leftMotor.rotate(angle, true);
-			rightMotor.rotate(-angle, true);
-		}
-
-		public synchronized void setLeftSpeed(int speed)
-		{
-			setMotorSpeed(leftMotor, speed);
-		}
-
-		public synchronized void resetLeftTacho()
-		{
-			leftMotor.resetTachoCount();
-		}
-
-		public synchronized int getLeftTacho()
-		{
-			return leftMotor.getTachoCount();
-		}
-
-		public synchronized void setRightSpeed(int speed)
-		{
-			setMotorSpeed(rightMotor, speed);
-		}
-
-		public synchronized void resetRightTacho()
-		{
-			rightMotor.resetTachoCount();
-		}
-
-		public synchronized int getRightTacho()
-		{
-			return rightMotor.getTachoCount();
-		}
-
-		public synchronized void stop()
-		{
-			leftMotor.stop();
-			rightMotor.stop();
-		}
-	}
-
-	public static void main(String args[]) throws Exception
-	{
-		RescueRobot robot = new RescueRobot(Motor.B, Motor.C, null,
-		                                    (ColorSensor) null, (Lamp) null);
-		for(double theta = -4 * Math.PI; theta < 4 * Math.PI; theta += Math.PI / 128)
-		{
-			robot.motors.setRightSpeed((int) (Math.sin(theta) * 900));
-			Thread.sleep(10);
-		}
-	}
-
+	/**
+	 * Determines if the robot is over a line
+	 * @return whether a line is spotted
+	 */
 	public boolean hasLine()
 	{
 		if(colors.getSensorColor(colorSensor) == colors.black)
@@ -197,12 +129,19 @@ public class RescueRobot
 		}
 	}
 
+	/**
+	 * Does a search for a line around the robot's current position.
+	 * @return whether a line was found
+	 */
 	public boolean doLineSearch()
 	{
+		//If the line is already visible, return
 		if(hasLine())
 			return true;
-		
+
+		//List of angles to turn to for line searching
 		int[] angles = {40, -40, 80, -80, 120, -120, 0};
+		
 		int lastangle = 0;
 		for(int angle : angles)
 		{
@@ -211,16 +150,19 @@ public class RescueRobot
 			{
 				if(hasLine())
 				{
+					//If the line is visible, stop the motors, and return
 					pilot.stop();
 					Sound.beepSequence();
 					return true;
 				}
 				Thread.yield();
 			}
+			//If he line still hasn't been found, return false
 			pilot.stop();
 			lastangle = angle;
 			Delay.msDelay(250);
 		}
 		return false;
 	}
+
 }

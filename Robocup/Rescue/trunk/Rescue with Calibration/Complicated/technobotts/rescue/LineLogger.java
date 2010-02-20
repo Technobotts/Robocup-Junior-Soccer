@@ -17,16 +17,16 @@ public class LineLogger extends RescueTask
 
 	private boolean distGone()
 	{
-		float leftDist = (_robot.motors.getLeftTacho() - lastLeftMotor) / _robot.pilot.getLeftDegPerDistance();
-		float rightDist = (_robot.motors.getRightTacho() - lastRightMotor) / _robot.pilot.getRightDegPerDistance();
+		float leftDist = (_robot.pilot.getLeft().getTachoCount() - lastLeftMotor) / _robot.pilot.getLeftDegPerDistance();
+		float rightDist = (_robot.pilot.getRight().getTachoCount() - lastRightMotor) / _robot.pilot.getRightDegPerDistance();
 		return leftDist > 35 && rightDist > 35;
 	}
 
 	public void lineLost()
 	{
-		synchronized(_robot.motors)
+		synchronized(_robot.pilot)
 		{
-			_robot.motors.stop();
+			_robot.pilot.stop();
 			
 			if(_robot.doLineSearch()) return;
 			
@@ -44,8 +44,8 @@ public class LineLogger extends RescueTask
 			while(_robot.hasLine())
 				yield();
 			
-			lastLeftMotor = _robot.motors.getLeftTacho();
-			lastRightMotor = _robot.motors.getRightTacho();
+			lastLeftMotor = _robot.pilot.getLeft().getTachoCount();
+			lastRightMotor = _robot.pilot.getRight().getTachoCount();
 			
 			while(!_robot.hasLine())
 			{
