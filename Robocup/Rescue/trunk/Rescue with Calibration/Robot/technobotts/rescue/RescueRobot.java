@@ -4,6 +4,7 @@ import lejos.nxt.Motor;
 import lejos.nxt.MotorPort;
 import lejos.nxt.SensorPort;
 import lejos.nxt.Sound;
+import lejos.nxt.TouchSensor;
 import lejos.nxt.addon.ColorSensor;
 import lejos.nxt.addon.Lamp;
 import lejos.nxt.addon.LineLeader;
@@ -21,8 +22,15 @@ public class RescueRobot
 	public final LineLeader       lineSensor;
 	public final ColorSensor      colorSensor;
 	public final BetterTachoPilot pilot;
-	
-	public long timeSinceLastLine;
+
+	public final TouchSensor      leftBumper;
+	public final TouchSensor      rightBumper;
+
+	public Follower               followerT;
+	public VictimFinder           victimT;
+	public AntiTwitch             twitchT;
+	public LineLogger             loggerT;
+	public DebrisAvoid            debrisT;
 
 	public RescueColors           colors;
 
@@ -71,7 +79,7 @@ public class RescueRobot
 			if(Math.signum(speed) == Math.signum(_rightDegPerDistance))
 				_right.forward();
 			else if(Math.signum(speed) != 0)
-				_left.backward();
+				_right.backward();
 
 			_right.setSpeed(Math.abs(speed));
 		}
@@ -83,9 +91,18 @@ public class RescueRobot
 		this.colorSensor = new ColorSensor(SensorPort.S1);
 		this.lineSensor = new LineLeader(SensorPort.S2);
 		this.lamp = new Lamp(MotorPort.A);
-		this.pilot = new BetterTachoPilot(3.6f, 14f, Motor.C, Motor.B);
+		this.pilot = new BetterTachoPilot(3.6f, 20f, Motor.C, Motor.B);
 		pilot.setMoveSpeed(30);
 		pilot.setTurnSpeed(200);
+
+		leftBumper = new TouchSensor(SensorPort.S3);
+		rightBumper = new TouchSensor(SensorPort.S4);
+
+		followerT = new Follower(this);
+		victimT = new VictimFinder(this);
+		twitchT = new AntiTwitch(this);
+		loggerT = new LineLogger(this);
+		debrisT = new DebrisAvoid(this);
 	}
 
 	/**
@@ -113,7 +130,7 @@ public class RescueRobot
 	 * Determines if the robot is over a line
 	 * @return whether a line is spotted
 	 */
-	public boolean hasLine()
+	public synchronized boolean hasLine()
 	{
 		if(colors.getSensorColor(colorSensor) == colors.black)
 		{
@@ -129,40 +146,55 @@ public class RescueRobot
 		}
 	}
 
+	private boolean _isSearching = false;
+
+	public boolean isSearching()
+	{
+		return _isSearching;
+	}
+
 	/**
 	 * Does a search for a line around the robot's current position.
 	 * @return whether a line was found
 	 */
 	public boolean doLineSearch()
 	{
-		//If the line is already visible, return
+		// If the line is already visible, return
 		if(hasLine())
 			return true;
 
-		//List of angles to turn to for line searching
-		int[] angles = {40, -40, 80, -80, 120, -120, 0};
-		
-		int lastangle = 0;
-		for(int angle : angles)
+		_isSearching = true;
+		try
 		{
-			pilot.rotate((lastangle - angle), true);
-			while(pilot.isMoving())
+			// List of angles to turn to for line searching
+			int[] angles = {40, -40, 80, -80, 120, -120, 0};
+
+			int lastangle = 0;
+			for(int angle : angles)
 			{
-				if(hasLine())
+				pilot.rotate((lastangle - angle), true);
+				while(pilot.isMoving())
 				{
-					//If the line is visible, stop the motors, and return
-					pilot.stop();
-					Sound.beepSequence();
-					return true;
+					if(hasLine())
+					{
+						// If the line is visible, stop the motors, and return
+						pilot.stop();
+						Sound.beepSequence();
+						return true;
+					}
+					Thread.yield();
 				}
-				Thread.yield();
+				// If he line still hasn't been found, return false
+				pilot.stop();
+				lastangle = angle;
+				Delay.msDelay(250);
 			}
-			//If he line still hasn't been found, return false
-			pilot.stop();
-			lastangle = angle;
-			Delay.msDelay(250);
+			return false;
 		}
-		return false;
+		finally
+		{
+			_isSearching = false;
+		}
 	}
 
 }

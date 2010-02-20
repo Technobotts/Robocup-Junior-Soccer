@@ -3,8 +3,8 @@ package technobotts.rescue;
 public class Follower extends RescueTask
 {
 	private int     maxspeed = 400;
-	private int     minspeed = -200;
-	static double[] sensorsFactors = {216, 36, 6, 1, 0, 0, 0, 0};
+	private int     minspeed = -400;
+	static double[] sensorFactors = {200, 50, 2, 1, 0, 0, 0, 0};
 
 	int scalePower(double input, double maxinput)
 	{
@@ -17,8 +17,8 @@ public class Follower extends RescueTask
 		double maxrawpower = 0;
 		for(int i = 0; i < 8; i++)
 		{
-			rawpower += sensors[7 - i] * sensorsFactors[i];
-			maxrawpower += 100 * sensorsFactors[i];
+			rawpower += sensors[7 - i] * sensorFactors[i];
+			maxrawpower += 100 * sensorFactors[i];
 		}
 		return scalePower(rawpower, maxrawpower);
 	}
@@ -29,8 +29,8 @@ public class Follower extends RescueTask
 		double maxrawpower = 0;
 		for(int i = 0; i < 8; i++)
 		{
-			rawpower += sensors[i] * sensorsFactors[i];
-			maxrawpower += 100 * sensorsFactors[i];
+			rawpower += sensors[i] * sensorFactors[i];
+			maxrawpower += 100 * sensorFactors[i];
 		}
 		return scalePower(rawpower, maxrawpower);
 	}
@@ -49,15 +49,21 @@ public class Follower extends RescueTask
 		{
 			synchronized(_robot.pilot)
 			{
-				System.out.println("Follower has Motors");
-				int[] sensors = _robot.lineSensor.getSensors();
-				if(sensors != null)
+				if(_robot.loggerT.lineIsLost())
 				{
-					int leftspeed = calcLeftSpeed(sensors);
-					int rightspeed = calcRightSpeed(sensors);
-					System.out.println(leftspeed +","+rightspeed );
-					_robot.pilot.setLeftSpeed(leftspeed);
-					_robot.pilot.setRightSpeed(rightspeed);
+					_robot.pilot.setMoveSpeed(10000);
+					_robot.pilot.forward();
+				}
+				else
+				{
+    				int[] sensors = _robot.lineSensor.getSensors();
+    				if(sensors != null)
+    				{
+    					int leftspeed = calcLeftSpeed(sensors);
+    					int rightspeed = calcRightSpeed(sensors);
+    					_robot.pilot.setLeftSpeed(leftspeed);
+    					_robot.pilot.setRightSpeed(rightspeed);
+    				}
 				}
 			}
 			yield();

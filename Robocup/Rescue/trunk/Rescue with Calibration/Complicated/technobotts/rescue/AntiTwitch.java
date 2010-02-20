@@ -17,39 +17,42 @@ public class AntiTwitch extends RescueTask
 
 	public void run()
 	{
-		int left, right;
+		int left = 0, right = 0;
 		int lastLeft = 0, lastRight = 0;
-		
+
 		isRunning = true;
 		while(isRunning)
 		{
-			left = _robot.pilot.getLeft().getTachoCount();
-			right = _robot.pilot.getRight().getTachoCount();
-
-			try
+			if(!isPaused)
 			{
-				sleep(time);
-			}
-			catch(InterruptedException e)
-			{
-				continue;
-			}
-
-			if(Math.abs(right - lastRight) <= tolerance && Math.abs(left - lastLeft) <= tolerance)
-			{
-				synchronized(_robot.pilot)
+				try
 				{
-					System.out.println("AntiTwitch has Motors");
-					Sound.beepSequenceUp();
-					LCD.drawString("Lack of progress", 0, 0);
-					_robot.pilot.travel(10);
-					_robot.doLineSearch();
-					LCD.clear();
+					sleep(time);
 				}
+				catch(InterruptedException e)
+				{
+					continue;
+				}
+				
+				left = _robot.pilot.getLeft().getTachoCount();
+				right = _robot.pilot.getRight().getTachoCount();
+				
+				if(Math.abs(right - lastRight) <= tolerance && Math.abs(left - lastLeft) <= tolerance && !_robot.loggerT.lineIsLost())
+				{
+					synchronized(_robot.pilot)
+					{
+						System.out.println("AntiTwitch has Motors");
+						Sound.beepSequenceUp();
+						LCD.drawString("Lack of progress", 0, 0);
+						_robot.pilot.travel(10);
+						_robot.doLineSearch();
+						LCD.clear();
+					}
+				}
+				lastLeft = left;
+				lastRight = right;
 			}
 			yield();
-			lastLeft = left;
-			lastRight = right;
 		}
 	}
 }
