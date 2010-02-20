@@ -20,14 +20,14 @@ public class MovementLogger extends Thread
 	@Override
 	public void run()
 	{
-		int left = _robot.motors.getLeftTacho(), right = _robot.motors.getRightTacho();
+		int left = _robot.pilot.getLeft().getTachoCount(), right = _robot.pilot.getRight().getTachoCount();
 		int lastLeft, lastRight;
 		while(true)
 		{
 			lastLeft = left;
 			lastRight = right;
-			left = _robot.motors.getLeftTacho();
-			right = _robot.motors.getRightTacho();
+			left = _robot.pilot.getLeft().getTachoCount();
+			right = _robot.pilot.getRight().getTachoCount();
 
 			try
 			{
@@ -38,7 +38,7 @@ public class MovementLogger extends Thread
 
 			if(Math.abs(right - lastRight) <= tolerance && Math.abs(left - lastLeft) <= tolerance)
 			{
-				synchronized(_robot.motors)
+				synchronized(_robot.pilot)
 				{
 					Sound.beepSequenceUp();
 					LCD.drawString("Lack of progress", 0, 0);

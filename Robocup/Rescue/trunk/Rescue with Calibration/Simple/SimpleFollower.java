@@ -54,11 +54,6 @@ public class SimpleFollower
 
 	static void init() throws InterruptedException
 	{
-
-		LineLeader ll = new LineLeader(SensorPort.S2);
-		ColorSensor cs = new ColorSensor(SensorPort.S1);
-		Lamp l = new Lamp(MotorPort.A);
-		robot = new RescueRobot(Motor.C, Motor.B, ll, cs, l);
 		Sound.beep();
 		try
 		{
@@ -78,6 +73,7 @@ public class SimpleFollower
 			System.exit(-1);
 		}
 		colors.printToLCD();
+		robot = new RescueRobot(colors);
 		Button.ENTER.waitForPressAndRelease();
 
 		logger = new MovementLogger(robot);
@@ -141,9 +137,9 @@ public class SimpleFollower
 			if((color == colors.silver || color == colors.green)
 			   && System.currentTimeMillis() - lastVictimTime > 2500)
 			{
-				synchronized(robot.motors)
+				synchronized(robot.pilot)
 				{
-					robot.motors.stop();
+					robot.pilot.stop();
 					robot.showVictimFound();
 					lastVictimTime = System.currentTimeMillis();
 					robot.pilot.travel(5);
@@ -152,7 +148,7 @@ public class SimpleFollower
 			}
 			else if(color == colors.white || color == colors.black)
 			{
-				synchronized(robot.motors)
+				synchronized(robot.pilot)
 				{
 					int[] sensors = robot.lineSensor.getSensors();
 					if(sensors != null)
@@ -160,8 +156,8 @@ public class SimpleFollower
 
 						int leftspeed = calcLeftSpeed(sensors);
 						int rightspeed = calcRightSpeed(sensors);
-						robot.motors.setLeftSpeed(leftspeed);
-						robot.motors.setRightSpeed(rightspeed);
+						robot.pilot.setLeftSpeed(leftspeed);
+						robot.pilot.setRightSpeed(rightspeed);
 					}
 				}
 			}

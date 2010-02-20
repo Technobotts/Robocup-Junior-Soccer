@@ -18,22 +18,15 @@ public class RescueMain
 {
 	static RescueRobot robot;
 
-	static void initRobot()
+	static void init()
 	{
-		LineLeader ll = new LineLeader(SensorPort.S2);
-		ColorSensor cs = new ColorSensor(SensorPort.S1);
-		Lamp l = new Lamp(MotorPort.A);
-		robot = new RescueRobot(Motor.C, Motor.B, ll, cs, l);
-	}
-
-	static void loadColors()
-	{
+		RescueColors cols = null;
 		try
 		{
 			File f = new File("CalibrationData.dat");
 
 			FileInputStream is = new FileInputStream(f);
-			robot.colors = RescueColors.readObject(is);
+			cols = RescueColors.readObject(is);
 			is.close();
 			LCD.drawString("File read", 0, 0);
 			LCD.drawString("sucessfully", 0, 0);
@@ -45,15 +38,15 @@ public class RescueMain
 			Button.waitForPress();
 			System.exit(-1);
 		}
-		robot.colors.printToLCD();
+		cols.printToLCD();
+		robot = new RescueRobot(cols);
 		Button.ENTER.waitForPressAndRelease();
 		LCD.clear();
 	}
 
 	public static void main(String... args)
 	{
-		initRobot();
-		loadColors();
+		init();
 
 		Follower     f = new Follower(robot);
 		VictimFinder v = new VictimFinder(robot);

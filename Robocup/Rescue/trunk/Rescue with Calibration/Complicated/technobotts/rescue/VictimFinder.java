@@ -28,10 +28,10 @@ public class VictimFinder extends RescueTask
 			RawColor color = _robot.colors.getSensorColor(_robot.colorSensor);
 			if((color == _robot.colors.silver || color == _robot.colors.green) && timeSinceLastVictim() > victimPause)
 			{
-				synchronized(_robot.motors)
+				synchronized(_robot.pilot)
 				{
 					System.out.println("Victim has Motors");
-					_robot.motors.stop();
+					_robot.pilot.stop();
 					_robot.showVictimFound();
 					lastVictimTime = System.currentTimeMillis();
 					_robot.pilot.travel(10);
