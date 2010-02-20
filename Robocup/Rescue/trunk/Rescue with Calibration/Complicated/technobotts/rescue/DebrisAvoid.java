@@ -60,14 +60,14 @@ public class DebrisAvoid extends RescueTask
     			
     			if(right && left)
     			{
-    				if(true /*WALL*/)
+    				if(_robot.loggerT.distSinceLastLine() > 15)
     				{
     					_robot.pilot.travel(-10);
         				_robot.pilot.rotate(-90);
     				}
-    				else if(false /*Debris*/)
+    				else
     				{
-    					
+    					_robot.pilot.arc(15);
     				}
     			}
     			else if(right)
