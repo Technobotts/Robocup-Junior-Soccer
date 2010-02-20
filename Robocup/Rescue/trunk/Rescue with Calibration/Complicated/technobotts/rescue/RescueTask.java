@@ -4,6 +4,7 @@ public abstract class RescueTask extends Thread
 {
 	protected RescueRobot _robot;
 	protected boolean isRunning = true;
+	protected boolean isPaused = false;
 	public RescueTask(RescueRobot robot)
 	{
 		_robot = robot;
@@ -13,5 +14,15 @@ public abstract class RescueTask extends Thread
 	public void stop()
 	{
 		isRunning = false;
+	}
+	
+	public void pause()
+	{
+		interrupt();
+		isPaused = true;
+	}
+	public void resume()
+	{
+		isPaused = false;
 	}
 }

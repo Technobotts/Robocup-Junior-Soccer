@@ -47,19 +47,21 @@ public class RescueMain
 	public static void main(String... args)
 	{
 		init();
+//
+//		Follower     f = new Follower(robot);
+//		VictimFinder v = new VictimFinder(robot);
+//		AntiTwitch   t = new AntiTwitch(robot);
 
-		Follower     f = new Follower(robot);
-		VictimFinder v = new VictimFinder(robot);
-		AntiTwitch   t = new AntiTwitch(robot);
-
-		f.start();
-		v.start();
-		t.start();
+		robot.followerT.start();
+		robot.victimT.start();
+		robot.twitchT.start();
+		robot.loggerT.start();
+		robot.debrisT.start();
 
 		Button.ESCAPE.waitForPressAndRelease();
 
-		f.stop();
-		v.stop();
-		t.stop();
+		robot.followerT.stop();
+		robot.victimT.stop();
+		robot.twitchT.stop();
 	}
 }

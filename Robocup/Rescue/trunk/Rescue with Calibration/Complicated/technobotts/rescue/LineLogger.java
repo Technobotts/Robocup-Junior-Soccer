@@ -1,28 +1,41 @@
 package technobotts.rescue;
 
-import lejos.nxt.SensorPortListener;
+import lejos.nxt.Button;
 import lejos.nxt.Sound;
 
 public class LineLogger extends RescueTask
 {
 	public final int dist = 35;
-	private int      lastLeftMotor;
-	private int      lastRightMotor;
+	private int      lastLeftMotor = 0;
+	private int      lastRightMotor = 0;
 
 	public LineLogger(RescueRobot robot)
 	{
 		super(robot);
-		// TODO Auto-generated constructor stub
+		setDaemon(true);
 	}
 
-	private boolean distGone()
+	private boolean _lineIsLost = false;
+	
+	
+	public boolean lineIsLost()
+	{
+		return _lineIsLost;
+	}
+	
+	public float distSinceLastLine()
 	{
 		float leftDist = (_robot.pilot.getLeft().getTachoCount() - lastLeftMotor) / _robot.pilot.getLeftDegPerDistance();
 		float rightDist = (_robot.pilot.getRight().getTachoCount() - lastRightMotor) / _robot.pilot.getRightDegPerDistance();
-		return leftDist > 35 && rightDist > 35;
+		return Math.min(leftDist, rightDist);
+	}
+	
+	private boolean _lineIsLost()
+	{
+		return distSinceLastLine() > dist;
 	}
 
-	public void lineLost()
+	public void LineLost()
 	{
 		synchronized(_robot.pilot)
 		{
@@ -41,21 +54,23 @@ public class LineLogger extends RescueTask
 		isRunning = true;
 		while(isRunning)
 		{
+			_lineIsLost = false;
 			while(_robot.hasLine())
+			{
+    			lastLeftMotor = _robot.pilot.getLeft().getTachoCount();
+    			lastRightMotor = _robot.pilot.getRight().getTachoCount();
 				yield();
-			
-			lastLeftMotor = _robot.pilot.getLeft().getTachoCount();
-			lastRightMotor = _robot.pilot.getRight().getTachoCount();
-			
+			}
 			while(!_robot.hasLine())
 			{
-				if(distGone())
+				if(!_lineIsLost && _lineIsLost())
 				{
-					lineLost();
-					break;
+					_lineIsLost = true;
+					Sound.beep();
 				}
 				yield();
 			}
+			yield();
 
 		}
 	}

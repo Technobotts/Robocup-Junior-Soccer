@@ -30,13 +30,19 @@ public class VictimFinder extends RescueTask
 			{
 				synchronized(_robot.pilot)
 				{
+					_robot.twitchT.pause();
+					
 					System.out.println("Victim has Motors");
 					_robot.pilot.stop();
 					_robot.showVictimFound();
 					lastVictimTime = System.currentTimeMillis();
-					_robot.pilot.travel(10);
-
-					_robot.doLineSearch();
+					if(!_robot.loggerT.lineIsLost())
+    				{
+    					_robot.pilot.travel(10);
+    
+    					_robot.doLineSearch();
+					}
+					_robot.twitchT.resume();
 				}
 			}
 			yield();
