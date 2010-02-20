@@ -191,7 +191,7 @@ public class RescueRobot
 		{
 			int[] sensors = lineSensor.getSensors();
 			if(sensors != null)
-				return sensors[0] < 50 && sensors[1] < 50 || sensors[6] < 50 && sensors[7] < 50;
+				return sensors[0] < 25 && sensors[1] < 25 || sensors[6] < 25 && sensors[7] < 25;
 			else
 				return false;
 		}
