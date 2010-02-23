@@ -1,5 +1,10 @@
 package technobotts.rescue;
 
+import technobotts.rescue.tasks.AntiTwitch;
+import technobotts.rescue.tasks.DebrisAvoid;
+import technobotts.rescue.tasks.Follower;
+import technobotts.rescue.tasks.LineLogger;
+import technobotts.rescue.tasks.VictimFinder;
 import lejos.nxt.Motor;
 import lejos.nxt.MotorPort;
 import lejos.nxt.SensorPort;

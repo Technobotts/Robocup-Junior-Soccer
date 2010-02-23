@@ -1,5 +1,7 @@
-package technobotts.rescue;
+package technobotts.rescue.tasks;
 
+import technobotts.rescue.RawColor;
+import technobotts.rescue.RescueRobot;
 import technobotts.rescue.RescueTask;
 
 public class VictimFinder extends RescueTask
@@ -29,10 +31,7 @@ public class VictimFinder extends RescueTask
 			if((color == _robot.colors.silver || color == _robot.colors.green) && timeSinceLastVictim() > victimPause)
 			{
 				synchronized(_robot.pilot)
-				{
-					_robot.twitchT.pause();
-					
-					System.out.println("Victim has Motors");
+				{					
 					_robot.pilot.stop();
 					_robot.showVictimFound();
 					lastVictimTime = System.currentTimeMillis();
@@ -42,7 +41,8 @@ public class VictimFinder extends RescueTask
     
     					_robot.doLineSearch();
 					}
-					_robot.twitchT.resume();
+					
+					_robot.twitchT.cancel();
 				}
 			}
 			yield();

@@ -1,5 +1,7 @@
-package technobotts.rescue;
+package technobotts.rescue.tasks;
 
+import technobotts.rescue.RescueRobot;
+import technobotts.rescue.RescueTask;
 import lejos.nxt.SensorPort;
 import lejos.nxt.SensorPortListener;
 import lejos.nxt.Sound;
