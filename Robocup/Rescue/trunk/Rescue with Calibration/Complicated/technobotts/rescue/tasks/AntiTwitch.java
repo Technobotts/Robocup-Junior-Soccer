@@ -50,10 +50,11 @@ public class AntiTwitch extends RescueTask
 			{
 				left = _robot.pilot.getLeft().getTachoCount();
 				right = _robot.pilot.getRight().getTachoCount();
+				
 				if(cancelCount > 0)
 				{
 					cancelCount--;
-					break;
+					continue;
 				}
 				else if(Math.abs(right - lastRight) <= tolerance && Math.abs(left - lastLeft) <= tolerance
 				   && !_robot.loggerT.lineIsLost())
