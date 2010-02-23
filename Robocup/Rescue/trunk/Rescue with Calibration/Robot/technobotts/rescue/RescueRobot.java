@@ -97,7 +97,7 @@ public class RescueRobot
 		this.lineSensor = new LineLeader(SensorPort.S2);
 		this.lamp = new Lamp(MotorPort.A);
 		this.pilot = new BetterTachoPilot(3.6f, 20f, Motor.C, Motor.B);
-		pilot.setMoveSpeed(30);
+		pilot.setMoveSpeed(50);
 		pilot.setTurnSpeed(200);
 
 		leftBumper = new TouchSensor(SensorPort.S3);
@@ -137,11 +137,12 @@ public class RescueRobot
 	 */
 	public synchronized boolean hasLine()
 	{
-		if(colors.getSensorColor(colorSensor) == colors.black)
+		RawColor color = colors.getSensorColor(colorSensor);
+		if(color == colors.black)
 		{
 			return true;
 		}
-		else
+		else if(color == colors.white)
 		{
 			int[] sensors = lineSensor.getSensors();
 			if(sensors != null)
@@ -149,6 +150,7 @@ public class RescueRobot
 			else
 				return false;
 		}
+		else return false;
 	}
 
 	private boolean _isSearching = false;
