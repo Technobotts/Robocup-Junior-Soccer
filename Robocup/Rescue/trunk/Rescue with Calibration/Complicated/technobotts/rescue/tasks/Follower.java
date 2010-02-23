@@ -59,6 +59,7 @@ public class Follower extends RescueTask
 				}
 				else
 				{
+					_robot.pilot.setMoveSpeed(50);
     				int[] sensors = _robot.lineSensor.getSensors();
     				if(sensors != null)
     				{

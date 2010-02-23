@@ -65,11 +65,12 @@ public class DebrisAvoid extends RescueTask
     				if(_robot.loggerT.distSinceLastLine() > 15)
     				{
     					_robot.pilot.travel(-10);
-        				_robot.pilot.rotate(-90);
+        				_robot.pilot.rotate(90);
     				}
     				else
     				{
     					_robot.pilot.arc(15);
+        				_robot.pilot.rotate(90);
     				}
 					_robot.twitchT.cancel();
     			}
