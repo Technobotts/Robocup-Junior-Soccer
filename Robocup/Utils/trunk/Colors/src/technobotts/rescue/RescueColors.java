@@ -81,8 +81,10 @@ public class RescueColors
 		{
 			float GreenRatio = (float) green.getG() / green.getR();
 			float CurrentRatio = (float) input.getG() / input.getR();
+			float GreenDist = input.distanceTo(green);
+			float BlackDist = input.distanceTo(black);
 
-			if(GreenRatio * 0.95f > CurrentRatio)
+			if(GreenDist*3 > BlackDist || Math.abs(CurrentRatio / GreenRatio - 1) > 0.1f)
 				col = black;
 		}
 		return col;
