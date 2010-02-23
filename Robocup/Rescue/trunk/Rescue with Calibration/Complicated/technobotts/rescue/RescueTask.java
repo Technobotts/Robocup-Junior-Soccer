@@ -15,14 +15,4 @@ public abstract class RescueTask extends Thread
 	{
 		isRunning = false;
 	}
-	
-	public void pause()
-	{
-		interrupt();
-		isPaused = true;
-	}
-	public void resume()
-	{
-		isPaused = false;
-	}
 }

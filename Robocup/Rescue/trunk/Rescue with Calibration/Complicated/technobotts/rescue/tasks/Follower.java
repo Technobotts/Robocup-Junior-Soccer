@@ -1,4 +1,7 @@
-package technobotts.rescue;
+package technobotts.rescue.tasks;
+
+import technobotts.rescue.RescueRobot;
+import technobotts.rescue.RescueTask;
 
 public class Follower extends RescueTask
 {
