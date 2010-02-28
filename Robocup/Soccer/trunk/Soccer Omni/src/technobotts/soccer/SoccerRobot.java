@@ -57,9 +57,9 @@ public class SoccerRobot
 		kickerMotor.smoothAcceleration(false);
 		kickerMotor.regulateSpeed(false);
 		
-		US = new UltrasonicSensor(SensorPort.S1);
-		compass = new CompassSensor(SensorPort.S2);
-		IR = new IRSeekerV2(SensorPort.S3, IRSeekerV2.Mode.DC);
+		US = new UltrasonicSensor(SensorPort.S3);
+		compass = new CompassSensor(SensorPort.S1);
+		IR = new IRSeekerV2(SensorPort.S2, IRSeekerV2.Mode.DC);
 
 		pilot = new OmniCompassPilot(compass,
 		                             new SimpleOmniPilot.OmniMotor(Motor.A, 60, 6.4f, 1, 11, true),
