@@ -1,4 +1,4 @@
-package java.utils.PID;
+package java.util.PID;
 
 /**
  * @author Eric
@@ -17,15 +17,15 @@ public class SimplePID
 	private long	_lastTick;
 
 	/** The deviation from the set point of last data input */
-	private long	_error;
+	private double	_error;
 
 	/** The previous value of _error */
-	private long	_lastError;
+	private double	_lastError;
 	/** The integrated error values */
 	private long	_intError;
 
 	/** The calculated PID controller output */
-	private long	_output;
+	private double	_output;
 
 	/** Whether the controller is running */
 	private boolean	_isRunning;
@@ -71,12 +71,12 @@ public class SimplePID
 		return _dTerm;
 	}
 
-	public long getOutput()
+	public double getOutput()
 	{
 		return _output;
 	}
 
-	public long getOutput(long input)
+	public double getOutput(double input)
 	{
 		if(_isRunning)
 		{
