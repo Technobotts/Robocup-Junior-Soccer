@@ -2,12 +2,13 @@ package lejos.nxt.addon;
 
 import lejos.nxt.I2CPort;
 import lejos.nxt.I2CSensor;
+import lejos.robotics.DirectionFinder;
 
 /**
  * HiTechnic IRSeekerV2 sensor - untested. www.hitechnic.com
  * 
  */
-public class IRSeekerV2 extends I2CSensor
+public class IRSeekerV2 extends I2CSensor implements DirectionFinder
 {
 	public static enum Mode {
 		AC, DC
@@ -155,4 +156,25 @@ public class IRSeekerV2 extends I2CSensor
 				+ getSensorValue(3) + "," + getSensorValue(4) + ","
 				+ getSensorValue(5) + ")";
 	}
+
+	@Override
+    public float getDegreesCartesian()
+    {
+	    return getAngle();
+    }
+
+	@Override
+    public void resetCartesianZero()
+    {	    
+    }
+
+	@Override
+    public void startCalibration()
+    {
+    }
+
+	@Override
+    public void stopCalibration()
+    {
+    }
 }
