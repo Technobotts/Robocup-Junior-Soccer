@@ -1,6 +1,7 @@
 package lejos.robotics.navigation;
 
 import lejos.nxt.LCD;
+import lejos.nxt.Sound;
 import lejos.robotics.DirectionFinder;
 import lejos.util.Delay;
 import java.util.PID.SimplePID;
@@ -78,12 +79,14 @@ public class OmniCompassPilot extends SimpleOmniPilot
 		synchronized(_regulator)
 		{
 			_regulate = on;
-			_regulator.notifyAll();
+			if(on && !_regulator._isRunning)
+				_regulator.start();
 		}
 	}
 
 	private class DirectionRegulator extends Thread
 	{
+		boolean _isRunning;
 		private float[] getTravelSpeedsWithBias(float rotationBias, float error)
 		{
 			float[] travelSpeeds = getMotorTravelVelocities(_targetDirection + error);
@@ -117,41 +120,34 @@ public class OmniCompassPilot extends SimpleOmniPilot
 		@Override
 		public void run()
 		{
+			_isRunning = true;
+			
 			pid.start();
-			while(true)
+			reset();
+			Sound.buzz();
+			while(_regulate)
 			{
-				while(_regulate)
+				synchronized(this)
 				{
-					synchronized(this)
-					{
-						float error = getError();
-						if(Float.isNaN(error))
-							continue;
-						float rotationBias = (float) pid.getOutput(error);
-						LCD.drawString("Bias=" + rotationBias + "    ", 0, 0);
-						LCD.drawString("Heading=" + _compass.getDegreesCartesian() + "    ", 0, 1);
-						LCD.drawString("Target=" + _targetFacing + "    ", 0, 3);
-						float[] speeds;
+					float error = getError();
+					if(Float.isNaN(error))
+						continue;
+					float rotationBias = (float) pid.getOutput(error);
+					LCD.drawString("Bias=" + rotationBias + "    ", 0, 0);
+					LCD.drawString("Heading=" + _compass.getDegreesCartesian() + "    ", 0, 1);
+					LCD.drawString("Target=" + _targetFacing + "    ", 0, 3);
+					float[] speeds;
 
-						if(_travel)
-							speeds = getTravelSpeedsWithBias(rotationBias, error);
-						else
-							speeds = getMotorRotationVelocities(rotationBias);
-						setMotorSpeeds(speeds);
-					}
-					Delay.msDelay(5);
+					if(_travel)
+						speeds = getTravelSpeedsWithBias(rotationBias, error);
+					else
+						speeds = getMotorRotationVelocities(rotationBias);
+					setMotorSpeeds(speeds);
 				}
-				while(!_regulate)
-				{
-    				try
-                    {
-    	                this.wait();
-                    }
-                    catch(InterruptedException e)
-                    {}
-				}
+				Delay.msDelay(5);
 			}
+			stop();
+			_isRunning = false;
 		}
-
 	}
 }
