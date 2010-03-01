@@ -41,7 +41,8 @@ public class SoccerRobot
 		{
 			try
 			{
-				Thread.sleep(2000);
+				Sound.beepSequenceUp();
+				Thread.sleep(1000);
 			}
 			catch(InterruptedException e)
 			{}
@@ -66,6 +67,7 @@ public class SoccerRobot
 		                             new SimpleOmniPilot.OmniMotor(Motor.B, 180, 6.4f, 1, 11),
 		                             new SimpleOmniPilot.OmniMotor(Motor.C, 300, 6.4f, 1, 11)
 		        );
+		//pilot.setRegulation(false);
 	}
 
 	private boolean isKicking = false;
@@ -89,12 +91,13 @@ public class SoccerRobot
 
 	public void kick()
 	{
-		final int kickAngle = 60;
+		final int kickAngle = 110;
 
 		kickerMotor.setPower(100);
 		kickerMotor.forward();
 		isKicking = true;
-		while(kickerMotor.getTachoCount() < kickAngle)
+		long startTime = System.currentTimeMillis();
+		while(kickerMotor.getTachoCount() < kickAngle && startTime + 1500 > System.currentTimeMillis())
 			Thread.yield();
 		kickerMotor.flt();
 		try
