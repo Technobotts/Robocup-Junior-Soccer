@@ -2,6 +2,7 @@ package lejos.robotics.navigation;
 
 import lejos.nxt.LCD;
 import lejos.nxt.Sound;
+import lejos.nxt.Motor.Regulator;
 import lejos.robotics.DirectionFinder;
 import lejos.util.Delay;
 import java.util.PID.SimplePID;
@@ -14,20 +15,20 @@ public class OmniCompassPilot extends SimpleOmniPilot
 	protected float              _targetDirection = 0;
 	protected boolean            _travel          = false;
 	protected boolean            _regulate        = true;
-	protected DirectionRegulator _regulator       = new DirectionRegulator();
+	protected DirectionRegulator _regulator       = null;
 
 	public OmniCompassPilot(DirectionFinder compass, OmniMotor... motors)
 	{
 		super(motors);
 		_compass = compass;
 		_compass.resetCartesianZero();
-		_regulator.setDaemon(true);
-		_regulator.start();
+		setRegulation(true);
 	}
 
 	@Override
 	public void rotate(float angle, boolean immediateReturn)
 	{
+		setRegulation(true);
 		synchronized(_regulator)
 		{
 			_travel = false;
@@ -41,16 +42,25 @@ public class OmniCompassPilot extends SimpleOmniPilot
 	@Override
 	public void stop()
 	{
+		setRegulation(true);
 		synchronized(_regulator)
 		{
 			_travel = false;
 			_regulator.reset();
 		}
+		super.stop();
 	}
+	
+	private void stop(boolean dummy)
+	{
+		super.stop();
+	}
+		
 
 	@Override
 	public void travel(float heading)
 	{
+		setRegulation(true);
 		if(Float.isNaN(heading))
 			stop();
 		else
@@ -71,22 +81,31 @@ public class OmniCompassPilot extends SimpleOmniPilot
 	public void setDirectionFinder(DirectionFinder df)
 	{
 		_compass = df;
+		if(_regulator != null)
 		_regulator.reset();
 	}
 
 	public void setRegulation(boolean on)
 	{
-		synchronized(_regulator)
+		if(on == (_regulator != null))
+			return;
+		
+		if(_regulator == null)
 		{
-			_regulate = on;
-			if(on && !_regulator._isRunning)
-				_regulator.start();
+			_regulator = new DirectionRegulator();
+			_regulator.setDaemon(true);
+			_regulator.start();
 		}
+		
+		else
+			synchronized(_regulator)
+			{
+				_regulator = null;
+			}
 	}
 
 	private class DirectionRegulator extends Thread
 	{
-		boolean _isRunning;
 		private float[] getTravelSpeedsWithBias(float rotationBias, float error)
 		{
 			float[] travelSpeeds = getMotorTravelVelocities(_targetDirection + error);
@@ -119,13 +138,10 @@ public class OmniCompassPilot extends SimpleOmniPilot
 
 		@Override
 		public void run()
-		{
-			_isRunning = true;
-			
+		{		
 			pid.start();
 			reset();
-			Sound.buzz();
-			while(_regulate)
+			while(_regulator == this)
 			{
 				synchronized(this)
 				{
@@ -146,8 +162,7 @@ public class OmniCompassPilot extends SimpleOmniPilot
 				}
 				Delay.msDelay(5);
 			}
-			stop();
-			_isRunning = false;
+			stop(true);
 		}
 	}
 }
