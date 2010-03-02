@@ -80,6 +80,12 @@ public class OmniCompassPilot extends SimpleOmniPilot
 
 	public void setDirectionFinder(DirectionFinder df)
 	{
+		float oldHeading = _compass.getDegreesCartesian();
+		float newHeading = df.getDegreesCartesian();
+		if(!Float.isNaN(oldHeading) && !Float.isNaN(newHeading))
+		{
+			_targetFacing = newHeading - oldHeading + _targetFacing;
+		}
 		_compass = df;
 		if(_regulator != null)
 		_regulator.reset();
@@ -149,9 +155,9 @@ public class OmniCompassPilot extends SimpleOmniPilot
 					if(Float.isNaN(error))
 						continue;
 					float rotationBias = (float) pid.getOutput(error);
-					LCD.drawString("Bias=" + rotationBias + "    ", 0, 0);
-					LCD.drawString("Heading=" + _compass.getDegreesCartesian() + "    ", 0, 1);
-					LCD.drawString("Target=" + _targetFacing + "    ", 0, 3);
+					//LCD.drawString("Bias=" + rotationBias + "    ", 0, 0);
+					//LCD.drawString("Heading=" + _compass.getDegreesCartesian() + "    ", 0, 1);
+					//LCD.drawString("Target=" + _targetFacing + "    ", 0, 3);
 					float[] speeds;
 
 					if(_travel)
