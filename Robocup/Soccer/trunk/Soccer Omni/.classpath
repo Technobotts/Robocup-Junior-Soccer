@@ -4,5 +4,6 @@
 	<classpathentry kind="lib" path="C:/Program Files/LeJOS NXJ/lib/classes.jar"/>
 	<classpathentry kind="src" path="/IRSeekerV2"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/OmniPilots"/>
+	<classpathentry kind="src" path="/Fixed compass"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

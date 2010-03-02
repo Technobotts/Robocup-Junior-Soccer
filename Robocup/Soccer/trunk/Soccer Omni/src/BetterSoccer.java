@@ -1,6 +1,7 @@
 import lejos.nxt.Button;
 import lejos.nxt.Sound;
 import lejos.robotics.navigation.SimpleOmniPilot;
+import technobotts.soccer.SoccerDisplay;
 import technobotts.soccer.SoccerRobot;
 
 
@@ -8,48 +9,58 @@ public class BetterSoccer
 {
 	static SoccerRobot robot = new SoccerRobot();
 	
-	public static void main(String[] args)
+	public static void main(String[] args) throws InterruptedException
 	{
+		Thread display = new SoccerDisplay(robot);
+		display.start();
 		while(true)
 		{
 			if(!robot.IR.hasDirection())
 			{
-				//Sound.playTone(440, 100);
+				robot.pilot.setRegulation(false);
+				
 				((SimpleOmniPilot) robot.pilot).rotate();
+				
 				while(!robot.IR.hasDirection())
 					Thread.yield();
-				robot.pilot.stop();
-				//Sound.playTone(880, 100);
 				
+				robot.pilot.stop();
 			}
 			
 			while(robot.IR.hasDirection())
 			{
 				while(robot.hasBall())
 				{
-					//Sound.beepSequenceUp();
-					Button.ENTER.waitForPressAndRelease();
+					robot.pilot.setRegulation(true);
+					robot.pilot.setDirectionFinder(robot.compass);
+					
+					robot.pilot.travel(0);
+					Sound.beepSequenceUp();
+					Thread.sleep(500);
 					robot.kick();
 				}
 				
 				float angle = robot.IR.getAngle();
 				System.out.println("a: "+angle);
-				
-				if(Math.abs(angle) > 45)
+				 
+				if(Math.abs(angle) > 60)
 				{
-					//Sound.playTone(261, 100);
+					robot.pilot.setRegulation(true);
 					robot.pilot.setDirectionFinder(robot.IR);
-					//robot.pilot.setRegulation(true);
+					
+					robot.pilot.stop();
 					robot.pilot.rotate(0);
-					//robot.pilot.setRegulation(false);
-					robot.pilot.setDirectionFinder(robot.compass);
-					//Sound.playTone(Sound.C2, 100);
+					
+					Thread.sleep(500);
 				}
 				else if(!Float.isNaN(angle))
 				{
-					((SimpleOmniPilot) robot.pilot).travel(angle);
+					robot.pilot.setRegulation(true);
+					robot.pilot.setDirectionFinder(robot.IR);
+					
+					robot.pilot.travel(0);
 				}
-				Thread.yield();
+				Thread.sleep(100);
 			}
 		}
 	}

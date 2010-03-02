@@ -3,8 +3,6 @@ package technobotts.soccer;
 import java.io.IOException;
 
 import lejos.nxt.*;
-import lejos.nxt.UltrasonicSensor;
-import lejos.nxt.addon.CompassSensor;
 import lejos.nxt.addon.IRSeekerV2;
 import lejos.nxt.comm.RS485;
 import lejos.nxt.remote.RemoteMotor;
@@ -41,7 +39,6 @@ public class SoccerRobot
 		{
 			try
 			{
-				Sound.beepSequenceUp();
 				Thread.sleep(1000);
 			}
 			catch(InterruptedException e)
@@ -53,11 +50,11 @@ public class SoccerRobot
 	{
 		RemoteNXT nxt = connectToKickerNXT();
 		if(nxt == null)
-			throw new IllegalStateException();
+			System.exit(-1);
 		kickerMotor = nxt.A;
 		kickerMotor.smoothAcceleration(false);
 		kickerMotor.regulateSpeed(false);
-		
+
 		US = new UltrasonicSensor(SensorPort.S3);
 		compass = new CompassSensor(SensorPort.S1);
 		IR = new IRSeekerV2(SensorPort.S2, IRSeekerV2.Mode.DC);
@@ -67,10 +64,12 @@ public class SoccerRobot
 		                             new SimpleOmniPilot.OmniMotor(Motor.B, 180, 6.4f, 1, 11),
 		                             new SimpleOmniPilot.OmniMotor(Motor.C, 300, 6.4f, 1, 11)
 		        );
-		//pilot.setRegulation(false);
+		pilot.setMoveSpeed(100);
+		pilot.setRegulation(false);
 	}
 
 	private boolean isKicking = false;
+	public String   status    = "";
 
 	public boolean hasBall()
 	{
@@ -79,12 +78,12 @@ public class SoccerRobot
 
 		int[] dists = new int[8];
 		US.ping();
-		
+
 		if(US.getDistances(dists) == 0)
 			for(int dist : dists)
 				if(dist < 10)
 					return true;
-		
+
 		return false;
 
 	}
