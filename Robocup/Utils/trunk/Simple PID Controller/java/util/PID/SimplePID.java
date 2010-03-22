@@ -2,34 +2,34 @@ package java.util.PID;
 
 /**
  * @author Eric
- *
  */
 public class SimplePID
 {
 	/** The P I and D factors to multiply by */
-	private double	_Kp, _Ki, _Kd;
+	private double  _Kp, _Ki, _Kd;
 	/** The P I and D terms of the PID algorithm */
-	private double	_pTerm, _iTerm, _dTerm;
+	private double  _pTerm, _iTerm, _dTerm;
 
 	/** The current system time */
-	private long	_tick;
+	private long    _tick;
 	/** The system time at the last data input */
-	private long	_lastTick;
+	private long    _lastTick;
 
 	/** The deviation from the set point of last data input */
-	private double	_error;
+	private double  _error;
 
 	/** The previous value of _error */
-	private double	_lastError;
+	private double  _lastError;
 	/** The integrated error values */
-	private long	_intError;
+	private long    _intError;
+	private long    _maxInt = 10000;
 
 	/** The calculated PID controller output */
-	private double	_output;
+	private double  _output;
 
 	/** Whether the controller is running */
-	private boolean	_isRunning;
-	private boolean	_hasData;
+	private boolean _isRunning;
+	private boolean _hasData;
 
 	/**
 	 * Constructs the SimplePID object
@@ -44,16 +44,18 @@ public class SimplePID
 		this._Kd = Kd;
 		reset();
 	}
-	
+
 	/**
 	 * Resets important member variables
 	 */
+
 	public void reset()
 	{
 		_intError = 0;
 		_pTerm = 0;
 		_iTerm = 0;
 		_dTerm = 0;
+		_hasData = false;
 	}
 
 	public double getPTerm()
@@ -90,21 +92,30 @@ public class SimplePID
 			{
 				// First time around: no I or D part;
 				_hasData = true;
-				_output = (long) _pTerm;
+				_output = _pTerm;
 			}
 			else if(dt != 0)
 			{
 				_intError += _error * dt;
+				if(_intError > _maxInt)
+					_intError = _maxInt;
+				else if(_intError < -_maxInt)
+					_intError = -_maxInt;
 
 				_iTerm = _Ki * _intError;
 				_dTerm = _Kd * (_error - _lastError) / dt;
-				
-				_output = (long) (_pTerm + _iTerm + _dTerm);
+
+				_output = _pTerm + _iTerm + _dTerm;
 			}
 			_lastTick = _tick;
 			_lastError = _error;
 		}
 		return _output;
+	}
+
+	public void setMaxInt(long maxInt)
+	{
+		_maxInt = maxInt;
 	}
 
 	public void start()
@@ -113,12 +124,11 @@ public class SimplePID
 		{
 			reset();
 			_isRunning = true;
-			_hasData = false;
 		}
 	}
-	
+
 	public void stop()
 	{
-		_isRunning  = false;
+		_isRunning = false;
 	}
 }
