@@ -21,12 +21,14 @@ public class SoccerDisplay extends Thread
 		{
 			g.clear();
 
-			g.drawString("IR=" + _robot.IR.getAngle(), 0, 0);
-			g.drawString("Compass=" + _robot.compass.getDegreesCartesian(), 0, 8);
-			g.drawString("Ball=" + _robot.hasBall(), 0, 16);
+			// g.drawString("IR=" + _robot.IR.getAngle(), 0, 0);
+			// g.drawString(_robot.IR.toString(), 8, 8);
+			g.drawString("Compass=" + _robot.compass.getDegreesCartesian(), 0, 16);
+			g.drawString("Ball=" + _robot.hasBall(), 0, 24);
 
-			g.drawString("Status:", 0, 28);
-			g.drawString(_robot.status, 8, 36);
+			g.drawString("Status:", 0, 36);
+			if(_robot.status != null)
+				g.drawString(_robot.status, 8, 44);
 
 			g.refresh();
 
@@ -38,7 +40,7 @@ public class SoccerDisplay extends Thread
 			{}
 		}
 	}
-	
+
 	public static void main(String... args)
 	{
 		Thread t = new SoccerDisplay(new SoccerRobot());
