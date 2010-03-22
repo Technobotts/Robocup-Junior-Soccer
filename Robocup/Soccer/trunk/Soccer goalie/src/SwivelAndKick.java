@@ -20,6 +20,8 @@ public class SwivelAndKick
 		
 		c.resetCartesianZero();
 		
+		Motor.A.smoothAcceleration(false);
+		
 		while(true)
 		{
 			boolean left = false;
