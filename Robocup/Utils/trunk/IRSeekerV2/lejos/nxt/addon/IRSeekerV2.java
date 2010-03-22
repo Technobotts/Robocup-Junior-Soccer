@@ -67,7 +67,7 @@ public class IRSeekerV2 extends I2CSensor implements DirectionFinder
 		while(true)
 		{
 			int dir = getDirection();
-			if(dir == 0 && !blocking)
+			if(dir <= 0 && !blocking)
 				return Float.NaN;
 			else
 				return (dir - 5) * 30;
