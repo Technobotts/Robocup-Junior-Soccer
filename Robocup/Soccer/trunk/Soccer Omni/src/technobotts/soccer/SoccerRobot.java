@@ -33,16 +33,13 @@ public class SoccerRobot
 		{
 			LCD.clear();
 			LCD.drawString("Failure", 0, 0);
-			return null;
-		}
-		finally
-		{
 			try
 			{
 				Thread.sleep(1000);
 			}
 			catch(InterruptedException e)
 			{}
+			return null;
 		}
 	}
 
@@ -57,14 +54,14 @@ public class SoccerRobot
 
 		US = new UltrasonicSensor(SensorPort.S3);
 		compass = new CompassSensor(SensorPort.S1);
-		IR = new IRSeekerV2(SensorPort.S2, IRSeekerV2.Mode.DC);
+		IR = new IRSeekerV2(SensorPort.S2, IRSeekerV2.Mode.AC);
 
 		pilot = new OmniCompassPilot(compass,
 		                             new SimpleOmniPilot.OmniMotor(Motor.A, 60, 6.4f, 1, 11, true),
-		                             new SimpleOmniPilot.OmniMotor(Motor.B, 180, 6.4f, 1, 11),
+		                             new SimpleOmniPilot.OmniMotor(Motor.B, 180, 6.4f, 1, 11, true),
 		                             new SimpleOmniPilot.OmniMotor(Motor.C, 300, 6.4f, 1, 11)
 		        );
-		pilot.setMoveSpeed(100);
+		pilot.setMoveSpeed(1000);
 		pilot.setRegulation(false);
 	}
 
@@ -88,9 +85,11 @@ public class SoccerRobot
 
 	}
 
-	public void kick()
+	public void kick() throws IOException
 	{
 		final int kickAngle = 110;
+		if(kickerMotor == null)
+			throw new IOException(/*"Kicker Disconnected!"*/);
 
 		kickerMotor.setPower(100);
 		kickerMotor.forward();

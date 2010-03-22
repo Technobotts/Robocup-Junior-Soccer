@@ -1,5 +1,7 @@
+import java.io.IOException;
 import java.util.Random;
 
+import lejos.nxt.LCD;
 import lejos.nxt.Sound;
 import technobotts.soccer.SoccerDisplay;
 import technobotts.soccer.SoccerRobot;
@@ -8,14 +10,12 @@ public class NFaceSoccer
 {
 	static SoccerRobot robot = new SoccerRobot();
 
-	public static void main(String... args) throws InterruptedException
+	public static void main(String... args) throws InterruptedException, IOException
 	{
 		Thread display = new SoccerDisplay(robot);
 		display.start();
 		robot.pilot.setRegulation(true);
 
-		Random r = new Random();
-		int randHeading = 0;
 		while(true)
 		{
 			robot.pilot.setMoveSpeed(50);
@@ -44,8 +44,10 @@ public class NFaceSoccer
 
 				if(Math.abs(angle) > 60)
 				{
-					robot.status = "Behind";
-					robot.pilot.travel(180 * 0.25f + angle * 0.75f);
+					//robot.status = "Behind";
+					//float angle2 = 180 - Math.signum(angle) * (180 - Math.abs(angle)) * 0.75f;
+					robot.status = ""+angle;// + ", " + angle2 + "        ";
+					robot.pilot.travel(angle);//2);
 
 					Thread.sleep(500);
 				}
