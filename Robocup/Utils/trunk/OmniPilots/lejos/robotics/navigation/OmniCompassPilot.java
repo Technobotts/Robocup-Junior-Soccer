@@ -29,11 +29,14 @@ public class OmniCompassPilot extends SimpleOmniPilot
 	public void rotate(float angle, boolean immediateReturn)
 	{
 		setRegulation(true);
-		synchronized(_regulator)
+		if(_targetFacing != angle || _travel != false)
 		{
-			_travel = false;
-			_targetFacing = angle;
-			_regulator.reset();
+			synchronized(_regulator)
+			{
+				_travel = false;
+				_targetFacing = angle;
+				_regulator.reset();
+			}
 		}
 		while(!(Math.abs(_regulator.getError()) < 3) && !immediateReturn)
 			Thread.yield();
@@ -50,12 +53,11 @@ public class OmniCompassPilot extends SimpleOmniPilot
 		}
 		super.stop();
 	}
-	
+
 	private void stop(boolean dummy)
 	{
 		super.stop();
 	}
-		
 
 	@Override
 	public void travel(float heading)
@@ -63,13 +65,15 @@ public class OmniCompassPilot extends SimpleOmniPilot
 		setRegulation(true);
 		if(Float.isNaN(heading))
 			stop();
-		else
+		else if(_targetDirection != heading || _travel != true)
+		{
 			synchronized(_regulator)
 			{
 				_travel = true;
 				_targetDirection = heading;
 				_regulator.reset();
 			}
+		}
 
 	}
 
@@ -88,21 +92,21 @@ public class OmniCompassPilot extends SimpleOmniPilot
 		}
 		_compass = df;
 		if(_regulator != null)
-		_regulator.reset();
+			_regulator.reset();
 	}
 
 	public void setRegulation(boolean on)
 	{
 		if(on == (_regulator != null))
 			return;
-		
+
 		if(_regulator == null)
 		{
 			_regulator = new DirectionRegulator();
 			_regulator.setDaemon(true);
 			_regulator.start();
 		}
-		
+
 		else
 			synchronized(_regulator)
 			{
@@ -124,7 +128,7 @@ public class OmniCompassPilot extends SimpleOmniPilot
 			return speeds;
 		}
 
-		private SimplePID pid = new SimplePID(4, 0.0001, 0);
+		private SimplePID pid = new SimplePID(4, 0.001, 0);
 
 		private float getError()
 		{
@@ -144,7 +148,7 @@ public class OmniCompassPilot extends SimpleOmniPilot
 
 		@Override
 		public void run()
-		{		
+		{
 			pid.start();
 			reset();
 			while(_regulator == this)
@@ -155,9 +159,9 @@ public class OmniCompassPilot extends SimpleOmniPilot
 					if(Float.isNaN(error))
 						continue;
 					float rotationBias = (float) pid.getOutput(error);
-					//LCD.drawString("Bias=" + rotationBias + "    ", 0, 0);
-					//LCD.drawString("Heading=" + _compass.getDegreesCartesian() + "    ", 0, 1);
-					//LCD.drawString("Target=" + _targetFacing + "    ", 0, 3);
+					// LCD.drawString("Bias=" + rotationBias + "    ", 0, 0);
+					// LCD.drawString("Heading=" + _compass.getDegreesCartesian() + "    ", 0, 1);
+					// LCD.drawString("Target=" + _targetFacing + "    ", 0, 3);
 					float[] speeds;
 
 					if(_travel)
