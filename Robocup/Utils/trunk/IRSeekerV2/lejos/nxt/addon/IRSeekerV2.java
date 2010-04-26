@@ -6,7 +6,6 @@ import lejos.robotics.DirectionFinder;
 
 /**
  * HiTechnic IRSeekerV2 sensor - untested. www.hitechnic.com
- * 
  */
 public class IRSeekerV2 extends I2CSensor implements DirectionFinder
 {
@@ -14,11 +13,11 @@ public class IRSeekerV2 extends I2CSensor implements DirectionFinder
 		AC, DC
 	};
 
-	public static final byte	address	= 0x08;
-	byte[]						buf		= new byte[1];
-	public static final	float	noAngle = Float.NaN;
+	public static final byte  address = 0x08;
+	byte[]                    buf     = new byte[1];
+	public static final float noAngle = Float.NaN;
 
-	private Mode				mode;
+	private Mode              mode;
 
 	/**
 	 * Set the mode of the sensor
@@ -37,7 +36,6 @@ public class IRSeekerV2 extends I2CSensor implements DirectionFinder
 
 	/**
 	 * Returns the direction of the target (1 to 9) or 0 if no target.
-	 * 
 	 * @return direction
 	 */
 	public int getDirection()
@@ -59,7 +57,6 @@ public class IRSeekerV2 extends I2CSensor implements DirectionFinder
 
 	/**
 	 * Returns the angle of the target (-180 to 180) or NaN.
-	 * 
 	 * @return direction
 	 */
 	public float getAngle(boolean blocking)
@@ -73,6 +70,30 @@ public class IRSeekerV2 extends I2CSensor implements DirectionFinder
 				return (dir - 5) * 30;
 		}
 	}
+	
+	public float getStrength()
+	{
+		return getStrength(getAngle());
+	}
+
+	public float getStrength(float angle)
+	{
+		if(Float.isNaN(angle) || angle > 120 || angle < -120)
+			return Float.NaN;
+		int lowerBound = (int) (angle - (angle + 360) % 60);
+		int lowerStrength = getSensorValue(lowerBound/60+3);
+		if(lowerBound == angle)
+		{
+			return lowerStrength;
+		}
+		else
+		{
+			int upperBound = lowerBound + 60;
+    		int upperStrength = getSensorValue(upperBound/60+3);
+    		return (angle-lowerBound)/(upperBound-lowerBound)*(upperStrength-lowerStrength)+lowerStrength;
+		}
+	}
+
 	public float getAngle()
 	{
 		return getAngle(false);
@@ -85,7 +106,6 @@ public class IRSeekerV2 extends I2CSensor implements DirectionFinder
 
 	/**
 	 * Returns value of sensor 1 - 5.
-	 * 
 	 * @param id
 	 *            The id of the sensor to read
 	 * @return sensor value (0 to 255).
@@ -103,7 +123,7 @@ public class IRSeekerV2 extends I2CSensor implements DirectionFinder
 		}
 		if(id < 1 || id > 5)
 			throw new IllegalArgumentException(
-					"The argument 'id' must be between 1 and 5");
+			                                   "The argument 'id' must be between 1 and 5");
 		int ret = getData(register + (id - 1), buf, 1);
 		if(ret != 0)
 			return -1;
@@ -112,7 +132,6 @@ public class IRSeekerV2 extends I2CSensor implements DirectionFinder
 
 	/**
 	 * Gets the values of each sensor, returning them in an array.
-	 * 
 	 * @return Array of sensor values (0 to 255).
 	 */
 	public int[] getSensorValues()
@@ -127,7 +146,6 @@ public class IRSeekerV2 extends I2CSensor implements DirectionFinder
 
 	/**
 	 * Returns the average sensor reading (DC Only)
-	 * 
 	 * @return sensor value (0 to 255).
 	 */
 	public int getAverage(int id)
@@ -153,28 +171,25 @@ public class IRSeekerV2 extends I2CSensor implements DirectionFinder
 	public String toString()
 	{
 		return "(" + getSensorValue(1) + "," + getSensorValue(2) + ","
-				+ getSensorValue(3) + "," + getSensorValue(4) + ","
-				+ getSensorValue(5) + ")";
+		       + getSensorValue(3) + "," + getSensorValue(4) + ","
+		       + getSensorValue(5) + ")";
 	}
 
 	@Override
-    public float getDegreesCartesian()
-    {
-	    return getAngle();
-    }
+	public float getDegreesCartesian()
+	{
+		return getAngle();
+	}
 
 	@Override
-    public void resetCartesianZero()
-    {	    
-    }
+	public void resetCartesianZero()
+	{}
 
 	@Override
-    public void startCalibration()
-    {
-    }
+	public void startCalibration()
+	{}
 
 	@Override
-    public void stopCalibration()
-    {
-    }
+	public void stopCalibration()
+	{}
 }
