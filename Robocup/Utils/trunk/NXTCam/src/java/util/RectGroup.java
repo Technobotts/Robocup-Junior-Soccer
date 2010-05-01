@@ -9,7 +9,8 @@ import lejos.nxt.LCD;
 
 public class RectGroup extends ArrayList<Rectangle> implements List<Rectangle>
 {
-	public RectGroup(Rectangle... rects)
+	@SuppressWarnings("deprecation")
+    public RectGroup(Rectangle... rects)
 	{
 		super(rects);
 	}
