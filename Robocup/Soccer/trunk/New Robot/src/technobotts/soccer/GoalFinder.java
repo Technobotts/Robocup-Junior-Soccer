@@ -4,11 +4,9 @@ import java.awt.Rectangle;
 import java.util.List;
 import java.util.RectGroup;
 
-import lejos.nxt.SensorPort;
 import lejos.nxt.addon.CamRect;
 import lejos.nxt.addon.NXTCam;
 import lejos.robotics.DirectionFinder;
-import lejos.util.TextMenu;
 
 public class GoalFinder implements DirectionFinder
 {
