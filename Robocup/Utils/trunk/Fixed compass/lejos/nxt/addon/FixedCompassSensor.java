@@ -1,9 +1,11 @@
-package lejos.nxt;
+package lejos.nxt.addon;
 
-public class CompassSensor extends lejos.nxt.addon.CompassSensor
+import lejos.nxt.I2CPort;
+
+public class FixedCompassSensor extends CompassSensor
 {
 
-	public CompassSensor(I2CPort port)
+	public FixedCompassSensor(I2CPort port)
     {
 	    super(port);
 	    // TODO Auto-generated constructor stub
