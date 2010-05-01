@@ -1,7 +1,5 @@
 package technobotts.soccer;
 
-import lejos.nxt.addon.IRSeeker;
-import lejos.nxt.addon.IRSeekerV2;
 import lejos.robotics.DirectionFinder;
 
 public class DualDirectionFinders implements DirectionFinder
