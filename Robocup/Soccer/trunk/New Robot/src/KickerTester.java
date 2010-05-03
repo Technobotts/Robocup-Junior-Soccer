@@ -1,3 +1,4 @@
+import lejos.nxt.Button;
 import lejos.nxt.LCD;
 import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
@@ -13,29 +14,36 @@ public class KickerTester
 
 		kicker.setSpeed(1000);
 		kicker.smoothAcceleration(false);
+		kicker.backward();
+		Thread.sleep(500);
+		kicker.resetTachoCount();
+		kicker.lock(100);
 
 		while(true)
 		{
 			int dist = us.getDistance();
-			if(dist <= 10)
+			
+			LCD.clear();
+			LCD.drawString("US: " + dist, 0, 0);
+			LCD.refresh();
+			
+			if(dist <= 10 || Button.ENTER.isPressed())
 			{
 				Sound.beepSequenceUp();
 
-				kicker.setPower(100);
 				kicker.forward();
 				long startTime = System.currentTimeMillis();
-				while(kicker.getTachoCount() < 90
-				      && startTime + 1500 > System.currentTimeMillis())
+				while(kicker.getTachoCount() < 120
+				      && startTime + 1000 > System.currentTimeMillis())
 					;
 				kicker.flt();
-				Thread.sleep(100);
+				Thread.sleep(250);
 
-				kicker.setPower(50);
-				kicker.rotateTo(0);
+				kicker.backward();
+				Thread.sleep(500);
+				kicker.lock(100);
 			}
-			LCD.clear();
-			LCD.drawString("US: " + us.getDistance(), 0, 0);
-			LCD.refresh();
+
 			Thread.sleep(100);
 		}
 	}
