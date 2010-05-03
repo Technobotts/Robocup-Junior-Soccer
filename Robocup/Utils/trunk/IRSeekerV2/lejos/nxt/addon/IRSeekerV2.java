@@ -10,7 +10,18 @@ import lejos.robotics.DirectionFinder;
 public class IRSeekerV2 extends I2CSensor implements DirectionFinder
 {
 	public static enum Mode {
-		AC, DC
+		AC_600Hz	(true, 600),
+		AC_1200Hz	(true, 1200),
+		DC			(true, 0);
+
+		public final boolean pulsed;
+		public final int     frequency;
+
+		Mode(boolean pulsed, int frequency)
+		{
+			this.pulsed = pulsed;
+			this.frequency = frequency;
+		}
 	};
 
 	public static final byte  address = 0x08;
@@ -25,6 +36,11 @@ public class IRSeekerV2 extends I2CSensor implements DirectionFinder
 	public void setMode(Mode mode)
 	{
 		this.mode = mode;
+		if(mode.pulsed)
+		{
+			byte modeId = (byte) (mode.frequency <= 900 ? 1 : 0);
+			this.sendData(0x41, modeId);
+		}
 	}
 
 	public IRSeekerV2(I2CPort port, Mode mode)
@@ -41,11 +57,11 @@ public class IRSeekerV2 extends I2CSensor implements DirectionFinder
 	public int getDirection()
 	{
 		int register = 0;
-		if(mode == Mode.AC)
+		if(mode.pulsed)
 		{
 			register = 0x49;
 		}
-		else if(mode == Mode.DC)
+		else
 		{
 			register = 0x42;
 		}
@@ -70,18 +86,18 @@ public class IRSeekerV2 extends I2CSensor implements DirectionFinder
 				return (dir - 5) * 30;
 		}
 	}
-	
-	public float getStrength()
+
+	public float getRange()
 	{
-		return getStrength(getAngle());
+		return getRange(getAngle());
 	}
 
-	public float getStrength(float angle)
+	public float getRange(float angle)
 	{
 		if(Float.isNaN(angle) || angle > 120 || angle < -120)
 			return Float.NaN;
 		int lowerBound = (int) (angle - (angle + 360) % 60);
-		int lowerStrength = getSensorValue(lowerBound/60+3);
+		int lowerStrength = getSensorValue(lowerBound / 60 + 3);
 		if(lowerBound == angle)
 		{
 			return lowerStrength;
@@ -89,8 +105,8 @@ public class IRSeekerV2 extends I2CSensor implements DirectionFinder
 		else
 		{
 			int upperBound = lowerBound + 60;
-    		int upperStrength = getSensorValue(upperBound/60+3);
-    		return (angle-lowerBound)/(upperBound-lowerBound)*(upperStrength-lowerStrength)+lowerStrength;
+			int upperStrength = getSensorValue(upperBound / 60 + 3);
+			return (angle - lowerBound) / (upperBound - lowerBound) * (upperStrength - lowerStrength) + lowerStrength;
 		}
 	}
 
@@ -113,11 +129,11 @@ public class IRSeekerV2 extends I2CSensor implements DirectionFinder
 	public int getSensorValue(int id)
 	{
 		int register = 0;
-		if(mode == Mode.AC)
+		if(mode.pulsed)
 		{
 			register = 0x4A;
 		}
-		else if(mode == Mode.DC)
+		else
 		{
 			register = 0x43;
 		}
@@ -150,7 +166,7 @@ public class IRSeekerV2 extends I2CSensor implements DirectionFinder
 	 */
 	public int getAverage(int id)
 	{
-		if(mode == Mode.DC)
+		if(!mode.pulsed)
 		{
 			if(id <= 0 || id > 5)
 				return -1;
