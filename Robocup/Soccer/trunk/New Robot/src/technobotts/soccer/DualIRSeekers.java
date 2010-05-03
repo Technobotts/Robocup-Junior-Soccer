@@ -4,8 +4,9 @@ import lejos.nxt.LCD;
 import lejos.nxt.SensorPort;
 import lejos.nxt.addon.IRSeekerV2;
 import lejos.nxt.addon.IRSeekerV2.Mode;
+import lejos.robotics.DirectionStrengthFinder;
 
-public class DualIRSeekers extends DualDirectionFinders
+public class DualIRSeekers extends DualDirectionFinders implements DirectionStrengthFinder
 {
 	protected IRSeekerV2 left;
 	protected IRSeekerV2 right;
@@ -41,12 +42,18 @@ public class DualIRSeekers extends DualDirectionFinders
 			return leftAngle;
 		else
 		{
-			float leftStrength = left.getStrength(leftAngle);
-			float rightStrength = right.getStrength(rightAngle);
+			float leftStrength = left.getRange(leftAngle);
+			float rightStrength = right.getRange(rightAngle);
 
 			return (leftAngle * leftStrength + rightAngle * rightStrength) / (leftStrength + rightStrength);
 		}
 	}
+	@Override
+    public float getRange()
+    {
+	    // TODO Auto-generated method stub
+	    return 0;
+    }
 
 	public static void main(String... args) throws InterruptedException
 	{
@@ -62,10 +69,10 @@ public class DualIRSeekers extends DualDirectionFinders
 			LCD.drawString("Angle: " + ballFinder.getDegreesCartesian(), 0, 0);
 			
 			LCD.drawString("Right: " + ballFinder.getRight().getAngle(), 0, 2);
-			LCD.drawString("     : " + ballFinder.getRight().getStrength(), 0, 3);
+			LCD.drawString("     : " + ballFinder.getRight().getRange(), 0, 3);
 			
 			LCD.drawString("Left : " + ballFinder.getLeft().getAngle(), 0, 5);
-			LCD.drawString("     : " + ballFinder.getLeft().getStrength(), 0, 6);
+			LCD.drawString("     : " + ballFinder.getLeft().getRange(), 0, 6);
 			
 			LCD.refresh();
 			
