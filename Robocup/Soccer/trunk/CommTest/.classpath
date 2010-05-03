@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="C:/Program Files/LeJOS NXJ/lib/classes.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Fixed compass"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
