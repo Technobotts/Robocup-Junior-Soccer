@@ -1,4 +1,4 @@
-package technobotts.soccer;
+package technobotts.soccer.util;
 
 import java.awt.Rectangle;
 import java.util.List;
