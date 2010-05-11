@@ -9,7 +9,7 @@ import lejos.robotics.RangeReading;
 import lejos.robotics.RangeReadingFinder;
 import lejos.robotics.RangeScanner;
 
-public class IRSeekerV2 extends I2CSensor implements RangeScanner, RangeReadingFinder
+public class IRSeekerV2 extends I2CSensor implements LightSourceFinder
 {
 	public static enum Mode {
 		AC_600Hz(true, 600),
@@ -150,4 +150,39 @@ public class IRSeekerV2 extends I2CSensor implements RangeScanner, RangeReadingF
 	{
 		return getRangeValues().getRangeReading();
 	}
+
+	@Override
+    public float getRange()
+    {
+	    // TODO Auto-generated method stub
+	    return 0;
+    }
+
+	@Override
+    public float getDegreesCartesian()
+    {
+	    // TODO Auto-generated method stub
+	    return getAngle();
+    }
+
+	@Override
+    public void resetCartesianZero()
+    {
+	    // TODO Auto-generated method stub
+	    
+    }
+
+	@Override
+    public void startCalibration()
+    {
+	    // TODO Auto-generated method stub
+	    
+    }
+
+	@Override
+    public void stopCalibration()
+    {
+	    // TODO Auto-generated method stub
+	    
+    }
 }
