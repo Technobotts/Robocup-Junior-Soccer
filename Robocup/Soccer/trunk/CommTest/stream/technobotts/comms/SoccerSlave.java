@@ -3,12 +3,11 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import lejos.nxt.LCD;
-import lejos.nxt.Sound;
+import lejos.nxt.*;
 import lejos.nxt.comm.NXTConnection;
 import lejos.nxt.comm.RS485;
 
-public class SoccerSlave implements MessageType
+public class SoccerSlave
 {
 	private NXTConnection    con;
 
@@ -32,6 +31,10 @@ public class SoccerSlave implements MessageType
 
 	class Responder extends Thread
 	{
+		public Responder()
+        {
+			super();
+        }
 		public void run()
 		{
 			while(true)
@@ -39,28 +42,28 @@ public class SoccerSlave implements MessageType
 				try
 				{
 					byte message = dis.readByte();
-
-					if(message == KICK)
+					if(message == MessageType.KICK.getValue())
 					{
 						Sound.beepSequenceUp();
 						dos.writeBoolean(true); //TODO
 					}
-					else if(message == GOAL_POS)
+					else if(message == MessageType.GOAL_POS.getValue())
 					{
 						Sound.beep();
 						dos.writeFloat(3.14159f); //TODO
 					}
-					else if(message == US_PING)
+					else if(message == MessageType.US_PING.getValue())
 					{
 						Sound.twoBeeps();
 						dos.writeBoolean(false); //TODO
 					}
-					else if(message == SHUTDOWN)
+					else if(message == MessageType.SHUTDOWN.getValue())
 					{
 						Sound.buzz();
 						dos.writeBoolean(true); //TODO
 						break;
 					}
+					dos.flush();
 				}
 				catch(IOException e)
 				{

@@ -2,14 +2,9 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import lejos.nxt.Button;
-import lejos.nxt.LCD;
-import lejos.nxt.SensorPort;
-import lejos.nxt.Sound;
-import lejos.nxt.addon.InvertedCompassSensor;
+import lejos.nxt.*;
 import lejos.nxt.comm.NXTConnection;
 import lejos.nxt.comm.RS485;
-import lejos.robotics.DirectionFinder;
 import lejos.util.TextMenu;
 
 public class CommTest
@@ -25,23 +20,27 @@ public class CommTest
 		
 		if(choice == 0)
 		{
+			int i = 0;
 			// SEND
 			NXTConnection con = RS485.getConnector().connect(name, NXTConnection.PACKET);
 			DataOutputStream dos = con.openDataOutputStream();
-			DirectionFinder c = new InvertedCompassSensor(SensorPort.S1);
+			DataInputStream dis = con.openDataInputStream();
+			//DirectionFinder c = new InvertedCompassSensor(SensorPort.S1);
+			LightSensor ls = new LightSensor(SensorPort.S1);
 			while(!Button.ESCAPE.isPressed())
 			{
 				try
 				{
-					dos.writeFloat(c.getDegreesCartesian());
-					dos
-	                //dos.flush();
+					dos.writeFloat(ls.getLightValue());
+	                dos.flush();
+					LCD.drawString(i++ +": "+dis.readFloat()+"     ", 0, 0);
+					LCD.refresh();
 				}
 				catch(IOException e)
 				{
 					Sound.buzz();
 				}
-				Thread.sleep(100);
+				Thread.yield();
 			}
 		}
 		else if(choice == 1)
@@ -54,7 +53,8 @@ public class CommTest
 	            Thread.sleep(2000);
 	            System.exit(1);
 	        }
-			
+
+			DataOutputStream dos = con.openDataOutputStream();
 			DataInputStream dis = con.openDataInputStream();
 			while(!Button.ESCAPE.isPressed())
 			{
@@ -64,12 +64,14 @@ public class CommTest
 					LCD.clear();
 					LCD.drawString("Angle: "+angle+"     ", 0, 0);
 					LCD.refresh();
+					dos.writeFloat(-angle);
+	                dos.flush();
 				}
 				catch(IOException e)
 				{
 					Sound.buzz();
 				}
-				Thread.sleep(100);
+				Thread.yield();
 			}
 		}
 	}
