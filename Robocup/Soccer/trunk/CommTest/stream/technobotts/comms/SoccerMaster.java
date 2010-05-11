@@ -11,9 +11,10 @@ import lejos.nxt.comm.NXTConnection;
 import lejos.nxt.comm.RS485;
 import lejos.util.TextMenu;
 
-public class SoccerMaster implements MessageType
+public class SoccerMaster
 {
-	private final String     recipientName;
+	@SuppressWarnings("unused")
+    private final String     recipientName;
 	private NXTConnection    con;
 
 	private DataOutputStream dos;
@@ -34,7 +35,7 @@ public class SoccerMaster implements MessageType
 	{
 		try
 		{
-			dos.writeByte(KICK);
+			dos.writeByte(MessageType.KICK.getValue());
 			dos.flush();
 			return dis.readBoolean();
 		}
@@ -48,7 +49,7 @@ public class SoccerMaster implements MessageType
 	{
 		try
 		{
-			dos.writeByte(GOAL_POS);
+			dos.writeByte(MessageType.GOAL_POS.getValue());
 			dos.flush();
 			return dis.readFloat();
 		}
@@ -62,7 +63,7 @@ public class SoccerMaster implements MessageType
 	{
 		try
 		{
-			dos.writeByte(US_PING);
+			dos.writeByte(MessageType.US_PING.getValue());
 			dos.flush();
 			return dis.readBoolean();
 		}
@@ -76,7 +77,7 @@ public class SoccerMaster implements MessageType
 	{
 		try
 		{
-			dos.writeByte(SHUTDOWN);
+			dos.writeByte(MessageType.SHUTDOWN.getValue());
 			dos.flush();
 			return dis.readBoolean();
 		}
@@ -114,24 +115,24 @@ public class SoccerMaster implements MessageType
 			LCD.clear();
 			code = menu.select(code);
 			LCD.clear();
-			byte msg = MESSAGES[code];
-			if(msg == KICK)
+			MessageType msg = MessageType.values()[code];
+			if(msg == MessageType.KICK)
 			{
 				boolean success = m.kick();
 				LCD.drawString("Success: "+success, 0, 0);
 			}
-			else if(msg == GOAL_POS)
+			else if(msg == MessageType.GOAL_POS)
 			{
 				float angle = m.getGoalAngle();
 				LCD.drawString("Angle: "+angle, 0, 0);
 				
 			}
-			else if(msg == US_PING)
+			else if(msg == MessageType.US_PING)
 			{
 				boolean hasBall = m.hasBall();
 				LCD.drawString("Ball: "+hasBall, 0, 0);
 			}
-			else if(msg == SHUTDOWN)
+			else if(msg == MessageType.SHUTDOWN)
 			{
 				if(m.shutdown())
 					break;
