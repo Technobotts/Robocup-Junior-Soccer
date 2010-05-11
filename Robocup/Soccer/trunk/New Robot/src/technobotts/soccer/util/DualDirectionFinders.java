@@ -1,4 +1,4 @@
-package technobotts.soccer;
+package technobotts.soccer.util;
 
 import lejos.robotics.DirectionFinder;
 
@@ -7,6 +7,9 @@ public class DualDirectionFinders implements DirectionFinder
 
 	protected DirectionFinder left;
 	protected float leftOffset;
+	protected DirectionFinder right;
+	protected float rightOffset;
+
 	
 	public DirectionFinder getLeft()
     {
@@ -17,16 +20,14 @@ public class DualDirectionFinders implements DirectionFinder
     	return right;
     }
 
-	protected DirectionFinder right;
-	protected float rightOffset;
-	
 
-	DualDirectionFinders(DirectionFinder left, float f, DirectionFinder right, float g)
+	DualDirectionFinders(DirectionFinder left, float leftOffset,
+	                     DirectionFinder right, float rightOffset)
     {
 	    this.left = left;
-	    this.leftOffset = f;
+	    this.leftOffset = leftOffset;
 	    this.right = right;
-	    this.rightOffset = g;
+	    this.rightOffset = rightOffset;
     }
 
 	@Override

@@ -4,12 +4,14 @@ import javax.microedition.lcdui.Graphics;
 
 import technobotts.soccer.util.GoalFinder;
 
+import lejos.nxt.Button;
 import lejos.nxt.LCD;
 import lejos.nxt.SensorPort;
+import lejos.nxt.Sound;
 import lejos.nxt.addon.NXTCam;
 import lejos.util.TextMenu;
 
-public class TurnToGoal
+public class CamSpeedTester
 {
 	public static void main(String[] args) throws InterruptedException
 	{
@@ -20,10 +22,11 @@ public class TurnToGoal
 
 		GoalFinder gFinder = new GoalFinder(cam, goalColor);
 
-		Smoother s = new Smoother(1);
+//		Smoother s = new Smoother(1);
 
 //		Graphics g = new Graphics();
-
+		long startTime = System.currentTimeMillis();
+		
 		for(int i=0;i<1000;i++)
 		{
 			LCD.clear();
@@ -37,11 +40,19 @@ public class TurnToGoal
 				g.fillRect(x, y, width, height);
 			}*/
 			float raw = gFinder.getDegreesCartesian();
-			double angle = s.getOutput(raw);
-			LCD.drawString("" + angle, 0, 0);
-			LCD.drawString("" + raw, 0, 1);
+//			double angle = s.getOutput(raw);
+//			LCD.drawString("Angle:" + angle, 0, 0);
+			LCD.drawString("RAWR:" + raw, 0, 1);
 			LCD.refresh();
-			Thread.sleep(50);
+			if(i%100 == 0)
+			{
+				Sound.beep();
+			}
 		}
+		long endTime = System.currentTimeMillis();
+		LCD.clear();
+		LCD.drawString("T:" + (startTime-endTime), 0, 0);
+		Button.ENTER.waitForPressAndRelease();
+		
 	}
 }

@@ -6,5 +6,6 @@
 	<classpathentry kind="src" path="/Fixed compass"/>
 	<classpathentry kind="src" path="/NXTCam"/>
 	<classpathentry kind="src" path="/IRSeekerV2"/>
+	<classpathentry kind="src" path="/Exponential Smoother"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
