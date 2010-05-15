@@ -1,4 +1,4 @@
-package technobotts.comms;
+package technobotts.comm;
 
 public enum MessageType {
 	KICK     (0x01),
@@ -13,7 +13,7 @@ public enum MessageType {
 		this.value = (byte) value;
 	}
 
-	byte getValue()
+	public byte getValue()
 	{
 		return value;
 	}
