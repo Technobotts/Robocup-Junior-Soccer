@@ -1,4 +1,4 @@
-package technobotts.comms;
+package technobotts.comm;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
