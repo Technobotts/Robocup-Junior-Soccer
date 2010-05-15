@@ -1,13 +1,11 @@
 package lejos.util;
-public class BasicSmoother implements DataProcessor 
+public class BasicSmoother extends DataProcessor 
 {
 
 	private double t;
 	private long   lastPollTime;
 
-	private double average   = 0;
-
-	private long   datacount = 0;
+	private double average   = Double.NaN;
 
 	public BasicSmoother(double t)
 	{
@@ -19,12 +17,12 @@ public class BasicSmoother implements DataProcessor
 		return average;
 	}
 
-	public double getOutput(double x)
+	public void setInput(double x)
 	{
 		if(!Double.isNaN(x))
 		{
 			long pollTime = System.currentTimeMillis();
-			if(datacount == 0)
+			if(Double.isNaN(average))
 			{
 				average = x;
 			}
@@ -35,10 +33,7 @@ public class BasicSmoother implements DataProcessor
 				average += alpha * (x - average);
 			}
 
-			datacount++;
-
 			lastPollTime = pollTime;
 		}
-		return average;
 	}
 }
