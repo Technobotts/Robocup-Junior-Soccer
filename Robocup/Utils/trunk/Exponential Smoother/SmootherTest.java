@@ -1,4 +1,4 @@
-package lejos.util;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +9,7 @@ import lejos.nxt.LCD;
 import lejos.nxt.LightSensor;
 import lejos.nxt.SensorPort;
 import lejos.nxt.Sound;
+import lejos.util.Smoother;
 
 
 public class SmootherTest

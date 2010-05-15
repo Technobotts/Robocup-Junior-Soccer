@@ -1,22 +1,30 @@
 package lejos.util;
 public class Smoother extends BasicSmoother
 {
-	BasicSmoother	NaNSmoother;
-
+	private BasicSmoother	NaNSmoother;
+	private double average = Double.NaN;
+	private double NaNProb  = 0;
 	public Smoother(double t)
 	{
 		super(t);
 		NaNSmoother = new BasicSmoother(t);
 	}
-
-	public double getOutput(double input)
+	
+	public double getOutput()
 	{
+		return average;
+	}
+	
+	public void setInput(double input)
+	{
+		super.setInput(input);
+		
 		boolean isNaN = Double.isNaN(input);
-		double NaNProb = NaNSmoother.getOutput(isNaN ? 1 : 0);
+		NaNProb = NaNSmoother.getOutput(isNaN ? 1 : 0);
 		if(NaNProb > 0.5)
-			return Double.NaN;
+			average = Double.NaN;
 		else
-			return super.getOutput(input);
+			average = super.getOutput();
 		
 	}
 }
