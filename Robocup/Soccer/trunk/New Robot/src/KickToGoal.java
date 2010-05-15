@@ -1,13 +1,11 @@
-import java.awt.Rectangle;
-
 import javax.microedition.lcdui.Graphics;
 
-
-import lejos.nxt.*;
-import lejos.nxt.addon.CamRect;
-import lejos.nxt.addon.NXTCam;
-import lejos.nxt.addon.CompassSensor;
+import lejos.nxt.Motor;
+import lejos.nxt.SensorPort;
+import lejos.nxt.Sound;
 import lejos.nxt.addon.InvertedCompassSensor;
+import lejos.nxt.addon.NXTCam;
+import lejos.robotics.CamRect;
 import lejos.robotics.DirectionFinder;
 import lejos.robotics.navigation.OmniCompassPilot;
 import lejos.robotics.navigation.SimpleOmniPilot;
