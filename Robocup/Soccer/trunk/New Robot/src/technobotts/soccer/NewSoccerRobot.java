@@ -1,18 +1,19 @@
 package technobotts.soccer;
 
-import technobotts.soccer.util.DualLightSourceFinder;
-import lejos.nxt.Motor;
-import lejos.nxt.SensorPort;
-import lejos.nxt.UltrasonicSensor;
-import lejos.nxt.addon.CompassSensor;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
+import lejos.nxt.*;
 import lejos.nxt.addon.IRSeekerV2;
 import lejos.nxt.addon.InvertedCompassSensor;
-import lejos.nxt.addon.LightSourceFinder;
 import lejos.nxt.addon.IRSeekerV2.Mode;
-import lejos.robotics.DirectionFinder;
-import lejos.robotics.navigation.OmniCompassPilot;
+import lejos.nxt.comm.NXTConnection;
+import lejos.nxt.comm.RS485;
 import lejos.robotics.navigation.SimpleOmniPilot;
-import lejos.robotics.navigation.SimpleOmniPilot.OmniMotor;
+import technobotts.comm.MessageType;
+
+import technobotts.soccer.util.DualLightSourceFinder;
 
 public class NewSoccerRobot extends SoccerRobot
 {
@@ -20,6 +21,9 @@ public class NewSoccerRobot extends SoccerRobot
 	public static final SensorPort LEFT_IR_PORT  = SensorPort.S2;
 	public static final SensorPort RIGHT_IR_PORT = SensorPort.S3;
 	public static final Mode       IR_MODE       = Mode.DC;
+	
+	private DataOutputStream dos;
+	private DataInputStream dis;
 
 	public NewSoccerRobot()
 	{
@@ -52,16 +56,94 @@ public class NewSoccerRobot extends SoccerRobot
 	}
 
 	@Override
-    public boolean hasBall()
+    public boolean connectTo(String slaveName)
     {
-	    // TODO Auto-generated method stub
-	    return false;
+		slave = RS485.getConnector().connect(slaveName, NXTConnection.PACKET);
+		if(slave != null)
+		{
+			dis = slave.openDataInputStream();
+			dos = slave.openDataOutputStream();
+			return true;
+		}
+		else
+			return false;
     }
+	
+	public boolean kick()
+	{
+		try
+		{
+			dos.writeByte(MessageType.KICK.getValue());
+			dos.flush();
+			return dis.readBoolean();
+		}
+		catch(IOException e)
+		{
+			return false;
+		}
+		catch(NullPointerException e)
+		{
+			return false;
+		}
+	}
 
-	@Override
-    public void kick()
-    {
-	    // TODO Auto-generated method stub
-	    
-    }
+	public double getGoalAngle()
+	{
+		try
+		{
+			dos.writeByte(MessageType.GOAL_POS.getValue());
+			dos.flush();
+			return dis.readDouble();
+		}
+		catch(IOException e)
+		{
+			return Double.NaN;
+		}
+		catch(NullPointerException e)
+		{
+			return Double.NaN;
+		}
+	}
+
+	public boolean hasBall()
+	{
+		try
+		{
+			dos.writeByte(MessageType.US_PING.getValue());
+			dos.flush();
+			return dis.readBoolean();
+		}
+		catch(IOException e)
+		{
+			return false;
+		}
+		catch(NullPointerException e)
+		{
+			return false;
+		}
+	}
+
+	public boolean disconnect()
+	{
+		try
+		{
+			dos.writeByte(MessageType.SHUTDOWN.getValue());
+			dos.flush();
+			return dis.readBoolean();
+		}
+		catch(IOException e)
+		{
+			return false;
+		}
+		catch(NullPointerException e)
+		{
+			return false;
+		}
+		finally
+		{
+			slave = null;
+			dis = null;
+			dos = null;
+		}
+	}
 }
