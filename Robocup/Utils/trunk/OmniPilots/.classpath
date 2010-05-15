@@ -3,5 +3,6 @@
 	<classpathentry kind="src" path=""/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/LeJOS NXJ V0.85 + Color"/>
 	<classpathentry kind="src" path="/Simple PID Controller"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Exponential Smoother"/>
 	<classpathentry kind="output" path=""/>
 </classpath>
