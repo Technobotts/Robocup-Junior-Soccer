@@ -3,7 +3,7 @@ package technobotts.soccer.util;
 import lejos.nxt.LCD;
 import lejos.nxt.SensorPort;
 import lejos.nxt.addon.IRSeekerV2;
-import lejos.nxt.addon.LightSourceFinder;
+import lejos.robotics.LightSourceFinder;
 import lejos.nxt.addon.IRSeekerV2.Mode;
 import lejos.robotics.RangeReadings;
 

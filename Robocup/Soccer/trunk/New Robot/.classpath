@@ -3,9 +3,8 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="C:/Program Files/LeJOS NXJ/lib/classes.jar"/>
 	<classpathentry kind="src" path="/OmniPilots"/>
-	<classpathentry kind="src" path="/Fixed compass"/>
-	<classpathentry kind="src" path="/NXTCam"/>
-	<classpathentry kind="src" path="/IRSeekerV2"/>
 	<classpathentry kind="src" path="/Exponential Smoother"/>
+	<classpathentry kind="src" path="/CommTest"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Sensors"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

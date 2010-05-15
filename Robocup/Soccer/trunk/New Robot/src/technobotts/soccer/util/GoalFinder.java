@@ -4,14 +4,14 @@ import java.awt.Rectangle;
 import java.util.List;
 import java.util.RectGroup;
 
-import lejos.nxt.addon.CamRect;
 import lejos.nxt.addon.NXTCam;
+import lejos.robotics.CamRect;
 import lejos.robotics.DirectionFinder;
 
 public class GoalFinder implements DirectionFinder
 {
-	final static int BLUE   = 0;
-	final static int YELLOW = 1;
+	public final static int BLUE   = 0;
+	public final static int YELLOW = 1;
 
 	private NXTCam   camera;
 	private int      goalColorId;
