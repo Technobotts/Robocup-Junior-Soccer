@@ -1,11 +1,9 @@
 package lejos.robotics.navigation;
 
-import lejos.nxt.LCD;
-import lejos.nxt.Sound;
-import lejos.nxt.Motor.Regulator;
+import java.util.PID.SimplePID;
+
 import lejos.robotics.DirectionFinder;
 import lejos.util.Delay;
-import java.util.PID.SimplePID;
 
 public class OmniCompassPilot extends SimpleOmniPilot
 {
