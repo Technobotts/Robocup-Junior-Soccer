@@ -5,7 +5,7 @@ import lejos.nxt.Motor;
 import lejos.nxt.UltrasonicSensor;
 import lejos.nxt.addon.NXTCam;
 
-public class SlaveRobot
+public class SoccerRobotSlave
 {
 	private CameraPoller     camPoller;
 	private UltrasonicSensor US;
@@ -13,7 +13,7 @@ public class SlaveRobot
 
 	private boolean          isKicking = false;
 
-	public SlaveRobot(NXTCam cam, UltrasonicSensor US, Motor kickerMotor, int goalColor)
+	public SoccerRobotSlave(NXTCam cam, UltrasonicSensor US, Motor kickerMotor, int goalColor)
 	{
 		this.US = US;
 		this.kickerMotor = kickerMotor;
@@ -52,7 +52,7 @@ public class SlaveRobot
 		isKicking = true;
 
 		long startTime = System.currentTimeMillis();
-		while(kickerMotor.getTachoCount() < kickAngle && startTime + 1500 > System.currentTimeMillis())
+		while(kickerMotor.getTachoCount() < kickAngle && startTime + 1000 > System.currentTimeMillis())
 			Thread.yield();
 
 		kickerMotor.flt();

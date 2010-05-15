@@ -51,7 +51,7 @@ public class KickToGoal
 				
 				if(r.colorId == YELLOW) g.drawRect(x, y, width, height); 
 				else g.fillRect(x, y, width, height);
-				pilot.rotate(centerHeading, false);
+				pilot.rotateTo(centerHeading, false);
 			}
 
 		}
