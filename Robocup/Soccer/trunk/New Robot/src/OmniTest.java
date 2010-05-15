@@ -25,7 +25,7 @@ public class OmniTest
 		                                              new SimpleOmniPilot.OmniMotor(Motor.A, 306.8699f, 6.4f, 1, 9.6f)
 		                         );
 		pilot.setMoveSpeed(1000);
-		pilot.rotate(0, false);
+		pilot.rotateTo(0, false);
 		Button.ENTER.waitForPressAndRelease();
 
 		pilot.travel(0);

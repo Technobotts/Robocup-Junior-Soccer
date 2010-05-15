@@ -16,9 +16,9 @@ public class SoccerSlave extends Thread
 	private DataOutputStream dos;
 	private DataInputStream  dis;
 
-	private SlaveRobot       robot;
+	private SoccerRobotSlave       robot;
 
-	public SoccerSlave(SlaveRobot robot) throws IOException
+	public SoccerSlave(SoccerRobotSlave robot) throws IOException
 	{
 		master = RS485.getConnector().waitForConnection(0, NXTConnection.PACKET);
 		if(master == null)
@@ -38,18 +38,15 @@ public class SoccerSlave extends Thread
 				byte message = dis.readByte();
 				if(message == MessageType.KICK.getValue())
 				{
-					Sound.beepSequenceUp();
 					robot.kick();
 					dos.writeBoolean(true); // TODO
 				}
 				else if(message == MessageType.GOAL_POS.getValue())
 				{
-					Sound.beep();
 					dos.writeDouble(robot.getGoalAngle());
 				}
 				else if(message == MessageType.US_PING.getValue())
 				{
-					Sound.twoBeeps();
 					dos.writeBoolean(robot.hasBall());
 				}
 				else if(message == MessageType.SHUTDOWN.getValue())
@@ -70,7 +67,7 @@ public class SoccerSlave extends Thread
 
 	public static void main(String[] args) throws InterruptedException, IOException
     {
-		SlaveRobot robot = new SlaveRobot(new NXTCam(SensorPort.S1),
+		SoccerRobotSlave robot = new SoccerRobotSlave(new NXTCam(SensorPort.S1),
 		                                  new UltrasonicSensor(SensorPort.S2),
 		                                  Motor.A,
 		                                  GoalFinder.BLUE);

@@ -7,20 +7,10 @@ import lejos.robotics.LightSourceFinder;
 import lejos.nxt.addon.IRSeekerV2.Mode;
 import lejos.robotics.RangeReadings;
 
-public class DualLightSourceFinder extends DualDirectionFinders implements LightSourceFinder
+public class DualLightSourceFinder extends DualSensor<LightSourceFinder> implements LightSourceFinder
 {
 	protected LightSourceFinder left;
 	protected LightSourceFinder right;
-
-	public LightSourceFinder getLeft()
-	{
-		return left;
-	}
-
-	public LightSourceFinder getRight()
-	{
-		return right;
-	}
 
 	public DualLightSourceFinder(LightSourceFinder left, float leftOffset,
 	              LightSourceFinder right, float rightOffset)
@@ -96,4 +86,32 @@ public class DualLightSourceFinder extends DualDirectionFinders implements Light
 		
 		return ranges;
 	}
+
+	@Override
+    public float getDegreesCartesian()
+    {
+	    // TODO Auto-generated method stub
+	    return 0;
+    }
+
+	@Override
+    public void resetCartesianZero()
+    {
+	    // TODO Auto-generated method stub
+	    
+    }
+
+	@Override
+    public void startCalibration()
+    {
+	    // TODO Auto-generated method stub
+	    
+    }
+
+	@Override
+    public void stopCalibration()
+    {
+	    // TODO Auto-generated method stub
+	    
+    }
 }
