@@ -1,3 +1,4 @@
+package lejos.util;
 public class BasicSmoother implements DataProcessor 
 {
 
