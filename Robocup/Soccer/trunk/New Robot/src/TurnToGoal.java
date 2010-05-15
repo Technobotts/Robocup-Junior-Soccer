@@ -1,13 +1,9 @@
-import java.awt.Rectangle;
-
-import javax.microedition.lcdui.Graphics;
-
-import technobotts.soccer.util.GoalFinder;
-
 import lejos.nxt.LCD;
 import lejos.nxt.SensorPort;
 import lejos.nxt.addon.NXTCam;
+import lejos.util.Smoother;
 import lejos.util.TextMenu;
+import technobotts.soccer.util.GoalFinder;
 
 public class TurnToGoal
 {

@@ -1,15 +1,10 @@
-import java.awt.Rectangle;
-
-import javax.microedition.lcdui.Graphics;
-
-import technobotts.soccer.util.GoalFinder;
-
 import lejos.nxt.Button;
 import lejos.nxt.LCD;
 import lejos.nxt.SensorPort;
 import lejos.nxt.Sound;
 import lejos.nxt.addon.NXTCam;
 import lejos.util.TextMenu;
+import technobotts.soccer.util.GoalFinder;
 
 public class CamSpeedTester
 {
