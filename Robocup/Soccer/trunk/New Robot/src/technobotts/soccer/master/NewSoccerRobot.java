@@ -1,4 +1,4 @@
-package technobotts.soccer;
+package technobotts.soccer.master;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -13,6 +13,7 @@ import lejos.nxt.comm.RS485;
 import lejos.robotics.navigation.SimpleOmniPilot;
 import technobotts.comm.MessageType;
 
+import technobotts.soccer.SoccerRobot;
 import technobotts.soccer.util.DualLightSourceFinder;
 
 public class NewSoccerRobot extends SoccerRobot
