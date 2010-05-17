@@ -91,7 +91,7 @@ public class DualLightSourceFinder extends DualSensor<LightSourceFinder> impleme
     public float getDegreesCartesian()
     {
 	    // TODO Auto-generated method stub
-	    return 0;
+	    return getAngle();
     }
 
 	@Override
