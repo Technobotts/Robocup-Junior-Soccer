@@ -19,9 +19,9 @@ import technobotts.soccer.util.DualLightSourceFinder;
 public class NewSoccerRobot extends SoccerRobot
 {
 	public static final SensorPort COMPASS_PORT  = SensorPort.S1;
-	public static final SensorPort LEFT_IR_PORT  = SensorPort.S2;
-	public static final SensorPort RIGHT_IR_PORT = SensorPort.S3;
-	public static final Mode       IR_MODE       = Mode.AC_1200Hz;
+	public static final SensorPort RIGHT_IR_PORT  = SensorPort.S2;
+	public static final SensorPort LEFT_IR_PORT = SensorPort.S3;
+	public static final Mode       IR_MODE       = Mode.DC;
 
 	private DataOutputStream       dos;
 	private DataInputStream        dis;
