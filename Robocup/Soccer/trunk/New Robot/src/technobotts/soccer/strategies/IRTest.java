@@ -3,7 +3,7 @@ package technobotts.soccer.strategies;
 import lejos.nxt.Button;
 import lejos.nxt.LCD;
 import lejos.nxt.Sound;
-import technobotts.soccer.master.NewSoccerRobot;
+import technobotts.soccer.NewSoccerRobot;
 import technobotts.soccer.util.DualLightSourceFinder;
 
 public class IRTest
