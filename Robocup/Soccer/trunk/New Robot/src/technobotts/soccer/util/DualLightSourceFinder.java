@@ -9,17 +9,11 @@ import lejos.robotics.RangeReadings;
 
 public class DualLightSourceFinder extends DualSensor<LightSourceFinder> implements LightSourceFinder
 {
-	protected LightSourceFinder left;
-	protected LightSourceFinder right;
-
 	public DualLightSourceFinder(LightSourceFinder left, float leftOffset,
 	              LightSourceFinder right, float rightOffset)
 	{
 		super(left, leftOffset,
 		      right, rightOffset);
-
-		this.left = left;
-		this.right = right;
 	}
 
 	@Override
@@ -69,7 +63,7 @@ public class DualLightSourceFinder extends DualSensor<LightSourceFinder> impleme
 
 			LCD.refresh();
 
-			Thread.sleep(250);
+			Thread.sleep(50);
 		}
 	}
 
@@ -90,28 +84,21 @@ public class DualLightSourceFinder extends DualSensor<LightSourceFinder> impleme
 	@Override
     public float getDegreesCartesian()
     {
-	    // TODO Auto-generated method stub
 	    return getAngle();
     }
 
 	@Override
     public void resetCartesianZero()
     {
-	    // TODO Auto-generated method stub
-	    
     }
 
 	@Override
     public void startCalibration()
-    {
-	    // TODO Auto-generated method stub
-	    
+    {	    
     }
 
 	@Override
     public void stopCalibration()
     {
-	    // TODO Auto-generated method stub
-	    
     }
 }
