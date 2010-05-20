@@ -2,24 +2,20 @@ package technobotts.soccer.strategies;
 
 import lejos.nxt.Button;
 import lejos.nxt.Sound;
-import technobotts.soccer.NewSoccerRobot;
 import technobotts.soccer.AbstractSoccerRobot;
-import technobotts.soccer.SoccerRobot;
+import technobotts.soccer.NewSoccerRobot;
 import technobotts.soccer.Strategy;
-import technobotts.soccer.slave.SoccerSlave;
 
-public class KickBall extends Strategy<SoccerRobot>
+public class NorthFacing extends Strategy<AbstractSoccerRobot>
 {
-
-	public KickBall(SoccerRobot robot)
+	public NorthFacing(AbstractSoccerRobot robot)
 	{
 		super(robot);
-		// TODO Auto-generated constructor stub
 	}
 
 	public static void main(String[] args)
 	{
-		Strategy<SoccerRobot> s = new KickBall(new NewSoccerRobot());
+		Strategy<AbstractSoccerRobot> s = new NorthFacing(new NewSoccerRobot());
 		s.run();
 	}
 
@@ -29,14 +25,20 @@ public class KickBall extends Strategy<SoccerRobot>
 		if(!robot.connectTo("NXT"))
 			Sound.buzz();
 
+		robot.pilot.rotateTo(0, true);
+
 		while(!Button.ESCAPE.isPressed())
 		{
 			if(robot.hasBall())
+			{
+				robot.pilot.travel(0);
 				robot.kick();
+			}
 
+			robot.pilot.travel(robot.getHeading() + robot.ballDetector.getAngle());
 			try
 			{
-				Thread.sleep(250);
+				Thread.sleep(50);
 			}
 			catch(InterruptedException e)
 			{}
