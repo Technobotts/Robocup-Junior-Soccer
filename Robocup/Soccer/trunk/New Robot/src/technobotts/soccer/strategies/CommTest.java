@@ -2,8 +2,8 @@ package technobotts.soccer.strategies;
 
 import lejos.nxt.Button;
 import lejos.nxt.Sound;
-import technobotts.soccer.SoccerRobot;
-import technobotts.soccer.master.NewSoccerRobot;
+import technobotts.soccer.NewSoccerRobot;
+import technobotts.soccer.AbstractSoccerRobot;
 import technobotts.soccer.slave.SoccerSlave;
 
 public class CommTest
@@ -15,7 +15,7 @@ public class CommTest
 	 */
 	public static void main(String[] args) throws InterruptedException
 	{
-		SoccerRobot robot = new NewSoccerRobot();
+		AbstractSoccerRobot robot = new NewSoccerRobot();
 		boolean success = robot.connectTo("NXT");
 		if(!success)
 			Sound.beepSequenceUp();
