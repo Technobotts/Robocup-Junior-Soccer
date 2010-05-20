@@ -44,16 +44,16 @@ public class DualLSFinder extends DualSensor<LightSourceFinder> implements Light
 
 	public static void main(String... args) throws InterruptedException
 	{
-		DualLSFinder ballFinder = new DualLSFinder(new IRSeekerV2(SensorPort.S2, Mode.AC_600Hz),
+		DualLSFinder ballFinder = new DualLSFinder(new IRSeekerV2(SensorPort.S3, Mode.AC_600Hz),
 		                                             53.13f,
-		                                             new IRSeekerV2(SensorPort.S1, Mode.AC_600Hz),
+		                                             new IRSeekerV2(SensorPort.S2, Mode.AC_600Hz),
 		                                             53.13f);
 
 		while(true)
 		{
 			LCD.clear();
 
-			LCD.drawString("Angle: " + ballFinder.getDegreesCartesian(), 0, 0);
+			LCD.drawString("Angle: " + Math.round(ballFinder.getDegreesCartesian()*10)/10, 0, 0);
 
 			LCD.drawString("Right: " + ballFinder.getRight().getAngle(), 0, 2);
 			LCD.drawString("     : " + ballFinder.getRight().getRange(), 0, 3);

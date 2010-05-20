@@ -39,7 +39,7 @@ public class SoccerSlave extends Thread
 				if(message == MessageType.KICK.getValue())
 				{
 					robot.kick();
-					dos.writeBoolean(true); // TODO
+					dos.writeBoolean(true);
 				}
 				else if(message == MessageType.GOAL_POS.getValue())
 				{

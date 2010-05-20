@@ -13,21 +13,21 @@ import lejos.nxt.comm.RS485;
 import lejos.robotics.navigation.SimpleOmniPilot;
 import technobotts.comm.MessageType;
 
-import technobotts.soccer.util.DualLightSourceFinder;
+import technobotts.soccer.util.DualLSFinder;
 
 public class NewSoccerRobot extends AbstractSoccerRobot implements CameraSoccerRobot
 {
 	public static final SensorPort COMPASS_PORT  = SensorPort.S1;
 	public static final SensorPort RIGHT_IR_PORT  = SensorPort.S2;
 	public static final SensorPort LEFT_IR_PORT = SensorPort.S3;
-	public static final Mode       IR_MODE       = Mode.DC;
+	public static final Mode       IR_MODE       = Mode.AC_600Hz;
 
 	private DataOutputStream       dos;
 	private DataInputStream        dis;
 	public NewSoccerRobot()
 	{
 		super(new InvertedCompassSensor(SensorPort.S1),
-		      new DualLightSourceFinder(new IRSeekerV2(LEFT_IR_PORT, IR_MODE),
+		      new DualLSFinder(new IRSeekerV2(LEFT_IR_PORT, IR_MODE),
 		                                53.1301f,
 		                                new IRSeekerV2(RIGHT_IR_PORT, IR_MODE),
 		                                53.1301f),
