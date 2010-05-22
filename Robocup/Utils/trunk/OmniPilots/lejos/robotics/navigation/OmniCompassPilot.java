@@ -2,6 +2,7 @@ package lejos.robotics.navigation;
 
 import java.util.PID.SimplePID;
 
+import lejos.nxt.Sound;
 import lejos.robotics.DirectionFinder;
 import lejos.util.Delay;
 
@@ -20,30 +21,45 @@ public class OmniCompassPilot extends SimpleOmniPilot
 		super(motors);
 		_compass = compass;
 		_compass.resetCartesianZero();
-		setRegulation(true);
+		
+		_regulator = new DirectionRegulator();
+		_regulator.start();
+	}
+
+	public void rotateTo(float heading)
+	{
+		rotateTo(heading, false);
+	}
+
+	public void rotateTo(float heading, boolean immediateReturn)
+	{
+		if(Float.isNaN(heading))
+			stop();
+		else if(_targetFacing != heading || _travel != false)
+		{
+			//setRegulation(true);
+			synchronized(_regulator)
+			{
+				_travel = false;
+				_targetFacing = heading;
+				_regulator.reset();
+			}
+		}
+			
+		while(!(immediateReturn || Math.abs(_regulator.getError()) < 3))
+			Thread.yield();
 	}
 
 	@Override
 	public void rotate(float angle, boolean immediateReturn)
 	{
-		setRegulation(true);
-		if(_targetFacing != angle || _travel != false)
-		{
-			synchronized(_regulator)
-			{
-				_travel = false;
-				_targetFacing = angle;
-				_regulator.reset();
-			}
-		}
-		while(!(Math.abs(_regulator.getError()) < 3) && !immediateReturn)
-			Thread.yield();
+		rotateTo(_compass.getDegreesCartesian() + angle, immediateReturn);
 	}
 
 	@Override
 	public void stop()
 	{
-		setRegulation(true);
+		//setRegulation(true);
 		synchronized(_regulator)
 		{
 			_travel = false;
@@ -52,19 +68,14 @@ public class OmniCompassPilot extends SimpleOmniPilot
 		super.stop();
 	}
 
-	private void stop(boolean dummy)
-	{
-		super.stop();
-	}
-
 	@Override
 	public void travel(float heading)
 	{
-		setRegulation(true);
 		if(Float.isNaN(heading))
 			stop();
 		else if(_targetDirection != heading || _travel != true)
 		{
+			//setRegulation(true);
 			synchronized(_regulator)
 			{
 				_travel = true;
@@ -92,7 +103,7 @@ public class OmniCompassPilot extends SimpleOmniPilot
 		if(_regulator != null)
 			_regulator.reset();
 	}
-
+/*
 	public void setRegulation(boolean on)
 	{
 		if(on == (_regulator != null))
@@ -111,9 +122,14 @@ public class OmniCompassPilot extends SimpleOmniPilot
 				_regulator = null;
 			}
 	}
-
+*/
 	private class DirectionRegulator extends Thread
 	{
+		public DirectionRegulator()
+        {
+        	super();
+        	setDaemon(true);
+        }
 		private float[] getTravelSpeedsWithBias(float rotationBias, float error)
 		{
 			float[] travelSpeeds = getMotorTravelVelocities(_targetDirection + error);
@@ -131,6 +147,7 @@ public class OmniCompassPilot extends SimpleOmniPilot
 		private float getError()
 		{
 			float err = _compass.getDegreesCartesian() - _targetFacing;
+			
 			// Handles the wrap-around problem:
 			while(err <= -180)
 				err += 360;
@@ -141,7 +158,7 @@ public class OmniCompassPilot extends SimpleOmniPilot
 
 		public synchronized void reset()
 		{
-			pid.reset();
+			//pid.reset();
 		}
 
 		@Override
@@ -149,17 +166,18 @@ public class OmniCompassPilot extends SimpleOmniPilot
 		{
 			pid.start();
 			reset();
-			while(_regulator == this)
+			while(true)
 			{
-				synchronized(this)
+				Delay.msDelay(10);
+				synchronized(_regulator)
 				{
 					float error = getError();
+
 					if(Float.isNaN(error))
 						continue;
+
 					float rotationBias = (float) pid.getOutput(error);
-					// LCD.drawString("Bias=" + rotationBias + "    ", 0, 0);
-					// LCD.drawString("Heading=" + _compass.getDegreesCartesian() + "    ", 0, 1);
-					// LCD.drawString("Target=" + _targetFacing + "    ", 0, 3);
+					
 					float[] speeds;
 
 					if(_travel)
@@ -168,9 +186,8 @@ public class OmniCompassPilot extends SimpleOmniPilot
 						speeds = getMotorRotationVelocities(rotationBias);
 					setMotorSpeeds(speeds);
 				}
-				Delay.msDelay(5);
 			}
-			stop(true);
+			//OmniCompassPilot.super.stop();
 		}
 	}
 }
