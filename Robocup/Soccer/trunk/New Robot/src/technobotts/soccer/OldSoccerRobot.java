@@ -1,0 +1,120 @@
+package technobotts.soccer;
+
+import java.io.IOException;
+
+import lejos.nxt.LCD;
+import lejos.nxt.Motor;
+import lejos.nxt.SensorPort;
+import lejos.nxt.UltrasonicSensor;
+import lejos.nxt.addon.FixedCompassSensor;
+import lejos.nxt.addon.IRSeekerV2;
+import lejos.nxt.addon.IRSeekerV2.Mode;
+import lejos.nxt.comm.RS485;
+import lejos.nxt.remote.RemoteMotor;
+import lejos.nxt.remote.RemoteNXT;
+import lejos.robotics.DirectionFinder;
+import lejos.robotics.LightSourceFinder;
+import lejos.robotics.TachoMotor;
+import lejos.robotics.navigation.SimpleOmniPilot;
+import lejos.robotics.navigation.SimpleOmniPilot.OmniMotor;
+
+public class OldSoccerRobot extends AbstractSoccerRobot
+{
+	public static final SensorPort COMPASS_PORT = SensorPort.S1;
+	public static final SensorPort IR_PORT      = SensorPort.S2;
+	public static final SensorPort US_PORT      = SensorPort.S3;
+	public static final Mode       IR_MODE      = Mode.AC_600Hz;
+
+	private UltrasonicSensor       US;
+	private RemoteMotor            kickerMotor;
+
+	private RemoteNXT              slave;
+	private boolean                isKicking    = false;
+
+	public OldSoccerRobot()
+	{
+		super(new FixedCompassSensor(COMPASS_PORT),
+		      new IRSeekerV2(IR_PORT, IR_MODE),
+		      new SimpleOmniPilot.OmniMotor(Motor.A, 60, 6.4f, 1, 11, true),
+		      new SimpleOmniPilot.OmniMotor(Motor.B, 180, 6.4f, 1, 11, true),
+		      new SimpleOmniPilot.OmniMotor(Motor.C, 300, 6.4f, 1, 11));
+
+		US = new UltrasonicSensor(US_PORT);
+	}
+
+	@Override
+	public boolean connectTo(String slaveName)
+	{
+		try
+		{
+			slave = new RemoteNXT(slaveName, RS485.getConnector());
+			kickerMotor = slave.A;
+			return true;
+		}
+		catch(IOException ioe)
+		{
+			return false;
+		}
+	}
+
+	@Override
+	public boolean disconnect()
+	{
+		slave.stopProgram();
+		slave.close();
+		return true;
+	}
+
+	@Override
+	public boolean hasBall()
+	{
+		if(isKicking)
+			return true;
+
+		US.ping();
+
+		int[] dists = new int[8];
+		if(US.getDistances(dists) == 0)
+			for(int dist : dists)
+				if(dist < 10)
+					return true;
+
+		return false;
+	}
+
+	@Override
+	public boolean kick()
+	{
+		try
+		{
+			final int kickAngle = 110;
+
+			kickerMotor.setPower(100);
+			kickerMotor.forward();
+
+			isKicking = true;
+
+			long startTime = System.currentTimeMillis();
+			while(kickerMotor.getTachoCount() < kickAngle && startTime + 1000 > System.currentTimeMillis())
+				Thread.yield();
+
+			kickerMotor.flt();
+			try
+			{
+				Thread.sleep(100);
+			}
+			catch(InterruptedException e)
+			{}
+			kickerMotor.setPower(50);
+			kickerMotor.rotateTo(0);
+
+			isKicking = false;
+			return true;
+		}
+		catch(NullPointerException e)
+		{
+			//XXX Horrible bodge to fix PrintStream Issue
+			return false;
+		}
+	}
+}
