@@ -5,25 +5,22 @@ import lejos.nxt.Motor;
 import lejos.nxt.UltrasonicSensor;
 import lejos.nxt.addon.NXTCam;
 
-public class SoccerRobotSlave
+public class SoccerSlaveRobot
 {
-	private CameraPoller     camPoller;
 	private UltrasonicSensor US;
 	private Motor            kickerMotor;
 
 	private boolean          isKicking = false;
 
-	public SoccerRobotSlave(NXTCam cam, UltrasonicSensor US, Motor kickerMotor, int goalColor)
+	public SoccerSlaveRobot(UltrasonicSensor US, Motor kickerMotor)
 	{
 		this.US = US;
 		this.kickerMotor = kickerMotor;
 		kickerMotor.smoothAcceleration(false);
 		kickerMotor.setSpeed(1000);
 		kickerMotor.regulateSpeed(false);
-		this.camPoller = new CameraPoller(cam, goalColor);
 
 		this.US.off();
-		this.camPoller.start();
 	}
 
 	public boolean hasBall()
@@ -67,10 +64,10 @@ public class SoccerRobotSlave
 
 		isKicking = false;
 	}
-
+	
 	public double getGoalAngle()
 	{
-		return camPoller.getAngle();
+		return Double.NaN;
 	}
 
 }

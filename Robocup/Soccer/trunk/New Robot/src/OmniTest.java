@@ -1,6 +1,6 @@
-import technobotts.soccer.AbstractSoccerRobot;
-import technobotts.soccer.NewSoccerRobot;
-import technobotts.soccer.SoccerRobot;
+import technobotts.soccer.robot.AbstractSoccerRobot;
+import technobotts.soccer.robot.NewSoccerRobot;
+import technobotts.soccer.robot.SoccerRobot;
 import lejos.nxt.Button;
 import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;

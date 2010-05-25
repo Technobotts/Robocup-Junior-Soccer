@@ -1,46 +1,53 @@
 package technobotts.soccer.strategies;
 
 import lejos.nxt.Button;
+import lejos.nxt.LCD;
 import lejos.nxt.Sound;
-import technobotts.soccer.AbstractSoccerRobot;
-import technobotts.soccer.NewSoccerRobot;
+import lejos.robotics.navigation.OmniCompassPilot;
 import technobotts.soccer.Strategy;
+import technobotts.soccer.robot.AbstractSoccerRobot;
+import technobotts.soccer.robot.NewSoccerRobot;
+import technobotts.soccer.robot.SoccerRobot;
 
-public class NorthFacing extends Strategy<AbstractSoccerRobot>
+public class NorthFacing extends Strategy<SoccerRobot>
 {
-	public NorthFacing(AbstractSoccerRobot robot)
+	public NorthFacing(SoccerRobot robot)
 	{
 		super(robot);
 	}
 
 	public static void main(String[] args)
 	{
-		Strategy<AbstractSoccerRobot> s = new NorthFacing(new NewSoccerRobot());
+		Strategy<SoccerRobot> s = new NorthFacing(new NewSoccerRobot());
 		s.run();
 	}
 
 	@Override
 	public void run()
 	{
+		OmniCompassPilot pilot = robot.getPilot();
 		if(!robot.connectToSlave())
 			Sound.buzz();
 
-		robot.pilot.rotateTo(0, true);
+		pilot.rotateTo(0, true);
 
 		float lastHeading = Float.NaN;
 		while(!Button.ESCAPE.isPressed())
 		{
 			if(robot.hasBall())
 			{
-				robot.pilot.travel(0);
+				pilot.travel(0);
 				robot.kick();
 			}
-			float heading = robot.getHeading() + robot.ballDetector.getAngle();
+			float ballAngle = robot.getBallAngle();
+			LCD.drawString("Angle: "+Math.rint(ballAngle*10)/10+"     ",0,0);
+			
+			float heading = robot.getHeading() + ballAngle;
 			if(Float.isNaN(heading))
 				heading = lastHeading;
 			else
 				lastHeading = heading;
-			robot.pilot.travel(heading);
+			pilot.travel(heading);
 			Sound.beep();
 			try
 			{

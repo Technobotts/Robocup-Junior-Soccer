@@ -2,8 +2,8 @@ package technobotts.soccer.strategies;
 
 import lejos.nxt.Button;
 import lejos.nxt.Sound;
-import technobotts.soccer.NewSoccerRobot;
 import technobotts.soccer.Strategy;
+import technobotts.soccer.robot.NewSoccerRobot;
 
 public class GoToBall extends Strategy<NewSoccerRobot>
 {

@@ -1,8 +1,7 @@
-package technobotts.soccer.slave;
+package technobotts.soccer.util;
 
 import lejos.nxt.addon.NXTCam;
 import lejos.util.Smoother;
-import technobotts.soccer.util.GoalFinder;
 
 public class CameraPoller extends Thread
 {

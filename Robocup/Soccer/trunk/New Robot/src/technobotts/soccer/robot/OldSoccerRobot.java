@@ -1,6 +1,7 @@
-package technobotts.soccer;
+package technobotts.soccer.robot;
 
 import java.io.IOException;
+
 
 import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
@@ -20,7 +21,7 @@ public class OldSoccerRobot extends AbstractSoccerRobot
 	public static final SensorPort US_PORT      = SensorPort.S3;
 	public static final Mode       IR_MODE      = Mode.AC_600Hz;
 
-	public static final String     SLAVE_NAME    = "Soccer";
+	public static final String     SLAVE_NAME    = "Lewis B";
 	
 	private UltrasonicSensor       US;
 	private RemoteMotor            kickerMotor;

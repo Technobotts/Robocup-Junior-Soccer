@@ -2,9 +2,9 @@ package technobotts.soccer.strategies;
 
 import lejos.nxt.Button;
 import lejos.nxt.Sound;
-import technobotts.soccer.NewSoccerRobot;
-import technobotts.soccer.SoccerRobot;
 import technobotts.soccer.Strategy;
+import technobotts.soccer.robot.NewSoccerRobot;
+import technobotts.soccer.robot.SoccerRobot;
 
 public class KickBall extends Strategy<SoccerRobot>
 {
