@@ -19,6 +19,8 @@ public abstract class AbstractSoccerRobot implements SoccerRobot
 	{
 		this.compass = compass;
 		this.pilot = new OmniCompassPilot(compass, motors);
+
+		//this.pilot.setMoveSpeed(Float.POSITIVE_INFINITY);
 		this.ballDetector = ballDetector;
 	}
 

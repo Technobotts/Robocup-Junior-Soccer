@@ -4,7 +4,7 @@ import lejos.robotics.LightSourceFinder;
 
 public interface SoccerRobot
 {
-	public boolean connectTo(String slaveName);
+	public boolean connectToSlave();
 
 	public boolean disconnect();
 

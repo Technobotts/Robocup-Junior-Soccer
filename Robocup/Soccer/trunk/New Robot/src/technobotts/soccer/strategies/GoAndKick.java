@@ -4,7 +4,6 @@ import lejos.nxt.Button;
 import lejos.nxt.Sound;
 import technobotts.soccer.AbstractSoccerRobot;
 import technobotts.soccer.NewSoccerRobot;
-import technobotts.soccer.SoccerRobot;
 import technobotts.soccer.Strategy;
 
 public class GoAndKick extends Strategy<AbstractSoccerRobot>
@@ -24,7 +23,7 @@ public class GoAndKick extends Strategy<AbstractSoccerRobot>
 	@Override
 	public void run()
 	{
-		if(!robot.connectTo("NXT"))
+		if(!robot.connectToSlave())
 			Sound.buzz();
 		
 		robot.pilot.setDirectionFinder(robot.ballDetector);

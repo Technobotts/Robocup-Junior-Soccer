@@ -3,10 +3,8 @@ package technobotts.soccer.strategies;
 import lejos.nxt.Button;
 import lejos.nxt.Sound;
 import technobotts.soccer.NewSoccerRobot;
-import technobotts.soccer.AbstractSoccerRobot;
 import technobotts.soccer.SoccerRobot;
 import technobotts.soccer.Strategy;
-import technobotts.soccer.slave.SoccerSlave;
 
 public class KickBall extends Strategy<SoccerRobot>
 {
@@ -26,7 +24,7 @@ public class KickBall extends Strategy<SoccerRobot>
 	@Override
 	public void run()
 	{
-		if(!robot.connectTo("NXT"))
+		if(!robot.connectToSlave())
 			Sound.buzz();
 
 		while(!Button.ESCAPE.isPressed())

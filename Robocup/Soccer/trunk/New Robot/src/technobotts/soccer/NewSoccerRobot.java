@@ -18,41 +18,31 @@ import technobotts.soccer.util.DualLSFinder;
 public class NewSoccerRobot extends AbstractSoccerRobot implements CameraSoccerRobot
 {
 	public static final SensorPort COMPASS_PORT  = SensorPort.S1;
-	public static final SensorPort RIGHT_IR_PORT  = SensorPort.S2;
-	public static final SensorPort LEFT_IR_PORT = SensorPort.S3;
+	public static final SensorPort RIGHT_IR_PORT = SensorPort.S2;
+	public static final SensorPort LEFT_IR_PORT  = SensorPort.S3;
 	public static final Mode       IR_MODE       = Mode.AC_600Hz;
+
+	public static final String     SLAVE_NAME    = "Soccer";
 
 	private DataOutputStream       dos;
 	private DataInputStream        dis;
+
 	public NewSoccerRobot()
 	{
-		super(new InvertedCompassSensor(SensorPort.S1),
+		super(new InvertedCompassSensor(COMPASS_PORT),
 		      new DualLSFinder(new IRSeekerV2(LEFT_IR_PORT, IR_MODE),
 		                                53.1301f,
 		                                new IRSeekerV2(RIGHT_IR_PORT, IR_MODE),
 		                                53.1301f),
-		      new SimpleOmniPilot.OmniMotor(Motor.A,
-		                                    53.1301f,
-		                                    6.4f,
-		                                    1,
-		                                    9.6f,
-		                                    true),
-  		      new SimpleOmniPilot.OmniMotor(Motor.B,
-		                                    180,
-		                                    6.4f,
-		                                    1,
-		                                    8.8f),
-		      new SimpleOmniPilot.OmniMotor(Motor.C,
-		                                    306.8699f,
-		                                    6.4f,
-		                                    1,
-		                                    9.6f));
+		      new SimpleOmniPilot.OmniMotor(Motor.C,  53.1301f, 6.4f, 1, 9.6f, true),
+		      new SimpleOmniPilot.OmniMotor(Motor.B, 180.0000f, 6.4f, 1, 8.8f),
+		      new SimpleOmniPilot.OmniMotor(Motor.A, 306.8699f, 6.4f, 1, 9.6f));
 	}
 
 	@Override
-	public boolean connectTo(String slaveName)
+	public boolean connectToSlave()
 	{
-		slave = RS485.getConnector().connect(slaveName, NXTConnection.PACKET);
+		slave = RS485.getConnector().connect(SLAVE_NAME, NXTConnection.PACKET);
 		if(slave != null)
 		{
 			dis = slave.openDataInputStream();

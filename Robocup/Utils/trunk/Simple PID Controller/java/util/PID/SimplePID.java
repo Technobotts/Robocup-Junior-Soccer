@@ -22,13 +22,13 @@ public class SimplePID
 	private double  _lastError;
 	/** The integrated error values */
 	private long    _intError;
-	private long    _maxInt = 10000;
+	private long    _maxInt = 20000;
 
 	/** The calculated PID controller output */
 	private double  _output;
 
 	/** Whether the controller is running */
-	private boolean _isRunning;
+	private boolean _isRunning = false;
 	private boolean _hasData;
 
 	/**
