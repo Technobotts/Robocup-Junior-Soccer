@@ -3,5 +3,6 @@
 	<classpathentry kind="src" path="stream"/>
 	<classpathentry kind="lib" path="C:/Program Files/LeJOS NXJ/lib/classes.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Sensors"/>
+	<classpathentry kind="src" path="/New Robot"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
