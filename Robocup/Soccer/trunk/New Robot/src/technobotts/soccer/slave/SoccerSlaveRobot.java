@@ -3,7 +3,6 @@ package technobotts.soccer.slave;
 
 import lejos.nxt.Motor;
 import lejos.nxt.UltrasonicSensor;
-import lejos.nxt.addon.NXTCam;
 
 public class SoccerSlaveRobot
 {

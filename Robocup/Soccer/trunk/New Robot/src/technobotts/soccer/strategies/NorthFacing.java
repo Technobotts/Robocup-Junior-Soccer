@@ -5,9 +5,7 @@ import lejos.nxt.LCD;
 import lejos.nxt.Sound;
 import lejos.robotics.navigation.OmniCompassPilot;
 import technobotts.soccer.Strategy;
-import technobotts.soccer.robot.AbstractSoccerRobot;
-import technobotts.soccer.robot.NewSoccerRobot;
-import technobotts.soccer.robot.SoccerRobot;
+import technobotts.soccer.robot.*;
 
 public class NorthFacing extends Strategy<SoccerRobot>
 {

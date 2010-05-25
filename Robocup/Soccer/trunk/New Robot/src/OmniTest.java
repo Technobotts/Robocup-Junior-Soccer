@@ -1,13 +1,6 @@
+import lejos.nxt.Button;
 import technobotts.soccer.robot.AbstractSoccerRobot;
 import technobotts.soccer.robot.NewSoccerRobot;
-import technobotts.soccer.robot.SoccerRobot;
-import lejos.nxt.Button;
-import lejos.nxt.Motor;
-import lejos.nxt.SensorPort;
-import lejos.nxt.addon.InvertedCompassSensor;
-import lejos.robotics.DirectionFinder;
-import lejos.robotics.navigation.OmniCompassPilot;
-import lejos.robotics.navigation.SimpleOmniPilot;
 
 public class OmniTest
 {

@@ -2,7 +2,6 @@ package technobotts.soccer;
 
 import lejos.nxt.*;
 import lejos.nxt.comm.*;
-import lejos.util.TextMenu;
 
 
 public class OldSlaveMain

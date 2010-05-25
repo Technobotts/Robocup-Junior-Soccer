@@ -3,10 +3,8 @@ package technobotts.soccer.slave;
 import java.io.*;
 
 import lejos.nxt.*;
-import lejos.nxt.addon.NXTCam;
 import lejos.nxt.comm.NXTConnection;
 import lejos.nxt.comm.RS485;
-import technobotts.soccer.util.GoalFinder;
 import technobotts.soccer.util.MessageType;
 
 public class SoccerSlave extends Thread
