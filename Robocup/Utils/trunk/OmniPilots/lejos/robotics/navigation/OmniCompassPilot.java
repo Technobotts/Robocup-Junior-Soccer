@@ -86,11 +86,6 @@ public class OmniCompassPilot extends SimpleOmniPilot
 
 	}
 
-	protected float[] getMotorTravelVelocities(float heading)
-	{
-		return super.getMotorTravelVelocities(heading);
-	}
-
 	public void setDirectionFinder(DirectionFinder df)
 	{
 		float oldHeading = _compass.getDegreesCartesian();
@@ -142,7 +137,7 @@ public class OmniCompassPilot extends SimpleOmniPilot
 			return speeds;
 		}
 
-		private SimplePID pid = new SimplePID(4, 0.001, 0);
+		private SimplePID pid = new SimplePID(0.05, 0.00001, 0);
 
 		private float getError()
 		{
@@ -181,9 +176,10 @@ public class OmniCompassPilot extends SimpleOmniPilot
 					float[] speeds;
 
 					if(_travel)
-						speeds = getTravelSpeedsWithBias(rotationBias, error);
+						speeds = getTravelSpeedsWithBias(rotationBias*_turnSpeed, error);
 					else
-						speeds = getMotorRotationVelocities(rotationBias);
+						speeds = getMotorRotationVelocities(rotationBias*_turnSpeed);
+					
 					setMotorSpeeds(speeds);
 				}
 			}

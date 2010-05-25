@@ -22,11 +22,12 @@ public class NorthFacing extends Strategy<AbstractSoccerRobot>
 	@Override
 	public void run()
 	{
-		if(!robot.connectTo("NXT"))
+		if(!robot.connectToSlave())
 			Sound.buzz();
 
 		robot.pilot.rotateTo(0, true);
 
+		float lastHeading = Float.NaN;
 		while(!Button.ESCAPE.isPressed())
 		{
 			if(robot.hasBall())
@@ -34,11 +35,16 @@ public class NorthFacing extends Strategy<AbstractSoccerRobot>
 				robot.pilot.travel(0);
 				robot.kick();
 			}
-
-			robot.pilot.travel(robot.getHeading() + robot.ballDetector.getAngle());
+			float heading = robot.getHeading() + robot.ballDetector.getAngle();
+			if(Float.isNaN(heading))
+				heading = lastHeading;
+			else
+				lastHeading = heading;
+			robot.pilot.travel(heading);
+			Sound.beep();
 			try
 			{
-				Thread.sleep(50);
+				Thread.sleep(250);
 			}
 			catch(InterruptedException e)
 			{}

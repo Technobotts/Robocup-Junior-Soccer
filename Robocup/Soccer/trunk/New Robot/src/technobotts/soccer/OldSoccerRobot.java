@@ -2,7 +2,6 @@ package technobotts.soccer;
 
 import java.io.IOException;
 
-import lejos.nxt.LCD;
 import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
 import lejos.nxt.UltrasonicSensor;
@@ -12,11 +11,7 @@ import lejos.nxt.addon.IRSeekerV2.Mode;
 import lejos.nxt.comm.RS485;
 import lejos.nxt.remote.RemoteMotor;
 import lejos.nxt.remote.RemoteNXT;
-import lejos.robotics.DirectionFinder;
-import lejos.robotics.LightSourceFinder;
-import lejos.robotics.TachoMotor;
 import lejos.robotics.navigation.SimpleOmniPilot;
-import lejos.robotics.navigation.SimpleOmniPilot.OmniMotor;
 
 public class OldSoccerRobot extends AbstractSoccerRobot
 {
@@ -25,6 +20,8 @@ public class OldSoccerRobot extends AbstractSoccerRobot
 	public static final SensorPort US_PORT      = SensorPort.S3;
 	public static final Mode       IR_MODE      = Mode.AC_600Hz;
 
+	public static final String     SLAVE_NAME    = "Soccer";
+	
 	private UltrasonicSensor       US;
 	private RemoteMotor            kickerMotor;
 
@@ -43,11 +40,11 @@ public class OldSoccerRobot extends AbstractSoccerRobot
 	}
 
 	@Override
-	public boolean connectTo(String slaveName)
+	public boolean connectToSlave()
 	{
 		try
 		{
-			slave = new RemoteNXT(slaveName, RS485.getConnector());
+			slave = new RemoteNXT(SLAVE_NAME, RS485.getConnector());
 			kickerMotor = slave.A;
 			return true;
 		}
@@ -113,7 +110,7 @@ public class OldSoccerRobot extends AbstractSoccerRobot
 		}
 		catch(NullPointerException e)
 		{
-			//XXX Horrible bodge to fix PrintStream Issue
+			//XXX Horrible hack to fix PrintStream Issue
 			return false;
 		}
 	}

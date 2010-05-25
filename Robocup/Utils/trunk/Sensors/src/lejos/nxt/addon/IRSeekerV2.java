@@ -2,6 +2,7 @@ package lejos.nxt.addon;
 
 import lejos.nxt.I2CPort;
 import lejos.nxt.I2CSensor;
+import lejos.nxt.Sound;
 import lejos.robotics.AndrewRangeReadings;
 import lejos.robotics.ImprovedRangeReadings;
 import lejos.robotics.LightSourceFinder;
@@ -77,7 +78,10 @@ public class IRSeekerV2 extends I2CSensor implements LightSourceFinder
 		}
 		int ret = getData(register, buf, 1);
 		if(ret != 0)
+		{
+			Sound.buzz();
 			return -1;
+		}
 		return (0xFF & buf[0]);
 	}
 

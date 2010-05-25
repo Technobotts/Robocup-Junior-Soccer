@@ -19,7 +19,7 @@ public class GoToBall extends Strategy<NewSoccerRobot>
 		robot.pilot.rotateTo(0,true);
 		robot.pilot.travel(0);
 
-		boolean success = robot.connectTo("NXT");
+		boolean success = robot.connectToSlave();
 		if(!success)
 			Sound.beepSequenceUp();
 		
