@@ -1,4 +1,4 @@
-package technobotts.soccer;
+package technobotts.soccer.robot;
 
 import lejos.nxt.comm.NXTConnection;
 import lejos.robotics.DirectionFinder;
@@ -32,6 +32,16 @@ public abstract class AbstractSoccerRobot implements SoccerRobot
 	public final LightSourceFinder getBallDetector()
 	{
 		return ballDetector;
+	}
+	
+	public final float getBallAngle()
+	{
+		return ballDetector.getAngle();
+	}
+	
+	public final OmniCompassPilot getPilot()
+	{
+		return pilot;
 	}
 
 }

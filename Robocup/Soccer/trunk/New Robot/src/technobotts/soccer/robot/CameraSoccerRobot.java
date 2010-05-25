@@ -1,4 +1,5 @@
-package technobotts.soccer;
+package technobotts.soccer.robot;
+
 
 public interface CameraSoccerRobot extends SoccerRobot
 {

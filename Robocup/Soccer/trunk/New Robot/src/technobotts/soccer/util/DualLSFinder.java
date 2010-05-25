@@ -6,6 +6,7 @@ import lejos.nxt.addon.IRSeekerV2;
 import lejos.robotics.LightSourceFinder;
 import lejos.nxt.addon.IRSeekerV2.Mode;
 import lejos.robotics.RangeReadings;
+import lejos.util.TextMenu;
 
 public class DualLSFinder extends DualSensor<LightSourceFinder> implements LightSourceFinder
 {
@@ -58,9 +59,16 @@ public class DualLSFinder extends DualSensor<LightSourceFinder> implements Light
 
 	public static void main(String... args) throws InterruptedException
 	{
-		DualLSFinder ballFinder = new DualLSFinder(new IRSeekerV2(SensorPort.S3, Mode.AC_600Hz),
+		Mode[] modes = {Mode.DC, Mode.AC_600Hz, Mode.AC_1200Hz};
+		TextMenu modeMenu = new TextMenu(new String[] {"DC", "AC 600Hz", "AC 1200Hz"},0,"Mode");
+		
+		int mode = modeMenu.select();
+		if(mode < 0)
+			return;
+		
+		DualLSFinder ballFinder = new DualLSFinder(new IRSeekerV2(SensorPort.S3, modes[mode]),
 		                                           53.13f,
-		                                           new IRSeekerV2(SensorPort.S2, Mode.AC_600Hz),
+		                                           new IRSeekerV2(SensorPort.S2, modes[mode]),
 		                                           53.13f);
 
 		while(true)

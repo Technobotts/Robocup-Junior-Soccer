@@ -1,4 +1,4 @@
-package technobotts.soccer;
+package technobotts.soccer.robot;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -11,18 +11,18 @@ import lejos.nxt.addon.IRSeekerV2.Mode;
 import lejos.nxt.comm.NXTConnection;
 import lejos.nxt.comm.RS485;
 import lejos.robotics.navigation.SimpleOmniPilot;
-import technobotts.comm.MessageType;
 
 import technobotts.soccer.util.DualLSFinder;
+import technobotts.soccer.util.MessageType;
 
 public class NewSoccerRobot extends AbstractSoccerRobot implements CameraSoccerRobot
 {
 	public static final SensorPort COMPASS_PORT  = SensorPort.S1;
 	public static final SensorPort RIGHT_IR_PORT = SensorPort.S2;
 	public static final SensorPort LEFT_IR_PORT  = SensorPort.S3;
-	public static final Mode       IR_MODE       = Mode.AC_600Hz;
+	public static final Mode       IR_MODE       = Mode.AC_1200Hz;
 
-	public static final String     SLAVE_NAME    = "Soccer";
+	public static final String     SLAVE_NAME    = "John B";
 
 	private DataOutputStream       dos;
 	private DataInputStream        dis;

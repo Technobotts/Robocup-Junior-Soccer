@@ -6,8 +6,8 @@ import lejos.nxt.*;
 import lejos.nxt.addon.NXTCam;
 import lejos.nxt.comm.NXTConnection;
 import lejos.nxt.comm.RS485;
-import technobotts.comm.MessageType;
 import technobotts.soccer.util.GoalFinder;
+import technobotts.soccer.util.MessageType;
 
 public class SoccerSlave extends Thread
 {
@@ -16,9 +16,9 @@ public class SoccerSlave extends Thread
 	private DataOutputStream dos;
 	private DataInputStream  dis;
 
-	private SoccerRobotSlave       robot;
+	private SoccerSlaveRobot robot;
 
-	public SoccerSlave(SoccerRobotSlave robot) throws IOException
+	public SoccerSlave(SoccerSlaveRobot robot) throws IOException
 	{
 		master = RS485.getConnector().waitForConnection(0, NXTConnection.PACKET);
 		if(master == null)
@@ -62,16 +62,6 @@ public class SoccerSlave extends Thread
 				continue;
 			}
 		}
-		
-	}
 
-	public static void main(String[] args) throws InterruptedException, IOException
-    {
-		SoccerRobotSlave robot = new SoccerRobotSlave(new NXTCam(SensorPort.S1),
-		                                  new UltrasonicSensor(SensorPort.S2),
-		                                  Motor.A,
-		                                  GoalFinder.BLUE);
-		SoccerSlave s = new SoccerSlave(robot);
-		s.start();
-    }
+	}
 }
