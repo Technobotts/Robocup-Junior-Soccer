@@ -65,7 +65,7 @@ public class IRSeekerV2 extends I2CSensor implements LightSourceFinder
 	 * Returns the direction of the target (1 to 9) or 0 if no target.
 	 * @return direction
 	 */
-	public int getDirectionId()
+	public synchronized int getDirectionId()
 	{
 		int register = 0;
 		if(mode.pulsed)
@@ -155,7 +155,7 @@ public class IRSeekerV2 extends I2CSensor implements LightSourceFinder
 		return readings;
 	}
 
-	public RangeReading getRangeReading()
+	public synchronized RangeReading getRangeReading()
 	{
 		return getRangeValues().getRangeReading();
 	}
