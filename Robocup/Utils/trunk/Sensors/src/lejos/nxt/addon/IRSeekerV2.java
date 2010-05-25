@@ -2,11 +2,11 @@ package lejos.nxt.addon;
 
 import lejos.nxt.I2CPort;
 import lejos.nxt.I2CSensor;
-import lejos.nxt.Sound;
 import lejos.robotics.AndrewRangeReadings;
 import lejos.robotics.ImprovedRangeReadings;
 import lejos.robotics.LightSourceFinder;
 import lejos.robotics.RangeReading;
+import lejos.robotics.RangeReadings;
 
 public class IRSeekerV2 extends I2CSensor implements LightSourceFinder
 {
@@ -65,7 +65,7 @@ public class IRSeekerV2 extends I2CSensor implements LightSourceFinder
 	 * Returns the direction of the target (1 to 9) or 0 if no target.
 	 * @return direction
 	 */
-	public int getDirection()
+	public int getDirectionId()
 	{
 		int register = 0;
 		if(mode.pulsed)
@@ -78,10 +78,7 @@ public class IRSeekerV2 extends I2CSensor implements LightSourceFinder
 		}
 		int ret = getData(register, buf, 1);
 		if(ret != 0)
-		{
-			Sound.buzz();
 			return -1;
-		}
 		return (0xFF & buf[0]);
 	}
 
@@ -93,7 +90,7 @@ public class IRSeekerV2 extends I2CSensor implements LightSourceFinder
 	{
 		while(true)
 		{
-			int dir = getDirection();
+			int dir = getDirectionId();
 			if(dir <= 0 && !blocking)
 				return Float.NaN;
 			else
@@ -108,7 +105,7 @@ public class IRSeekerV2 extends I2CSensor implements LightSourceFinder
 
 	public boolean hasDirection()
 	{
-		return getDirection() != 0;
+		return getDirectionId() != 0;
 	}
 
 	/**
@@ -147,7 +144,7 @@ public class IRSeekerV2 extends I2CSensor implements LightSourceFinder
 		if(result != 0)
 			return null;
 
-		AndrewRangeReadings readings = new AndrewRangeReadings(5);
+		ImprovedRangeReadings readings = new ImprovedRangeReadings(5);
 
 		int angle = -120;
 		for(int i = 0; i < 5; i++)
@@ -166,8 +163,29 @@ public class IRSeekerV2 extends I2CSensor implements LightSourceFinder
 	@Override
 	public float getRange()
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		RangeReadings r = getRangeValues();
+		switch(getDirectionId()) {
+		case 1:
+			return r.getRange(0);
+		case 2:
+			return (r.getRange(0) + r.getRange(1)) / 2;
+		case 3:
+			return r.getRange(1);
+		case 4:
+			return (r.getRange(1) + r.getRange(2)) / 2;
+		case 5:
+			return r.getRange(2);
+		case 6:
+			return (r.getRange(2) + r.getRange(3)) / 2;
+		case 7:
+			return r.getRange(3);
+		case 8:
+			return (r.getRange(3) + r.getRange(4)) / 2;
+		case 9:
+			return r.getRange(4);
+		default:
+			return 0;
+		}
 	}
 
 	@Override
