@@ -3,6 +3,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import technobotts.soccer.util.MessageType;
+
 import lejos.nxt.*;
 import lejos.nxt.comm.NXTConnection;
 import lejos.nxt.comm.RS485;
