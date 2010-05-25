@@ -12,13 +12,19 @@ public class IRTest
 	public static void main(String... args) throws InterruptedException
 	{
 		Mode[] modes = {Mode.DC, Mode.AC_600Hz, Mode.AC_1200Hz};
-		TextMenu textmenu = new TextMenu(new String[] {"DC", "AC 600Hz", "AC 1200Hz"});
+		TextMenu modeMenu = new TextMenu(new String[] {"DC", "AC 600Hz", "AC 1200Hz"},0,"Mode");
+		
+		TextMenu portMenu = new TextMenu(new String[] {"S1","S2","S3","S4"},0,"Port");
 
-		int choice = textmenu.select();
-		if(choice < 0)
+		int mode = modeMenu.select();
+		if(mode < 0)
 			return;
 		
-		IRSeekerV2 ir = new IRSeekerV2(SensorPort.S1, modes[choice]);
+		int port = portMenu.select();
+		if(mode < 0)
+			return;
+		
+		IRSeekerV2 ir = new IRSeekerV2(SensorPort.PORTS[port], modes[mode]);
 		while(!Button.ESCAPE.isPressed())
 		{
 			LCD.clear();
