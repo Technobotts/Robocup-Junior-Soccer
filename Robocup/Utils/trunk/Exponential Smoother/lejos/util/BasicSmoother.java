@@ -5,7 +5,7 @@ public class BasicSmoother extends DataProcessor
 	private double t;
 	private long   lastPollTime;
 
-	private double average   = Double.NaN;
+	protected double average   = Double.NaN;
 
 	public BasicSmoother(double t)
 	{

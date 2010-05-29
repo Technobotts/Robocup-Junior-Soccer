@@ -2,7 +2,7 @@ package lejos.util;
 public class Smoother extends BasicSmoother
 {
 	private BasicSmoother	NaNSmoother;
-	private double average = Double.NaN;
+	protected double average = Double.NaN;
 	private double NaNProb  = 0;
 	public Smoother(double t)
 	{
