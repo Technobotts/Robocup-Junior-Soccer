@@ -2,6 +2,8 @@ package technobotts.soccer;
 
 import java.io.IOException;
 
+import javax.microedition.lcdui.Graphics;
+
 import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
 import lejos.nxt.UltrasonicSensor;
@@ -28,5 +30,4 @@ public class NewSlaveMain
 		SoccerSlave s = new SoccerSlave(robot);
 		s.start();
 	}
-
 }
