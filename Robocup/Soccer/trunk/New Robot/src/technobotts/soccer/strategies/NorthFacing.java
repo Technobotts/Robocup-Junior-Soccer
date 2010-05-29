@@ -4,11 +4,16 @@ import lejos.nxt.Button;
 import lejos.nxt.LCD;
 import lejos.nxt.Sound;
 import lejos.robotics.navigation.OmniCompassPilot;
+import lejos.util.DataProcessor;
+import lejos.util.Delay;
 import technobotts.soccer.Strategy;
 import technobotts.soccer.robot.*;
+import technobotts.soccer.util.RobotDirectionModifier;
 
 public class NorthFacing extends Strategy<SoccerRobot>
 {
+	DataProcessor robotHeadingModifier = new RobotDirectionModifier(1.5);
+	
 	public NorthFacing(SoccerRobot robot)
 	{
 		super(robot);
@@ -28,8 +33,8 @@ public class NorthFacing extends Strategy<SoccerRobot>
 			Sound.buzz();
 
 		pilot.rotateTo(0, true);
-
-		float lastHeading = Float.NaN;
+		int i = 0;
+//		float lastHeading = Float.NaN;
 		while(!Button.ESCAPE.isPressed())
 		{
 			if(robot.hasBall())
@@ -38,21 +43,21 @@ public class NorthFacing extends Strategy<SoccerRobot>
 				robot.kick();
 			}
 			float ballAngle = robot.getBallAngle();
-			LCD.drawString("Angle: "+Math.rint(ballAngle*10)/10+"     ",0,0);
+			LCD.clear();
+			LCD.drawString("Angle: "+Math.rint(ballAngle),0,0);
 			
 			float heading = robot.getHeading() + ballAngle;
 			if(Float.isNaN(heading))
-				heading = lastHeading;
-			else
-				lastHeading = heading;
-			pilot.travel(heading);
-			Sound.beep();
-			try
 			{
-				Thread.sleep(250);
+				pilot.travel(180);
 			}
-			catch(InterruptedException e)
-			{}
+			else
+			{
+				pilot.travel((float) robotHeadingModifier.getOutput(heading));
+			}
+			LCD.drawInt(i++, 0, 3);
+			Delay.msDelay(50);
+			
 		}
 		robot.disconnect();
 	}
