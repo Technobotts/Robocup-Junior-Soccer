@@ -11,6 +11,8 @@ import lejos.nxt.addon.IRSeekerV2.Mode;
 import lejos.nxt.comm.NXTConnection;
 import lejos.nxt.comm.RS485;
 import lejos.robotics.navigation.SimpleOmniPilot;
+import lejos.util.AngleSmoother;
+import lejos.util.DataProcessor;
 
 import technobotts.soccer.util.DualLSFinder;
 import technobotts.soccer.util.MessageType;
