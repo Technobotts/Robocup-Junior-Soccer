@@ -5,6 +5,8 @@ import lejos.robotics.DirectionFinder;
 import lejos.robotics.LightSourceFinder;
 import lejos.robotics.navigation.OmniCompassPilot;
 import lejos.robotics.navigation.SimpleOmniPilot.OmniMotor;
+import lejos.util.AngleSmoother;
+import lejos.util.DataProcessor;
 
 public abstract class AbstractSoccerRobot implements SoccerRobot
 {
@@ -12,6 +14,10 @@ public abstract class AbstractSoccerRobot implements SoccerRobot
 	private DirectionFinder  compass;
 	public OmniCompassPilot  pilot;
 	protected NXTConnection    slave;
+	
+
+	
+	private DataProcessor ballSmoother = new AngleSmoother(0.15);
 
 	public AbstractSoccerRobot(DirectionFinder compass,
 	                   LightSourceFinder ballDetector,
@@ -36,7 +42,12 @@ public abstract class AbstractSoccerRobot implements SoccerRobot
 	
 	public final float getBallAngle()
 	{
-		return ballDetector.getAngle();
+		float angle = (float) ballSmoother.getOutput(ballDetector.getAngle());
+		while(angle > 180)
+			angle -= 360;
+		while(angle <= -180)
+			angle += 360;
+		return angle;
 	}
 	
 	public final OmniCompassPilot getPilot()
