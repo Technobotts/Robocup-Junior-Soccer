@@ -15,8 +15,6 @@ public class GoalFinder implements DirectionFinder
 
 	private NXTCam   camera;
 	private int      goalColorId;
-	
-	private CamPoller poller = null;
 
 	public GoalFinder(NXTCam camera, int goalColorId)
 	{
@@ -65,57 +63,12 @@ public class GoalFinder implements DirectionFinder
 	
 	public Rectangle getGoalRectangle()
 	{
-		if(poller != null)
-			return poller.largestBlock;
-		else
-			return calcGoalRectangle();
+		return calcGoalRectangle();
 	}
 	
 	public float getDegreesCartesian()
 	{
 		return getAngle(getGoalRectangle());
-	}
-
-	public void startPolling()
-	{
-		startPolling(50);
-	}
-	public void startPolling(int pollTime)
-	{
-		poller = new CamPoller(pollTime);
-		poller.start();
-	}
-	public void stopPolling()
-	{
-		poller = null;
-	}
-	
-	
-	private class CamPoller extends Thread
-	{
-		Rectangle largestBlock = null;
-		int pollTime = 0;
-		
-		public CamPoller(int pollTime)
-		{
-			this.pollTime = pollTime;
-			setDaemon(true);
-		}
-
-		public void run()
-		{
-			while(poller == this)
-			{
-				largestBlock = calcGoalRectangle();
-				try
-                {
-	                sleep(pollTime);
-                }
-                catch(InterruptedException e)
-                {
-                }
-			}
-		}
 	}
 
 

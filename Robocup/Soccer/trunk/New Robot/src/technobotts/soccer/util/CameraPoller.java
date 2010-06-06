@@ -1,5 +1,7 @@
 package technobotts.soccer.util;
 
+import java.awt.Rectangle;
+
 import lejos.nxt.addon.NXTCam;
 import lejos.util.Smoother;
 
@@ -22,6 +24,12 @@ public class CameraPoller extends Thread
 	{
 		return s.getOutput();
 	}
+	
+	private Rectangle goalRectangle;
+	public Rectangle getGoalRectangle()
+	{
+		return goalRectangle;
+	}
 
 	public void run()
 	{
@@ -29,6 +37,7 @@ public class CameraPoller extends Thread
 		while(true)
 		{
 			s.setInput(gFinder.getDegreesCartesian());
+			//goalRectangle = gFinder.getGoalRectangle();
 		}
 	}
 }
