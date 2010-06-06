@@ -128,6 +128,8 @@ public class OmniCompassPilot extends SimpleOmniPilot
 		private float[] getTravelSpeedsWithBias(float rotationBias, float error)
 		{
 			float[] travelSpeeds = getMotorTravelVelocities(_targetDirection + error);
+			travelSpeeds = limitToMaxSpeeds(travelSpeeds);
+			
 			float[] rotationSpeeds = getMotorRotationVelocities(rotationBias);
 			float[] speeds = new float[_motors.length];
 			for(int i = 0; i < _motors.length; i++)
