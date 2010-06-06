@@ -115,7 +115,7 @@ public class NewSoccerRobot extends AbstractSoccerRobot implements CameraSoccerR
 		{
 			dos.writeByte(MessageType.SHUTDOWN.getValue());
 			dos.flush();
-			return dis.readBoolean();
+			return true;
 		}
 		catch(IOException e)
 		{

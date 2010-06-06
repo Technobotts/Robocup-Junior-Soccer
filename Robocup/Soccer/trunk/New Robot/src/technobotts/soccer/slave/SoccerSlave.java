@@ -51,7 +51,9 @@ public class SoccerSlave extends Thread
 		fillRoundRect(g, 5, 5, 90, 54, 5, 5);
 		g.drawString("Running!", g.getCenteredX("Running!"), 28, true);
 		
-		while(true)
+		boolean isRunning = true;
+		
+		while(isRunning)
 		{
 			try
 			{
@@ -72,7 +74,6 @@ public class SoccerSlave extends Thread
 				else if(message == MessageType.SHUTDOWN.getValue())
 				{
 					Sound.buzz();
-					dos.writeBoolean(true);
 					break;
 				}
 				dos.flush();
