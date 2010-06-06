@@ -7,7 +7,7 @@ public class NewMasterMain
 {
 	public static void main(String[] args)
 	{
-		Strategy<SoccerRobot> s = new NorthFacing(new NewSoccerRobot());
+		Strategy<NewSoccerRobot> s = new CameraNorthFacing(new NewSoccerRobot());
 		s.run();
 	}
 }

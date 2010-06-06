@@ -28,6 +28,7 @@ public class NewSlaveMain
 		                                              new NXTCam(SensorPort.S1),
 		                                              GoalFinder.BLUE);
 		SoccerSlave s = new SoccerSlave(robot);
-		s.start();
+		s.run();
+		System.exit(0);
 	}
 }
