@@ -2,7 +2,6 @@ package lejos.nxt.addon;
 
 import lejos.nxt.I2CPort;
 import lejos.nxt.I2CSensor;
-import lejos.robotics.AndrewRangeReadings;
 import lejos.robotics.ImprovedRangeReadings;
 import lejos.robotics.LightSourceFinder;
 import lejos.robotics.RangeReading;
