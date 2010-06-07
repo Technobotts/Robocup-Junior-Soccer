@@ -3,32 +3,20 @@ package technobotts.soccer.strategies;
 import lejos.nxt.Button;
 import lejos.nxt.Sound;
 import technobotts.soccer.Strategy;
-import technobotts.soccer.robot.AbstractSoccerRobot;
-import technobotts.soccer.robot.NewSoccerRobot;
+import technobotts.soccer.robot.SoccerRobot;
 
-public class GoAndKick extends Strategy<AbstractSoccerRobot>
+public class GoAndKick extends Strategy
 {
 
-	public GoAndKick(AbstractSoccerRobot robot)
-	{
-		super(robot);
-	}
-
-	public static void main(String[] args)
-	{
-		Strategy<AbstractSoccerRobot> s = new GoAndKick(new NewSoccerRobot());
-		s.run();
-	}
-
 	@Override
-	public void run()
+	public void executeWith(SoccerRobot robot)
 	{
 		if(!robot.connectToSlave())
 			Sound.buzz();
 		
-		robot.pilot.setDirectionFinder(robot.ballDetector);
-		robot.pilot.rotateTo(0,true);
-		robot.pilot.travel(0);
+		robot.setDirectionFinder(robot.getBallDetector());
+		robot.rotateTo(0,true);
+		robot.travel(0);
 
 		while(!Button.ESCAPE.isPressed())
 		{

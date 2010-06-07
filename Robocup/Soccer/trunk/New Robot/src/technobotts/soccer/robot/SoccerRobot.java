@@ -1,20 +1,57 @@
 package technobotts.soccer.robot;
 
+import lejos.nxt.comm.NXTConnection;
+import lejos.robotics.DirectionFinder;
 import lejos.robotics.LightSourceFinder;
 import lejos.robotics.navigation.OmniCompassPilot;
+import lejos.util.AngleSmoother;
+import lejos.util.DataProcessor;
 
-public interface SoccerRobot
+public abstract class SoccerRobot extends OmniCompassPilot
 {
-	public boolean connectToSlave();
-	public boolean disconnect();
+	private LightSourceFinder ballDetector;
+	private DirectionFinder  compass;
+	protected NXTConnection  slave;
 
-	public LightSourceFinder getBallDetector();
-	public boolean hasBall();
-	public float getBallAngle();
+	private DataProcessor    ballSmoother = new AngleSmoother(0.15);
 
-	public OmniCompassPilot getPilot();
+	public SoccerRobot(DirectionFinder compass,
+	                           LightSourceFinder ballDetector,
+	                           OmniMotor... motors)
+	{
+		super(compass, motors);
+		this.compass = compass;
 
-	public boolean kick();
+		// this.setMoveSpeed(Float.POSITIVE_INFINITY);
+		this.ballDetector = ballDetector;
+	}
 
-	public float getHeading();
+	public final float getHeading()
+	{
+		return compass.getDegreesCartesian();
+	}
+
+	public final LightSourceFinder getBallDetector()
+	{
+		return ballDetector;
+	}
+
+	public abstract boolean hasBall();
+	public final float getBallAngle()
+	{
+		float angle = (float) ballSmoother.getOutput(ballDetector.getAngle());
+		while(angle > 180)
+			angle -= 360;
+		while(angle <= -180)
+			angle += 360;
+		return angle;
+	}
+
+	public abstract double getGoalAngle();
+
+	public abstract boolean connectToSlave();
+	public abstract boolean disconnect();
+	
+	public abstract boolean kick();
+
 }

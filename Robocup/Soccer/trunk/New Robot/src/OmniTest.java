@@ -1,5 +1,5 @@
 import lejos.nxt.Button;
-import technobotts.soccer.robot.AbstractSoccerRobot;
+import technobotts.soccer.robot.SoccerRobot;
 import technobotts.soccer.robot.NewSoccerRobot;
 
 public class OmniTest
@@ -12,7 +12,7 @@ public class OmniTest
 	public static void main(String... args) throws InterruptedException
 	{
 		Thread.sleep(1000);
-		AbstractSoccerRobot robot = new NewSoccerRobot();
+		SoccerRobot robot = new NewSoccerRobot();
 		/*DirectionFinder compass = new InvertedCompassSensor(SensorPort.S1);
 		compass.resetCartesianZero();
 		OmniCompassPilot pilot = new OmniCompassPilot(compass,
@@ -22,12 +22,12 @@ public class OmniTest
 		                                              new SimpleOmniPilot.OmniMotor(Motor.A, 306.8699f, 6.4f, 1, 9.6f)
 		                         );*/
 		
-		robot.pilot.setMoveSpeed(200);
-		robot.pilot.setTurnSpeed(180);
-		robot.pilot.rotateTo(0, false);
+		robot.setMoveSpeed(200);
+		robot.setTurnSpeed(180);
+		robot.rotateTo(0, false);
 		Button.ENTER.waitForPressAndRelease();
 
-		robot.pilot.travel(0);
+		robot.travel(0);
 		Button.ENTER.waitForPressAndRelease();
 
 	}

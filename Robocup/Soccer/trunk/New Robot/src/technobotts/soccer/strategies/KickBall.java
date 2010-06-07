@@ -3,26 +3,13 @@ package technobotts.soccer.strategies;
 import lejos.nxt.Button;
 import lejos.nxt.Sound;
 import technobotts.soccer.Strategy;
-import technobotts.soccer.robot.NewSoccerRobot;
 import technobotts.soccer.robot.SoccerRobot;
 
-public class KickBall extends Strategy<SoccerRobot>
+public class KickBall extends Strategy
 {
 
-	public KickBall(SoccerRobot robot)
-	{
-		super(robot);
-		// TODO Auto-generated constructor stub
-	}
-
-	public static void main(String[] args)
-	{
-		Strategy<SoccerRobot> s = new KickBall(new NewSoccerRobot());
-		s.run();
-	}
-
 	@Override
-	public void run()
+	public void executeWith(SoccerRobot robot)
 	{
 		if(!robot.connectToSlave())
 			Sound.buzz();

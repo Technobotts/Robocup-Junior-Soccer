@@ -6,22 +6,19 @@ import lejos.nxt.Sound;
 import lejos.util.Delay;
 import technobotts.soccer.Strategy;
 import technobotts.soccer.robot.NewSoccerRobot;
+import technobotts.soccer.robot.SoccerRobot;
 
-public class PointAndShoot extends Strategy<NewSoccerRobot>
+public class PointAndShoot extends Strategy
 {
-	public PointAndShoot(NewSoccerRobot robot)
-	{
-		super(robot);
-	}
 
 	public static void main(String[] args)
 	{
-		Strategy<NewSoccerRobot> s = new PointAndShoot(new NewSoccerRobot());
-		s.run();
+		Strategy s = new PointAndShoot();
+		s.executeWith(new NewSoccerRobot());
 	}
 
 	@Override
-	public void run()
+	public void executeWith(SoccerRobot robot)
 	{
 		if(!robot.connectToSlave())
 			Sound.buzz();
@@ -37,15 +34,16 @@ public class PointAndShoot extends Strategy<NewSoccerRobot>
 
 			if(robot.hasBall())
 			{
-				robot.pilot.rotate((float) goalAngle, true);
-				robot.pilot.travel(0);
+				robot.rotate((float) goalAngle, true);
+				robot.travel(0);
 				Delay.msDelay(500);
 				robot.kick();
-				robot.pilot.rotateTo(0);
+				robot.rotateTo(0);
 			}
 
 		}
 		if(!robot.disconnect())
 			Sound.buzz();
 	}
+
 }
