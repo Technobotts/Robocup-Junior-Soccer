@@ -14,7 +14,7 @@ import lejos.nxt.remote.RemoteMotor;
 import lejos.nxt.remote.RemoteNXT;
 import lejos.robotics.navigation.SimpleOmniPilot;
 
-public class OldSoccerRobot extends AbstractSoccerRobot
+public class OldSoccerRobot extends SoccerRobot
 {
 	public static final SensorPort COMPASS_PORT = SensorPort.S1;
 	public static final SensorPort IR_PORT      = SensorPort.S2;
@@ -111,8 +111,14 @@ public class OldSoccerRobot extends AbstractSoccerRobot
 		}
 		catch(NullPointerException e)
 		{
-			//XXX Horrible hack to fix PrintStream Issue
+			//FIXME Horrible hack to fix PrintStream Issue
 			return false;
 		}
 	}
+
+	@Override
+    public double getGoalAngle()
+    {
+		return 0;
+    }
 }

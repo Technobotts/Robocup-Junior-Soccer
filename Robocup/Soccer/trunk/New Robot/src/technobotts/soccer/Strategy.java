@@ -2,11 +2,7 @@ package technobotts.soccer;
 
 import technobotts.soccer.robot.SoccerRobot;
 
-public abstract class Strategy<RobotType extends SoccerRobot> implements Runnable
+public abstract class Strategy
 {
-	protected RobotType robot;
-	public Strategy(RobotType robot)
-    {
-    	this.robot = robot;
-    }
+	public abstract void executeWith(SoccerRobot robot);
 }

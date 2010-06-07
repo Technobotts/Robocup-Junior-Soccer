@@ -3,21 +3,16 @@ package technobotts.soccer.strategies;
 import lejos.nxt.Button;
 import lejos.nxt.Sound;
 import technobotts.soccer.Strategy;
-import technobotts.soccer.robot.NewSoccerRobot;
+import technobotts.soccer.robot.SoccerRobot;
 
-public class GoToBall extends Strategy<NewSoccerRobot>
+public class GoToBall extends Strategy
 {
-	public GoToBall(NewSoccerRobot robot)
-    {
-	    super(robot);
-    }
-
 	@Override
-    public void run()
+    public void executeWith(SoccerRobot robot)
     {
-		robot.pilot.setDirectionFinder(robot.ballDetector);
-		robot.pilot.rotateTo(0,true);
-		robot.pilot.travel(0);
+		robot.setDirectionFinder(robot.getBallDetector());
+		robot.rotateTo(0,true);
+		robot.travel(0);
 
 		boolean success = robot.connectToSlave();
 		if(!success)
@@ -25,11 +20,4 @@ public class GoToBall extends Strategy<NewSoccerRobot>
 		
 		Button.ENTER.waitForPressAndRelease();
     }
-	
-    public static void main(String[] args)
-    {
-		Strategy<NewSoccerRobot> s = new GoToBall(new NewSoccerRobot());
-		s.run();
-    }
-
 }
