@@ -1,10 +1,10 @@
 package technobotts.soccer.strategies;
 
-import java.util.PID.SimplePID;
 
 import lejos.nxt.Button;
 import lejos.nxt.Sound;
 import lejos.util.DataProcessor;
+import lejos.util.SimplePID;
 import technobotts.soccer.Strategy;
 import technobotts.soccer.robot.NewSoccerRobot;
 import technobotts.soccer.robot.SoccerRobot;
