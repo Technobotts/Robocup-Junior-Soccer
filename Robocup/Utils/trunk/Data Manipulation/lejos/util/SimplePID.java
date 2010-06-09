@@ -1,4 +1,4 @@
-package java.util.PID;
+package lejos.util;
 
 /**
  * @author Eric
