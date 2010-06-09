@@ -26,7 +26,7 @@ public class GoalFinder implements DirectionFinder
 	private float getAngle(float xCoord)
 	{
 		final float offset = 72;
-		final float scale = 0.005f;
+		final float scale = 0.01f;
 		return (float) (Math.toDegrees(Math.atan(scale * (xCoord - offset))));
 	}
 	private float getAngle(Rectangle rect)
@@ -43,7 +43,7 @@ public class GoalFinder implements DirectionFinder
 
 		for(CamRect r : rects)
 		{
-			if(r.getArea() >= 100)
+			if(r.getArea() >= 50)
 			{
 				if(r.colorId == goalColorId)
 					blocks.add(r);
@@ -58,7 +58,7 @@ public class GoalFinder implements DirectionFinder
 			mergedBlocks.add(group.getBoundingBox());
 		}
 
-		return mergedBlocks.getLargest(500);
+		return mergedBlocks.getLargest(250);
 	}
 	
 	public Rectangle getGoalRectangle()
