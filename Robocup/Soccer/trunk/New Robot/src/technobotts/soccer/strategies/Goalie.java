@@ -12,7 +12,7 @@ import technobotts.soccer.robot.SoccerRobot;
 public class Goalie extends Strategy
 {
 
-	SimplePID pid = new SimplePID(2,0,0);
+	DataProcessor pid = new SimplePID(2,0,0);
 	
 	public static void main(String[] args)
 	{
