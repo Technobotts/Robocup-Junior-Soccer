@@ -2,12 +2,12 @@ package technobotts.soccer.robot;
 
 import java.io.IOException;
 
-
 import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
 import lejos.nxt.UltrasonicSensor;
 import lejos.nxt.addon.FixedCompassSensor;
 import lejos.nxt.addon.IRSeekerV2;
+import lejos.nxt.addon.InvertedCompassSensor;
 import lejos.nxt.addon.IRSeekerV2.Mode;
 import lejos.nxt.comm.RS485;
 import lejos.nxt.remote.RemoteMotor;
@@ -19,10 +19,10 @@ public class OldSoccerRobot extends SoccerRobot
 	public static final SensorPort COMPASS_PORT = SensorPort.S1;
 	public static final SensorPort IR_PORT      = SensorPort.S2;
 	public static final SensorPort US_PORT      = SensorPort.S3;
-	public static final Mode       IR_MODE      = Mode.AC_600Hz;
+	public static final Mode       IR_MODE      = Mode.AC_1200Hz;
 
-	public static final String     SLAVE_NAME    = "Lewis B";
-	
+	public static final String     SLAVE_NAME   = "Lewis B";
+
 	private UltrasonicSensor       US;
 	private RemoteMotor            kickerMotor;
 
@@ -31,11 +31,11 @@ public class OldSoccerRobot extends SoccerRobot
 
 	public OldSoccerRobot()
 	{
-		super(new FixedCompassSensor(COMPASS_PORT),
+		super(new InvertedCompassSensor(COMPASS_PORT),
 		      new IRSeekerV2(IR_PORT, IR_MODE),
-		      new SimpleOmniPilot.OmniMotor(Motor.A, 60, 6.4f, 1, 11, true),
-		      new SimpleOmniPilot.OmniMotor(Motor.B, 180, 6.4f, 1, 11, true),
-		      new SimpleOmniPilot.OmniMotor(Motor.C, 300, 6.4f, 1, 11));
+		      new SimpleOmniPilot.OmniMotor(Motor.C,  53.1301f, 6.4f, 1, 9.6f, true),
+		      new SimpleOmniPilot.OmniMotor(Motor.B, 180.0000f, 6.4f, 1, 8.8f),
+		      new SimpleOmniPilot.OmniMotor(Motor.A, 306.8699f, 6.4f, 1, 9.6f));
 
 		US = new UltrasonicSensor(US_PORT);
 	}
@@ -111,14 +111,14 @@ public class OldSoccerRobot extends SoccerRobot
 		}
 		catch(NullPointerException e)
 		{
-			//FIXME Horrible hack to fix PrintStream Issue
+			// FIXME Horrible hack to fix PrintStream Issue
 			return false;
 		}
 	}
 
 	@Override
-    public double getGoalAngle()
-    {
+	public double getGoalAngle()
+	{
 		return 0;
-    }
+	}
 }
