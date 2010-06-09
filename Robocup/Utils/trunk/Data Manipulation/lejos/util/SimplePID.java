@@ -3,7 +3,7 @@ package lejos.util;
 /**
  * @author Eric
  */
-public class SimplePID
+public class SimplePID extends DataProcessor
 {
 	/** The P I and D factors to multiply by */
 	private double  _Kp, _Ki, _Kd;
@@ -77,8 +77,8 @@ public class SimplePID
 	{
 		return _output;
 	}
-
-	public double getOutput(double input)
+	
+	public void setInput(double input)
 	{
 		if(_isRunning)
 		{
@@ -110,7 +110,6 @@ public class SimplePID
 			_lastTick = _tick;
 			_lastError = _error;
 		}
-		return _output;
 	}
 
 	public void setMaxInt(long maxInt)
