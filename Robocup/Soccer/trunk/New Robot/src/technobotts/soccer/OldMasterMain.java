@@ -7,7 +7,7 @@ public class OldMasterMain
 {
 	public static void main(String[] args)
 	{
-		Strategy s = new NorthFacing();
+		Strategy s = new Goalie();
 		s.executeWith(new OldSoccerRobot());
 	}
 }

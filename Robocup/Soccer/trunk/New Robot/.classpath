@@ -5,5 +5,6 @@
 	<classpathentry exported="true" kind="src" path="/OmniPilots"/>
 	<classpathentry exported="true" kind="src" path="/Exponential Smoother"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/Sensors"/>
+	<classpathentry kind="src" path="/Simple PID Controller"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

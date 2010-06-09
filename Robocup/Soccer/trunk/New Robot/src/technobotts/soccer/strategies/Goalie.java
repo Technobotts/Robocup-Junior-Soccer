@@ -1,19 +1,22 @@
 package technobotts.soccer.strategies;
 
+import java.util.PID.SimplePID;
+
 import lejos.nxt.Button;
-import lejos.nxt.LCD;
 import lejos.nxt.Sound;
-import lejos.util.Delay;
+import lejos.util.DataProcessor;
 import technobotts.soccer.Strategy;
 import technobotts.soccer.robot.NewSoccerRobot;
 import technobotts.soccer.robot.SoccerRobot;
 
-public class PointAndShoot extends Strategy
+public class Goalie extends Strategy
 {
 
+	SimplePID pid = new SimplePID(2,0,0);
+	
 	public static void main(String[] args)
 	{
-		Strategy s = new PointAndShoot();
+		Strategy s = new Goalie();
 		s.executeWith(new NewSoccerRobot());
 	}
 
@@ -23,24 +26,19 @@ public class PointAndShoot extends Strategy
 		if(!robot.connectToSlave())
 			Sound.buzz();
 
+		robot.travel(90);
+		
 		while(!Button.ESCAPE.isPressed())
 		{
-
-			double goalAngle = robot.getGoalAngle();
-
-			LCD.clear();
-			LCD.drawString("GoalAngle: " + Math.floor(goalAngle), 0, 0);
-			LCD.refresh();
-
 			if(robot.hasBall())
 			{
-				robot.rotate((float) goalAngle, true);
-				//robot.travel(0);
-				Delay.msDelay(500);
 				robot.kick();
-				robot.rotateTo(0);
 			}
-
+			float ballAngle = robot.getBallAngle();
+//			if(ballAngle > 0) robot.travel(90);
+//			else if(ballAngle == 0) robot.stop();
+//			else if(ballAngle < 0) robot.travel(-90);
+			robot.setMoveSpeed((float) pid.getOutput(ballAngle));
 		}
 		if(!robot.disconnect())
 			Sound.buzz();
