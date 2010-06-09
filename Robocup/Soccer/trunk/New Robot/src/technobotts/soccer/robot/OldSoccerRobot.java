@@ -5,7 +5,6 @@ import java.io.IOException;
 import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
 import lejos.nxt.UltrasonicSensor;
-import lejos.nxt.addon.FixedCompassSensor;
 import lejos.nxt.addon.IRSeekerV2;
 import lejos.nxt.addon.InvertedCompassSensor;
 import lejos.nxt.addon.IRSeekerV2.Mode;
