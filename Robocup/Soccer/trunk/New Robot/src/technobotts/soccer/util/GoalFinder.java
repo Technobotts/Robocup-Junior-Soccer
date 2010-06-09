@@ -25,8 +25,8 @@ public class GoalFinder implements DirectionFinder
 
 	private float getAngle(float xCoord)
 	{
-		final float offset = 102.19f;
-		final float scale = 0.0057f;
+		final float offset = 72;
+		final float scale = 0.005f;
 		return (float) (Math.toDegrees(Math.atan(scale * (xCoord - offset))));
 	}
 	private float getAngle(Rectangle rect)
