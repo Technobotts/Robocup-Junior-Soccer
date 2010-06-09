@@ -71,15 +71,11 @@ public class RectGroup extends ArrayList<Rectangle> implements List<Rectangle>
 		for(Rectangle newRect : this)
 		{
 			List<RectGroup> newGroupings = new ArrayList<RectGroup>();
+			// Create a list of all the groups the current rectangle overlaps
 
 			for(RectGroup group : groups)
-			{
 				if(group.intersects(newRect))
-				{
 					newGroupings.add(group);
-					break;
-				}
-			}
 
 			RectGroup newGroup = new RectGroup(newRect);
 
