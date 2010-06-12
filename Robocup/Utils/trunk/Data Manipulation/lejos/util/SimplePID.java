@@ -6,9 +6,9 @@ package lejos.util;
 public class SimplePID extends DataProcessor
 {
 	/** The P I and D factors to multiply by */
-	private double  _Kp, _Ki, _Kd;
+	private double  Kp, Ki, Kd;
 	/** The P I and D terms of the PID algorithm */
-	private double  _pTerm, _iTerm, _dTerm;
+	private double  pTerm, iTerm, dTerm;
 
 	/** The current system time */
 	private long    _tick;
@@ -21,15 +21,13 @@ public class SimplePID extends DataProcessor
 	/** The previous value of _error */
 	private double  _lastError;
 	/** The integrated error values */
-	private long    _intError;
-	private long    _maxInt = 20000;
+	private long    intError;
+	private long    _maxInt    = 20000;
 
 	/** The calculated PID controller output */
 	private double  _output;
 
-	/** Whether the controller is running */
-	private boolean _isRunning = false;
-	private boolean _hasData;
+	private boolean hasData;
 
 	/**
 	 * Constructs the SimplePID object
@@ -39,9 +37,9 @@ public class SimplePID extends DataProcessor
 	 */
 	public SimplePID(double Kp, double Ki, double Kd)
 	{
-		this._Kp = Kp;
-		this._Ki = Ki;
-		this._Kd = Kd;
+		this.Kp = Kp;
+		this.Ki = Ki;
+		this.Kd = Kd;
 		reset();
 	}
 
@@ -51,83 +49,66 @@ public class SimplePID extends DataProcessor
 
 	public void reset()
 	{
-		_intError = 0;
-		_pTerm = 0;
-		_iTerm = 0;
-		_dTerm = 0;
-		_hasData = false;
+		intError = 0;
+		pTerm = 0;
+		iTerm = 0;
+		dTerm = 0;
+		hasData = false;
 	}
 
 	public double getPTerm()
 	{
-		return _pTerm;
+		return pTerm;
 	}
 
 	public double getITerm()
 	{
-		return _iTerm;
+		return iTerm;
 	}
 
 	public double getDTerm()
 	{
-		return _dTerm;
+		return dTerm;
 	}
 
 	public double getOutput()
 	{
 		return _output;
 	}
-	
+
 	public void setInput(double input)
 	{
-		if(_isRunning)
+		_tick = System.currentTimeMillis();
+		_error = input;
+
+		pTerm = Kp * _error;
+
+		long dt = _tick - _lastTick;
+		if(!hasData)
 		{
-			_tick = System.currentTimeMillis();
-			_error = input;
-
-			_pTerm = _Kp * _error;
-
-			long dt = _tick - _lastTick;
-			if(!_hasData)
-			{
-				// First time around: no I or D part;
-				_hasData = true;
-				_output = _pTerm;
-			}
-			else if(dt != 0 && !Double.isNaN(input))
-			{
-				_intError += _error * dt;
-				if(_intError > _maxInt)
-					_intError = _maxInt;
-				else if(_intError < -_maxInt)
-					_intError = -_maxInt;
-
-				_iTerm = _Ki * _intError;
-				_dTerm = _Kd * (_error - _lastError) / dt;
-
-				_output = _pTerm + _iTerm + _dTerm;
-			}
-			_lastTick = _tick;
-			_lastError = _error;
+			// First time around: no I or D part;
+			hasData = true;
+			_output = pTerm;
 		}
+		else if(dt != 0 && !Double.isNaN(input))
+		{
+			intError += _error * dt;
+			if(intError > _maxInt)
+				intError = _maxInt;
+			else if(intError < -_maxInt)
+				intError = -_maxInt;
+
+			iTerm = Ki * intError;
+			dTerm = Kd * (_error - _lastError) / dt;
+
+			_output = pTerm + iTerm + dTerm;
+		}
+		_lastTick = _tick;
+		_lastError = _error;
 	}
 
 	public void setMaxInt(long maxInt)
 	{
 		_maxInt = maxInt;
-	}
-
-	public void start()
-	{
-		if(!_isRunning)
-		{
-			reset();
-			_isRunning = true;
-		}
-	}
-
-	public void stop()
-	{
-		_isRunning = false;
 	}
 }
