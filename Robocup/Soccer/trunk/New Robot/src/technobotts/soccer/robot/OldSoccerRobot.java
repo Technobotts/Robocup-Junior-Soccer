@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
+import lejos.nxt.TouchSensor;
 import lejos.nxt.UltrasonicSensor;
 import lejos.nxt.addon.IRSeekerV2;
 import lejos.nxt.addon.InvertedCompassSensor;
@@ -24,6 +25,7 @@ public class OldSoccerRobot extends SoccerRobot
 
 	private UltrasonicSensor       US;
 	private RemoteMotor            kickerMotor;
+	private TouchSensor bumper;
 
 	private RemoteNXT              slave;
 	private boolean                isKicking    = false;
@@ -46,6 +48,7 @@ public class OldSoccerRobot extends SoccerRobot
 		{
 			slave = new RemoteNXT(SLAVE_NAME, RS485.getConnector());
 			kickerMotor = slave.A;
+			bumper = new TouchSensor(slave.S1);
 			return true;
 		}
 		catch(IOException ioe)
@@ -124,6 +127,6 @@ public class OldSoccerRobot extends SoccerRobot
 	@Override
     public boolean bumperIsPressed()
     {
-	    return false;
+	    return bumper.isPressed();
     }
 }
