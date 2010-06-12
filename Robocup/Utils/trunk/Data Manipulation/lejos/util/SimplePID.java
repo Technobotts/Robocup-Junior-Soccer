@@ -94,7 +94,7 @@ public class SimplePID extends DataProcessor
 				_hasData = true;
 				_output = _pTerm;
 			}
-			else if(dt != 0)
+			else if(dt != 0 && !Double.isNaN(input))
 			{
 				_intError += _error * dt;
 				if(_intError > _maxInt)
