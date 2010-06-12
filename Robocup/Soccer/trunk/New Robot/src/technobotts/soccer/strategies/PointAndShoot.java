@@ -11,21 +11,17 @@ import technobotts.soccer.robot.SoccerRobot;
 public class PointAndShoot extends Strategy
 {
 
-	public static void main(String[] args)
+	public static void main(String[] args) throws InterruptedException
 	{
 		Strategy s = new PointAndShoot();
 		s.executeWith(new NewSoccerRobot());
 	}
 
 	@Override
-	public void executeWith(SoccerRobot robot)
+	protected void executeWithConnected(SoccerRobot robot)
 	{
-		if(!robot.connectToSlave())
-			Sound.buzz();
-
 		while(!Button.ESCAPE.isPressed())
 		{
-
 			double goalAngle = robot.getGoalAngle();
 
 			LCD.clear();
@@ -40,10 +36,7 @@ public class PointAndShoot extends Strategy
 				robot.kick();
 				robot.rotateTo(0);
 			}
-
 		}
-		if(!robot.disconnect())
-			Sound.buzz();
 	}
 
 }

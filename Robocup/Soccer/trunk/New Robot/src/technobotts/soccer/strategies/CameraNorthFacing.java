@@ -14,11 +14,8 @@ public class CameraNorthFacing extends Strategy
 	DataProcessor robotHeadingModifier = new RobotDirectionModifier(3);
 
 	@Override
-	public void executeWith(SoccerRobot robot)
+	protected void executeWithConnected(SoccerRobot robot)
 	{
-		if(!robot.connectToSlave())
-			Sound.buzz();
-
 		robot.rotateTo(0, true);
 
 		while(!Button.ESCAPE.isPressed())
@@ -48,6 +45,5 @@ public class CameraNorthFacing extends Strategy
 			}
 			Delay.msDelay(50);
 		}
-		robot.disconnect();
 	}
 }
