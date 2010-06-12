@@ -13,14 +13,13 @@ import technobotts.soccer.robot.SoccerRobot;
 
 public class Goalie extends Strategy
 {
-
-	DataProcessor pid = new SimplePID(3, 0, 0.5);
-
 	public static void main(String[] args) throws InterruptedException
 	{
 		Strategy s = new Goalie();
 		s.executeWith(new OldSoccerRobot());
 	}
+
+	DataProcessor pid = new SimplePID(3, 0, 0.5);
 
 	long        lastResetTime    = System.currentTimeMillis();
 
@@ -29,7 +28,7 @@ public class Goalie extends Strategy
 
 	public float calculateHeading()
 	{
-		float heading = (System.currentTimeMillis() - lastResetTime) * degreesPerSecond / 1000f;
+		float heading = initialHeading + (System.currentTimeMillis() - lastResetTime) * degreesPerSecond / 1000f;
 		if(heading > 180)
 			heading = 180;
 
@@ -41,30 +40,29 @@ public class Goalie extends Strategy
 		lastResetTime = System.currentTimeMillis();
 	}
 
-	public void executeWithConnected(SoccerRobot robot) throws InterruptedException
+	protected void executeWithConnected(SoccerRobot robot) throws InterruptedException
 	{
-
 		while(!Button.ESCAPE.isPressed())
 		{
+			float ballAngle = robot.getBallAngle();
+			float robotSpeed = (float) pid.getOutput(ballAngle);
+			
 			if(robot.hasBall())
 			{
+				robot.setMoveSpeed(300);
+				robot.travel(0);
+				Thread.sleep(250);
 				robot.kick();
+				robot.stop();
 			}
-			if(robot.bumperIsPressed())
+			else if(robot.bumperIsPressed())
 			{
 				resetHeading();
 			}
-
-			float ballAngle = robot.getBallAngle();
-			float robotSpeed = (float) pid.getOutput(ballAngle);
-
-			LCD.clear();
-			LCD.drawString(ballAngle + ":" + robotSpeed, 0, 0);
-			LCD.refresh();
-
-			if(!Float.isNaN(robotSpeed))
+			else if(!Float.isNaN(robotSpeed))
 			{
 				float heading = calculateHeading();
+				
 				if(Math.abs(robotSpeed) < 15 && heading < 135)
 				{
 					robot.setMoveSpeed(300);
@@ -79,11 +77,9 @@ public class Goalie extends Strategy
 						robot.travel(-heading);
 				}
 			}
+			
 			Delay.msDelay(50);
 		}
-		
-		if(!robot.disconnect())
-			Sound.buzz();
 	}
 
 }

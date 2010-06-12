@@ -40,6 +40,5 @@ public class OldSlaveMain
         resp.start();
         resp.join();
         LCD.drawString("Closing...  ", 0, 1);
-        Button.ENTER.waitForPressAndRelease();
     }
 }
