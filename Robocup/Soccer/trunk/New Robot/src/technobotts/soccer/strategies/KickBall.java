@@ -9,11 +9,8 @@ public class KickBall extends Strategy
 {
 
 	@Override
-	public void executeWith(SoccerRobot robot)
+	protected void executeWithConnected(SoccerRobot robot)
 	{
-		if(!robot.connectToSlave())
-			Sound.buzz();
-
 		while(!Button.ESCAPE.isPressed())
 		{
 			if(robot.hasBall())
@@ -26,6 +23,5 @@ public class KickBall extends Strategy
 			catch(InterruptedException e)
 			{}
 		}
-		robot.disconnect();
 	}
 }

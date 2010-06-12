@@ -7,20 +7,16 @@ import technobotts.soccer.robot.SoccerRobot;
 
 public class GoAndKick extends Strategy
 {
-
 	@Override
-	public void executeWith(SoccerRobot robot)
+	protected void executeWithConnected(SoccerRobot robot)
 	{
-		if(!robot.connectToSlave())
-			Sound.buzz();
-		
 		robot.setDirectionFinder(robot.getBallDetector());
-		robot.rotateTo(0,true);
+		robot.rotateTo(0, true);
 		robot.travel(0);
 
 		while(!Button.ESCAPE.isPressed())
 		{
-			
+
 			if(robot.hasBall())
 				robot.kick();
 
@@ -31,6 +27,5 @@ public class GoAndKick extends Strategy
 			catch(InterruptedException e)
 			{}
 		}
-		robot.disconnect();
 	}
 }

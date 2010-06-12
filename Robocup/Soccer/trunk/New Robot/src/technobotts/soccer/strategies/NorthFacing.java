@@ -14,11 +14,8 @@ public class NorthFacing extends Strategy
 	DataProcessor robotHeadingModifier = new RobotDirectionModifier(1.5);
 
 	@Override
-    public void executeWith(SoccerRobot robot)
+	protected void executeWithConnected(SoccerRobot robot)
 	{
-		if(!robot.connectToSlave())
-			Sound.buzz();
-
 		robot.rotateTo(0, true);
 		int i = 0;
 //		float lastHeading = Float.NaN;
@@ -46,6 +43,5 @@ public class NorthFacing extends Strategy
 			Delay.msDelay(50);
 			
 		}
-		robot.disconnect();
 	}
 }

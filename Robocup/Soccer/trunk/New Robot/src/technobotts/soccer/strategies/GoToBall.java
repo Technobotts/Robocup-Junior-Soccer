@@ -20,4 +20,9 @@ public class GoToBall extends Strategy
 		
 		Button.ENTER.waitForPressAndRelease();
     }
+
+	@Override
+    protected void executeWithConnected(SoccerRobot robot) throws InterruptedException
+    {	    
+    }
 }
