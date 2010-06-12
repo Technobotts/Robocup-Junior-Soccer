@@ -120,4 +120,10 @@ public class OldSoccerRobot extends SoccerRobot
 	{
 		return 0;
 	}
+
+	@Override
+    public boolean bumperIsPressed()
+    {
+	    return false;
+    }
 }

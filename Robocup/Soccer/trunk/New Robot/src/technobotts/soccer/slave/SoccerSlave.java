@@ -71,6 +71,10 @@ public class SoccerSlave extends Thread
 				{
 					dos.writeBoolean(robot.hasBall());
 				}
+				else if(message == MessageType.BUMPER_CHECK.getValue())
+				{
+					dos.writeBoolean(robot.bumperIsPressed());
+				}
 				else if(message == MessageType.SHUTDOWN.getValue())
 				{
 					Sound.buzz();

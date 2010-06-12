@@ -1,7 +1,7 @@
 package technobotts.soccer.slave;
 
-
 import lejos.nxt.Motor;
+import lejos.nxt.TouchSensor;
 import lejos.nxt.UltrasonicSensor;
 
 public class SoccerSlaveRobot
@@ -10,11 +10,13 @@ public class SoccerSlaveRobot
 	private Motor            kickerMotor;
 
 	private boolean          isKicking = false;
+	private TouchSensor      bumper;
 
-	public SoccerSlaveRobot(UltrasonicSensor US, Motor kickerMotor)
+	public SoccerSlaveRobot(UltrasonicSensor US, Motor kickerMotor, TouchSensor bumper)
 	{
 		this.US = US;
 		this.kickerMotor = kickerMotor;
+		this.bumper = bumper;
 		kickerMotor.smoothAcceleration(false);
 		kickerMotor.setSpeed(1000);
 		kickerMotor.regulateSpeed(false);
@@ -63,10 +65,15 @@ public class SoccerSlaveRobot
 
 		isKicking = false;
 	}
-	
+
 	public double getGoalAngle()
 	{
 		return Double.NaN;
+	}
+
+	public boolean bumperIsPressed()
+	{
+		return bumper.isPressed();
 	}
 
 }
