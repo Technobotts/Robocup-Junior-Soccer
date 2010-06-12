@@ -107,6 +107,25 @@ public class NewSoccerRobot extends SoccerRobot
 		}
 	}
 
+	@Override
+    public boolean bumperIsPressed()
+    {
+		try
+		{
+			dos.writeByte(MessageType.BUMPER_CHECK.getValue());
+			dos.flush();
+			return dis.readBoolean();
+		}
+		catch(IOException e)
+		{
+			return false;
+		}
+		catch(NullPointerException e)
+		{
+			return false;
+		}
+    }
+
 	public boolean disconnect()
 	{
 		try

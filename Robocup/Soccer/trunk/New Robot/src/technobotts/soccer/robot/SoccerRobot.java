@@ -10,10 +10,10 @@ import lejos.util.DataProcessor;
 public abstract class SoccerRobot extends OmniCompassPilot
 {
 	private LightSourceFinder ballDetector;
-	private DirectionFinder  compass;
-	protected NXTConnection  slave;
+	private DirectionFinder   compass;
+	protected NXTConnection   slave;
 
-	private DataProcessor    ballSmoother = new AngleSmoother(0.15);
+	private DataProcessor     ballSmoother = new AngleSmoother(0.15);
 
 	public SoccerRobot(DirectionFinder compass,
 	                           LightSourceFinder ballDetector,
@@ -37,6 +37,7 @@ public abstract class SoccerRobot extends OmniCompassPilot
 	}
 
 	public abstract boolean hasBall();
+
 	public final float getBallAngle()
 	{
 		float angle = (float) ballSmoother.getOutput(ballDetector.getAngle());
@@ -50,8 +51,11 @@ public abstract class SoccerRobot extends OmniCompassPilot
 	public abstract double getGoalAngle();
 
 	public abstract boolean connectToSlave();
+
 	public abstract boolean disconnect();
-	
+
 	public abstract boolean kick();
+
+	public abstract boolean bumperIsPressed();
 
 }
