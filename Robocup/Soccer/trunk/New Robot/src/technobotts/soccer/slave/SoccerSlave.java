@@ -51,9 +51,7 @@ public class SoccerSlave extends Thread
 		fillRoundRect(g, 5, 5, 90, 54, 5, 5);
 		g.drawString("Running!", g.getCenteredX("Running!"), 28, true);
 		
-		boolean isRunning = true;
-		
-		while(isRunning)
+		while(true)
 		{
 			try
 			{

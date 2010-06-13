@@ -7,7 +7,7 @@ public class NewMasterMain
 {
 	public static void main(String[] args)
 	{
-		Strategy s = new PointAndShoot();
+		Strategy s = new CameraNorthFacing();
 		s.executeWith(new NewSoccerRobot());
 	}
 }
