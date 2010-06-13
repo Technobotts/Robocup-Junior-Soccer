@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="C:/Program Files/leJOS NXJ/lib/classes.jar"/>
+	<classpathentry exported="true" kind="src" path="/OmniPilots"/>
+	<classpathentry exported="true" kind="src" path="/Data Manipulation"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/Sensors"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

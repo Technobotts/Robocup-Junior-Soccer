@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/LeJOS NXJ V0.85 + Color"/>
+	<classpathentry kind="lib" path="C:/Program Files/LeJOS NXJ/lib/classes.jar" rootpath="/"/>
+	<classpathentry kind="src" path="/Simple PID Controller"/>
+	<classpathentry kind="src" path="/Fixed compass"/>
+	<classpathentry kind="src" path="/IRSeekerV2"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
