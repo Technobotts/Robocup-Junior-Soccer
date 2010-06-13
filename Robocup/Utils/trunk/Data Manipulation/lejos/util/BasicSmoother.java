@@ -1,11 +1,12 @@
 package lejos.util;
-public class BasicSmoother extends DataProcessor 
+
+public class BasicSmoother extends DataProcessor
 {
 
-	private double t;
-	private long   lastPollTime;
+	private double   t;
+	private long     lastPollTime;
 
-	protected double average   = Double.NaN;
+	protected double average;
 
 	public BasicSmoother(double t)
 	{
@@ -35,5 +36,10 @@ public class BasicSmoother extends DataProcessor
 
 			lastPollTime = pollTime;
 		}
+	}
+
+	public void reset()
+	{
+		average = Double.NaN;
 	}
 }
