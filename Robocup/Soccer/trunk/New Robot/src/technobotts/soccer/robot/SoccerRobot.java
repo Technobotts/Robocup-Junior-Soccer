@@ -40,6 +40,8 @@ public abstract class SoccerRobot extends OmniCompassPilot
 
 	public final float getBallAngle()
 	{
+		if(hasBall())
+			return 0;
 		float angle = (float) ballSmoother.getOutput(ballDetector.getAngle());
 		while(angle > 180)
 			angle -= 360;

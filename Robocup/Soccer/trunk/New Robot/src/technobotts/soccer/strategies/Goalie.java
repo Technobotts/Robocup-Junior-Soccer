@@ -10,6 +10,7 @@ import technobotts.soccer.Strategy;
 import technobotts.soccer.robot.NewSoccerRobot;
 import technobotts.soccer.robot.OldSoccerRobot;
 import technobotts.soccer.robot.SoccerRobot;
+import technobotts.soccer.util.GoalieHeadingCalculator;
 
 public class Goalie extends Strategy
 {
@@ -19,57 +20,52 @@ public class Goalie extends Strategy
 		s.executeWith(new OldSoccerRobot());
 	}
 
-	DataProcessor pid = new SimplePID(3, 0, 0.5);
+	DataProcessor pid               = new SimplePID(3, 0, 0.5);
 
-	long        lastResetTime    = System.currentTimeMillis();
+	GoalieHeadingCalculator  headingCalculator = new GoalieHeadingCalculator(80, 15);
 
-	final float degreesPerSecond = 15;
-	final float initialHeading   = 80;
-
-	public float calculateHeading()
-	{
-		float heading = initialHeading + (System.currentTimeMillis() - lastResetTime) * degreesPerSecond / 1000f;
-		if(heading > 180)
-			heading = 180;
-
-		return heading;
-	}
-
-	public void resetHeading()
-	{
-		lastResetTime = System.currentTimeMillis();
-	}
-
+	boolean ballLost = false;
+	
 	protected void executeWithConnected(SoccerRobot robot) throws InterruptedException
 	{
 		while(!Button.ESCAPE.isPressed())
 		{
 			float ballAngle = robot.getBallAngle();
 			float robotSpeed = (float) pid.getOutput(ballAngle);
-			
-			if(robot.hasBall())
+
+			if(robot.bumperIsPressed())
 			{
-				robot.setMoveSpeed(300);
+				headingCalculator.reset();
 				robot.travel(0);
-				Thread.sleep(250);
-				robot.kick();
-				robot.stop();
 			}
-			else if(robot.bumperIsPressed())
+			else if(!Float.isNaN(ballAngle))
 			{
-				resetHeading();
-			}
-			else if(!Float.isNaN(robotSpeed))
-			{
-				float heading = calculateHeading();
 				
-				if(Math.abs(robotSpeed) < 15 && heading < 135)
+				float heading = (float) headingCalculator.getOutput();
+				
+				if(heading == 180)
 				{
+					//Robot REALLY should start retreating now
+					robot.setMoveSpeed(300);
+					robot.travel(heading);
+				}
+				else if(Math.abs(ballAngle) < 15)
+				{
+					//Ball ahead
 					robot.setMoveSpeed(300);
 					robot.travel(0);
+					if(robot.hasBall())
+					{
+						//Ball in reach!
+						Thread.sleep(250);
+						robot.kick();
+						Thread.sleep(250);
+						robot.travel(180);
+					}
 				}
-				else
+				else if(!Float.isNaN(robotSpeed))
 				{
+					//Ball to side
 					robot.setMoveSpeed(Math.abs(robotSpeed));
 					if(robotSpeed > 0)
 						robot.travel(heading);
@@ -77,9 +73,14 @@ public class Goalie extends Strategy
 						robot.travel(-heading);
 				}
 			}
-			
+			else
+			{
+				//No ball
+				headingCalculator.pause();
+				robot.stop();
+			}
+
 			Delay.msDelay(50);
 		}
 	}
-
 }
