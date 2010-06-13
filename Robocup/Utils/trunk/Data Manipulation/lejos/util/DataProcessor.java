@@ -2,11 +2,6 @@ package lejos.util;
 
 public abstract class DataProcessor
 {
-	protected DataProcessor()
-	{
-		reset();
-	}
-
 	public abstract double getOutput();
 
 	public abstract void setInput(double input);
