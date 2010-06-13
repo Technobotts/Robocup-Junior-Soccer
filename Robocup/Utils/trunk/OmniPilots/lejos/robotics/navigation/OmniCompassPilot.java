@@ -160,7 +160,6 @@ public class OmniCompassPilot extends SimpleOmniPilot
 		@Override
 		public void run()
 		{
-			pid.start();
 			reset();
 			while(true)
 			{
