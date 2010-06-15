@@ -1,11 +1,11 @@
 package technobotts.soccer.robot;
 
+import technobotts.robotics.LightSourceFinder;
+import technobotts.robotics.navigation.OmniCompassPilot;
+import technobotts.util.AngleSmoother;
+import technobotts.util.DataProcessor;
 import lejos.nxt.comm.NXTConnection;
 import lejos.robotics.DirectionFinder;
-import lejos.robotics.LightSourceFinder;
-import lejos.robotics.navigation.OmniCompassPilot;
-import lejos.util.AngleSmoother;
-import lejos.util.DataProcessor;
 
 public abstract class SoccerRobot extends OmniCompassPilot
 {

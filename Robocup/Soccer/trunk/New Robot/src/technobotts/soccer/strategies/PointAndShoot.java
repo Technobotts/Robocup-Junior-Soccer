@@ -2,7 +2,6 @@ package technobotts.soccer.strategies;
 
 import lejos.nxt.Button;
 import lejos.nxt.LCD;
-import lejos.nxt.Sound;
 import lejos.util.Delay;
 import technobotts.soccer.Strategy;
 import technobotts.soccer.robot.NewSoccerRobot;

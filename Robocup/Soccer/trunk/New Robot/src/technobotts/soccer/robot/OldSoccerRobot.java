@@ -2,17 +2,18 @@ package technobotts.soccer.robot;
 
 import java.io.IOException;
 
+import technobotts.nxt.addon.IRSeekerV2;
+import technobotts.nxt.addon.InvertedCompassSensor;
+import technobotts.nxt.addon.IRSeekerV2.Mode;
+import technobotts.robotics.navigation.SimpleOmniPilot;
+
 import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
 import lejos.nxt.TouchSensor;
 import lejos.nxt.UltrasonicSensor;
-import lejos.nxt.addon.IRSeekerV2;
-import lejos.nxt.addon.InvertedCompassSensor;
-import lejos.nxt.addon.IRSeekerV2.Mode;
 import lejos.nxt.comm.RS485;
 import lejos.nxt.remote.RemoteMotor;
 import lejos.nxt.remote.RemoteNXT;
-import lejos.robotics.navigation.SimpleOmniPilot;
 
 public class OldSoccerRobot extends SoccerRobot
 {

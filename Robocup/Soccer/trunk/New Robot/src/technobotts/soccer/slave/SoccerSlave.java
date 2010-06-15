@@ -4,7 +4,7 @@ import java.io.*;
 
 import javax.microedition.lcdui.Graphics;
 
-import lejos.nxt.*;
+import lejos.nxt.Sound;
 import lejos.nxt.comm.NXTConnection;
 import lejos.nxt.comm.RS485;
 import technobotts.soccer.util.MessageType;

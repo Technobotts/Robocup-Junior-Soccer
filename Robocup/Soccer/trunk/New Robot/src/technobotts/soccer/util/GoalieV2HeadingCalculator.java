@@ -1,11 +1,10 @@
 package technobotts.soccer.util;
 
-import lejos.util.PausableDataProcessor;
-import lejos.util.Timer;
+import technobotts.util.PausableDataProcessor;
 
 public class GoalieV2HeadingCalculator extends PausableDataProcessor
 {
-	private double  xComp, yComp;
+	//private double  xComp, yComp;
 
 	private boolean isPaused    = false;
 	private long    pauseOffset = 0;

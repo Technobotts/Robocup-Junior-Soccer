@@ -1,6 +1,6 @@
 package technobotts.soccer.util;
 
-import lejos.util.DataProcessor;
+import technobotts.util.DataProcessor;
 
 public class RobotDirectionModifier extends DataProcessor
 {

@@ -2,12 +2,11 @@ package technobotts.soccer.strategies;
 
 import lejos.nxt.Button;
 import lejos.nxt.LCD;
-import lejos.nxt.Sound;
-import lejos.util.DataProcessor;
 import lejos.util.Delay;
 import technobotts.soccer.Strategy;
 import technobotts.soccer.robot.*;
 import technobotts.soccer.util.RobotDirectionModifier;
+import technobotts.util.DataProcessor;
 
 public class CameraNorthFacing extends Strategy
 {

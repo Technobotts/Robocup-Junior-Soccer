@@ -2,10 +2,11 @@ package technobotts.soccer.util;
 
 import java.awt.Rectangle;
 import java.util.List;
-import java.util.RectGroup;
+
+import technobotts.robotics.CamRect;
+import technobotts.util.RectGroup;
 
 import lejos.nxt.addon.NXTCam;
-import lejos.robotics.CamRect;
 import lejos.robotics.DirectionFinder;
 
 public class GoalFinder implements DirectionFinder

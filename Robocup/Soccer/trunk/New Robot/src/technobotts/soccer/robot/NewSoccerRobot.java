@@ -4,14 +4,14 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import lejos.nxt.*;
-import lejos.nxt.addon.IRSeekerV2;
-import lejos.nxt.addon.InvertedCompassSensor;
-import lejos.nxt.addon.IRSeekerV2.Mode;
+import lejos.nxt.Motor;
+import lejos.nxt.SensorPort;
 import lejos.nxt.comm.NXTConnection;
 import lejos.nxt.comm.RS485;
-import lejos.robotics.navigation.SimpleOmniPilot;
-
+import technobotts.nxt.addon.IRSeekerV2;
+import technobotts.nxt.addon.InvertedCompassSensor;
+import technobotts.nxt.addon.IRSeekerV2.Mode;
+import technobotts.robotics.navigation.SimpleOmniPilot;
 import technobotts.soccer.util.DualLSFinder;
 import technobotts.soccer.util.MessageType;
 

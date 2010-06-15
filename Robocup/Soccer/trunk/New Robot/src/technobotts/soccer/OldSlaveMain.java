@@ -1,6 +1,9 @@
 package technobotts.soccer;
 
-import lejos.nxt.*;
+import lejos.nxt.Button;
+import lejos.nxt.ButtonListener;
+import lejos.nxt.LCD;
+import lejos.nxt.Sound;
 import lejos.nxt.comm.*;
 
 
