@@ -4,12 +4,13 @@ import java.util.List;
 
 import javax.microedition.lcdui.Graphics;
 
+import technobotts.util.Smoother;
+
 import lejos.nxt.Button;
 import lejos.nxt.LCD;
 import lejos.nxt.LightSensor;
 import lejos.nxt.SensorPort;
 import lejos.nxt.Sound;
-import lejos.util.Smoother;
 
 
 public class SmootherTest

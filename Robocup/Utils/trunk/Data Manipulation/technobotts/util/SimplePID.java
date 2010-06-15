@@ -1,4 +1,4 @@
-package lejos.util;
+package technobotts.util;
 
 /**
  * @author Eric
