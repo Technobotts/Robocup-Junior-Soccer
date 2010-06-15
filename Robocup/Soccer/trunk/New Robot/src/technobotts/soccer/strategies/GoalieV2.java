@@ -1,11 +1,14 @@
 package technobotts.soccer.strategies;
 
+import java.awt.geom.Point2D;
+
+import lejos.geom.Point;
 import lejos.nxt.Button;
 import lejos.util.Delay;
 import technobotts.soccer.Strategy;
 import technobotts.soccer.robot.OldSoccerRobot;
 import technobotts.soccer.robot.SoccerRobot;
-import technobotts.soccer.util.GoalieV2HeadingCalculator;
+import technobotts.soccer.util.GoalieTrajectoryFinder;
 
 public class GoalieV2 extends Strategy
 {
@@ -15,25 +18,21 @@ public class GoalieV2 extends Strategy
 		s.executeWith(new OldSoccerRobot());
 	}
 
-
-	GoalieV2HeadingCalculator headerCalculator = new GoalieV2HeadingCalculator(1);
-
-	float         yBias = 0;
-
-	private boolean ballLost = false;
-	
+	GoalieTrajectoryFinder headingCalculator = new GoalieTrajectoryFinder(1, 300);
+	private boolean           ballLost          = false;
 
 	protected void executeWithConnected(SoccerRobot robot) throws InterruptedException
 	{
+		headingCalculator.start();
 		while(!Button.ESCAPE.isPressed())
 		{
 			float ballAngle = robot.getBallAngle();
-			
+
 			boolean noball = Float.isNaN(ballAngle);
-			
+
 			if(robot.bumperIsPressed())
 			{
-				headerCalculator.reset();
+				headingCalculator.restart();
 				if(noball)
 					robot.stop();
 				else
@@ -41,15 +40,11 @@ public class GoalieV2 extends Strategy
 			}
 			else if(!noball)
 			{
-				double ballAngleRad = Math.toRadians(ballAngle);
+				headingCalculator.resume();
+				headingCalculator.setInput(ballAngle);
 
-				double xComp = Math.sin(ballAngleRad);
-				double yComp = Math.cos(ballAngleRad) - headerCalculator.getOutput();
-				float heading = (float) Math.toDegrees(Math.atan2(xComp, yComp));
-				float speed = (float) (300 * Math.sqrt(xComp * xComp + yComp * yComp));
-
-				robot.setMoveSpeed(speed);
-				robot.travel(heading);
+				robot.setMoveSpeed(headingCalculator.getSpeed());
+				robot.travel(headingCalculator.getHeading());
 
 				if(robot.hasBall())
 				{
@@ -70,8 +65,8 @@ public class GoalieV2 extends Strategy
 					robot.travel(Math.random() > 0.5 ? -135 : 135);
 					ballLost = true;
 				}
+				headingCalculator.pause();
 			}
-
 			Delay.msDelay(50);
 		}
 	}
