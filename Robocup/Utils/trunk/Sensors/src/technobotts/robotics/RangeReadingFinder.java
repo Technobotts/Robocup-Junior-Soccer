@@ -1,4 +1,6 @@
-package lejos.robotics;
+package technobotts.robotics;
+
+import lejos.robotics.RangeReading;
 
 public interface RangeReadingFinder
 {

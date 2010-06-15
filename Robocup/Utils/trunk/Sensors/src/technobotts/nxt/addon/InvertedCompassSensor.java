@@ -1,4 +1,4 @@
-package lejos.nxt.addon;
+package technobotts.nxt.addon;
 
 
 import lejos.nxt.I2CPort;

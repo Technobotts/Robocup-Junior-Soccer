@@ -1,5 +1,8 @@
-import lejos.nxt.*;
-import lejos.nxt.addon.LineLeader;
+import technobotts.nxt.addon.LineLeader;
+import lejos.nxt.Button;
+import lejos.nxt.LCD;
+import lejos.nxt.SensorPort;
+import lejos.nxt.Sound;
 
 public class LLTest
 {
