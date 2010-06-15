@@ -1,9 +1,9 @@
+import technobotts.nxt.addon.IRSeekerV2;
+import technobotts.nxt.addon.IRSeekerV2.Mode;
+import technobotts.robotics.ImprovedRangeReadings;
 import lejos.nxt.Button;
 import lejos.nxt.LCD;
 import lejos.nxt.SensorPort;
-import lejos.nxt.addon.IRSeekerV2;
-import lejos.nxt.addon.IRSeekerV2.Mode;
-import lejos.robotics.ImprovedRangeReadings;
 import lejos.robotics.RangeReading;
 import lejos.util.TextMenu;
 

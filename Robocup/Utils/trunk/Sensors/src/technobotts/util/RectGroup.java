@@ -1,4 +1,4 @@
-package java.util;
+package technobotts.util;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Collection;

@@ -1,4 +1,7 @@
-package lejos.robotics;
+package technobotts.robotics;
+
+import lejos.robotics.RangeReading;
+import lejos.robotics.RangeReadings;
 
 
 public class ImprovedRangeReadings extends RangeReadings

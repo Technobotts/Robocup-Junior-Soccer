@@ -1,6 +1,7 @@
-package lejos.nxt.addon;
+package technobotts.nxt.addon;
 
 import lejos.nxt.I2CPort;
+import lejos.nxt.addon.CompassSensor;
 
 public class FixedCompassSensor extends CompassSensor
 {

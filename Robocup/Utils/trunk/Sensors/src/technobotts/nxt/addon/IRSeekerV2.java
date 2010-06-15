@@ -1,9 +1,9 @@
-package lejos.nxt.addon;
+package technobotts.nxt.addon;
 
+import technobotts.robotics.ImprovedRangeReadings;
+import technobotts.robotics.LightSourceFinder;
 import lejos.nxt.I2CPort;
 import lejos.nxt.I2CSensor;
-import lejos.robotics.ImprovedRangeReadings;
-import lejos.robotics.LightSourceFinder;
 import lejos.robotics.RangeReading;
 import lejos.robotics.RangeReadings;
 

@@ -1,6 +1,6 @@
-package lejos.nxt.addon;
+package technobotts.nxt.addon;
 
-import java.util.Fraction;
+import technobotts.util.Fraction;
 
 import lejos.nxt.I2CPort;
 import lejos.nxt.I2CSensor;
