@@ -1,4 +1,4 @@
-package lejos.robotics.navigation;
+package technobotts.robotics.navigation;
 
 
 import lejos.nxt.Battery;
