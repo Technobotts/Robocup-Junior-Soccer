@@ -3,7 +3,7 @@ package technobotts.robotics.navigation;
 
 import lejos.robotics.DirectionFinder;
 import lejos.util.Delay;
-import lejos.util.SimplePID;
+import technobotts.util.SimplePID;
 
 public class OmniCompassPilot extends SimpleOmniPilot
 {
