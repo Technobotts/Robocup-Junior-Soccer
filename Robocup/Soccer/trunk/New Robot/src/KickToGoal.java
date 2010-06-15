@@ -1,14 +1,15 @@
 import javax.microedition.lcdui.Graphics;
 
+import technobotts.nxt.addon.InvertedCompassSensor;
+import technobotts.robotics.CamRect;
+import technobotts.robotics.navigation.OmniCompassPilot;
+import technobotts.robotics.navigation.SimpleOmniPilot;
+
 import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
 import lejos.nxt.Sound;
-import lejos.nxt.addon.InvertedCompassSensor;
 import lejos.nxt.addon.NXTCam;
-import lejos.robotics.CamRect;
 import lejos.robotics.DirectionFinder;
-import lejos.robotics.navigation.OmniCompassPilot;
-import lejos.robotics.navigation.SimpleOmniPilot;
 
 public class KickToGoal
 {

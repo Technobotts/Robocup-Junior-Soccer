@@ -1,8 +1,8 @@
 package technobotts.soccer.util;
 
+import technobotts.util.DataProcessor;
 import lejos.nxt.Button;
 import lejos.nxt.LCD;
-import lejos.util.DataProcessor;
 
 public class GoalieHeadingCalculator extends DataProcessor
 {

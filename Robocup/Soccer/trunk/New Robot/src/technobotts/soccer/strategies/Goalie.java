@@ -1,16 +1,13 @@
 package technobotts.soccer.strategies;
 
 import lejos.nxt.Button;
-import lejos.nxt.LCD;
-import lejos.nxt.Sound;
-import lejos.util.DataProcessor;
 import lejos.util.Delay;
-import lejos.util.SimplePID;
 import technobotts.soccer.Strategy;
-import technobotts.soccer.robot.NewSoccerRobot;
 import technobotts.soccer.robot.OldSoccerRobot;
 import technobotts.soccer.robot.SoccerRobot;
 import technobotts.soccer.util.GoalieHeadingCalculator;
+import technobotts.util.DataProcessor;
+import technobotts.util.SimplePID;
 
 public class Goalie extends Strategy
 {

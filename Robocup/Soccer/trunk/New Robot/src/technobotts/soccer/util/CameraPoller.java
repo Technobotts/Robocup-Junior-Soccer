@@ -2,8 +2,9 @@ package technobotts.soccer.util;
 
 import java.awt.Rectangle;
 
+import technobotts.util.Smoother;
+
 import lejos.nxt.addon.NXTCam;
-import lejos.util.Smoother;
 
 public class CameraPoller extends Thread
 {

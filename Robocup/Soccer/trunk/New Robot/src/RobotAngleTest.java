@@ -1,10 +1,10 @@
+import technobotts.nxt.addon.InvertedCompassSensor;
 import technobotts.soccer.util.RobotDirectionModifier;
+import technobotts.util.DataProcessor;
 import lejos.nxt.Button;
 import lejos.nxt.LCD;
 import lejos.nxt.SensorPort;
 import lejos.nxt.addon.CompassSensor;
-import lejos.nxt.addon.InvertedCompassSensor;
-import lejos.util.DataProcessor;
 
 
 public class RobotAngleTest

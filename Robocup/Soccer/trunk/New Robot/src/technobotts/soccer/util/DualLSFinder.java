@@ -1,10 +1,10 @@
 package technobotts.soccer.util;
 
+import technobotts.nxt.addon.IRSeekerV2;
+import technobotts.nxt.addon.IRSeekerV2.Mode;
+import technobotts.robotics.LightSourceFinder;
 import lejos.nxt.LCD;
 import lejos.nxt.SensorPort;
-import lejos.nxt.addon.IRSeekerV2;
-import lejos.robotics.LightSourceFinder;
-import lejos.nxt.addon.IRSeekerV2.Mode;
 import lejos.robotics.RangeReadings;
 import lejos.util.TextMenu;
 
