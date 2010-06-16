@@ -7,7 +7,7 @@ public class OldMasterMain
 {
 	public static void main(String[] args) throws InterruptedException
 	{
-		Strategy s = new Goalie();
+		Strategy s = new GoalieV2();
 		s.executeWith(new OldSoccerRobot());
 	}
 }
