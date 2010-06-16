@@ -1,47 +1,30 @@
 package technobotts.soccer;
 
+import technobotts.soccer.slave.CameraSlaveRobot;
+import technobotts.soccer.slave.SlaveCommunicator;
+import technobotts.soccer.slave.SoccerSlaveRobot;
+import technobotts.soccer.util.GoalFinder;
 import lejos.nxt.Button;
 import lejos.nxt.ButtonListener;
 import lejos.nxt.LCD;
+import lejos.nxt.Motor;
+import lejos.nxt.SensorPort;
 import lejos.nxt.Sound;
+import lejos.nxt.TouchSensor;
+import lejos.nxt.UltrasonicSensor;
+import lejos.nxt.addon.NXTCam;
 import lejos.nxt.comm.*;
 
 
 public class OldSlaveMain
 {
-
-	static class Responder extends LCPResponder
-	{
-		Responder(NXTCommConnector con)
-		{
-			super(con);
-		}
-
-		protected void disconnect()
-		{
-			super.disconnect();
-			super.shutdown();
-		}
-	}
-
 	public static void main(String[] args) throws Exception
     {
-        LCD.drawString("Running...", 0, 1);
-        final Responder resp = new Responder(RS485.getConnector());
-    	Button.ESCAPE.addButtonListener(new ButtonListener() {
-			public void buttonReleased(Button b)
-			{
-				resp.disconnect();
-				System.exit(0);
-			}
-			
-			public void buttonPressed(Button b)
-			{			
-			}
-		});
-    	Sound.beep();
-        resp.start();
-        resp.join();
-        LCD.drawString("Closing...  ", 0, 1);
+		SoccerSlaveRobot robot = new SoccerSlaveRobot(null,
+		                                              Motor.A,
+		                                              new TouchSensor(SensorPort.S1));
+		SlaveCommunicator s = new SlaveCommunicator(robot);
+		s.run();
+		System.exit(0);
     }
 }

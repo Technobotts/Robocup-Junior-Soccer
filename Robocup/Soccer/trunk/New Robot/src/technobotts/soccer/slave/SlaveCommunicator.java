@@ -9,7 +9,7 @@ import lejos.nxt.comm.NXTConnection;
 import lejos.nxt.comm.RS485;
 import technobotts.soccer.util.MessageType;
 
-public class SoccerSlave extends Thread
+public class SlaveCommunicator extends Thread
 {
 	private NXTConnection    master;
 
@@ -28,7 +28,7 @@ public class SoccerSlave extends Thread
 		g.fillArc(x, y + height - arcHeight * 2 - 1, arcWidth * 2, arcHeight * 2, 180, 90);
 	}
 	
-	public SoccerSlave(SoccerSlaveRobot robot) throws IOException
+	public SlaveCommunicator(SoccerSlaveRobot robot) throws IOException
 	{
 		Graphics g = new Graphics();
 		g.clear();
@@ -58,8 +58,7 @@ public class SoccerSlave extends Thread
 				byte message = dis.readByte();
 				if(message == MessageType.KICK.getValue())
 				{
-					robot.kick();
-					dos.writeBoolean(true);
+					dos.writeBoolean(robot.kick());
 				}
 				else if(message == MessageType.GOAL_POS.getValue())
 				{

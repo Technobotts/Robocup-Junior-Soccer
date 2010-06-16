@@ -4,6 +4,8 @@ import java.awt.geom.Point2D;
 
 import lejos.geom.Point;
 import lejos.nxt.Button;
+import lejos.nxt.LCD;
+import lejos.nxt.Sound;
 import lejos.util.Delay;
 import technobotts.soccer.Strategy;
 import technobotts.soccer.robot.OldSoccerRobot;
@@ -18,12 +20,13 @@ public class GoalieV2 extends Strategy
 		s.executeWith(new OldSoccerRobot());
 	}
 
-	GoalieTrajectoryFinder headingCalculator = new GoalieTrajectoryFinder(1, 300);
+	GoalieTrajectoryFinder headingCalculator = new GoalieTrajectoryFinder(0.8, 500);
 	private boolean           ballLost          = false;
 
 	protected void executeWithConnected(SoccerRobot robot) throws InterruptedException
 	{
 		headingCalculator.start();
+		int loopCount = 0;
 		while(!Button.ESCAPE.isPressed())
 		{
 			float ballAngle = robot.getBallAngle();
@@ -48,11 +51,14 @@ public class GoalieV2 extends Strategy
 
 				if(robot.hasBall())
 				{
-					Thread.sleep(250);
 					robot.setMoveSpeed(300);
 					robot.travel(0);
-					robot.kick();
 					Thread.sleep(250);
+						
+					if(headingCalculator.atMaximum())
+						robot.stop();
+					
+					robot.kick();
 					robot.travel(180);
 				}
 				ballLost = false;
@@ -67,7 +73,13 @@ public class GoalieV2 extends Strategy
 				}
 				headingCalculator.pause();
 			}
-			Delay.msDelay(50);
+			
+			loopCount++;
+			if(loopCount%10 == 0)
+				LCD.drawInt(loopCount, 0, 7);
+			if(loopCount%100 == 0)
+				Sound.beep();
+			Thread.yield();
 		}
 	}
 }

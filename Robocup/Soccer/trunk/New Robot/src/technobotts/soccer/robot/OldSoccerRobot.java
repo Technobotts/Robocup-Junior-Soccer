@@ -1,25 +1,25 @@
 package technobotts.soccer.robot;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 
+import lejos.nxt.Motor;
+import lejos.nxt.SensorPort;
+import lejos.nxt.TouchSensor;
+import lejos.nxt.UltrasonicSensor;
+import lejos.nxt.comm.NXTConnection;
+import lejos.nxt.comm.RS485;
+import lejos.nxt.remote.RemoteMotor;
+import lejos.nxt.remote.RemoteNXT;
+import lejos.util.Delay;
 import technobotts.nxt.addon.IRSeekerV2;
 import technobotts.nxt.addon.InvertedCompassSensor;
 import technobotts.nxt.addon.IRSeekerV2.Mode;
 import technobotts.robotics.navigation.SimpleOmniPilot;
+import technobotts.soccer.util.MessageType;
 import technobotts.util.AngleSmoother;
 import technobotts.util.Timer;
-
-import lejos.nxt.Motor;
-import lejos.nxt.SensorPort;
-import lejos.nxt.Sound;
-import lejos.nxt.TouchSensor;
-import lejos.nxt.UltrasonicSensor;
-import lejos.nxt.comm.RS485;
-import lejos.nxt.remote.FixedRemoteMotor;
-import lejos.nxt.remote.FixedRemoteNXT;
-import lejos.nxt.remote.RemoteMotor;
-import lejos.nxt.remote.RemoteNXT;
-import lejos.util.Delay;
 
 public class OldSoccerRobot extends SoccerRobot
 {
@@ -31,11 +31,8 @@ public class OldSoccerRobot extends SoccerRobot
 	public static final String     SLAVE_NAME   = "Lewis B";
 
 	private UltrasonicSensor       US;
-	private RemoteMotor            kickerMotor;
-	private TouchSensor            bumper;
 
-	private RemoteNXT         slave;
-	private volatile boolean       isKicking    = false;
+	private boolean                isKicking    = false;
 
 	public OldSoccerRobot()
 	{
@@ -48,29 +45,8 @@ public class OldSoccerRobot extends SoccerRobot
 		ballSmoother = new AngleSmoother(0);
 	}
 
-	@Override
-	public boolean connectToSlave()
-	{
-		try
-		{
-			slave = new RemoteNXT(SLAVE_NAME, RS485.getConnector());
-			kickerMotor = slave.A;
-			bumper = new TouchSensor(slave.S1);
-			return true;
-		}
-		catch(IOException ioe)
-		{
-			return false;
-		}
-	}
-
-	@Override
-	public boolean disconnect()
-	{
-		slave.stopProgram();
-		slave.close();
-		return true;
-	}
+	private DataOutputStream dos;
+	private DataInputStream  dis;
 
 	@Override
 	public boolean hasBall()
@@ -89,114 +65,89 @@ public class OldSoccerRobot extends SoccerRobot
 		return false;
 	}
 
-	KickerThread kThread = new KickerThread();
-
 	@Override
-	public boolean kick()
+	public boolean connectToSlave()
 	{
-		if(isKicking)
-			return false;
-
-		synchronized(kThread)
+		slave = RS485.getConnector().connect(SLAVE_NAME, NXTConnection.PACKET);
+		if(slave != null)
 		{
-			isKicking = true;
-			kThread.notifyAll();
-			// Tell it to start kicking
-			while(!kThread.hasKicked())
-			{
-				try
-				{
-					kThread.wait();
-				}
-				catch(InterruptedException e)
-				{
-					return false;
-				}
-			}
+			dis = slave.openDataInputStream();
+			dos = slave.openDataOutputStream();
+			return true;
 		}
-		return true;
-
+		else
+			return false;
 	}
 
-	private class KickerThread extends Thread
+	public boolean kick()
 	{
-		final int kickAngle = 75;
-		final int timeOut   = 5000;
-
-		Timer     t         = new Timer();
-
-		public KickerThread()
+		isKicking = true;
+		try
 		{
-			setDaemon(true);
-			start();
+			dos.writeByte(MessageType.KICK.getValue());
+			dos.flush();
+			return dis.readBoolean();
 		}
-
-		private boolean hasKicked;
-
-		public boolean hasKicked()
+		catch(IOException e)
 		{
-			return hasKicked;
+			return false;
 		}
-
-		@Override
-		public void run()
+		catch(NullPointerException e)
 		{
-			while(true)
-			{
-				hasKicked = false;
-
-				synchronized(this)
-				{
-					while(!isKicking)
-					{
-						try
-						{
-							this.wait();
-						}
-						catch(InterruptedException e1)
-						{
-							continue;
-						}
-					}
-					
-					kickerMotor.setPower(100);
-					kickerMotor.forward();
-					// Set the kicker going
-
-					t.restart();
-
-					while(kickerMotor.getTachoCount() <= kickAngle / 2)
-						Thread.yield();
-					// Go half way
-
-					hasKicked = true;
-					this.notifyAll();
-					// Wake the main thread
-				}
-
-				while(kickerMotor.getTachoCount() <= kickAngle && t.getTime() < timeOut)
-					Thread.yield();
-				// Wait for it to reach full extension, or time out
-
-				kickerMotor.flt();
-
-				Delay.msDelay(100);
-				kickerMotor.setPower(50);
-				kickerMotor.rotateTo(0);
-				// Move the kicker back
-			}
+			return false;
 		}
-	};
-
-	@Override
-	public double getGoalAngle()
-	{
-		return 0;
+		finally
+		{
+			isKicking = false;
+		}
 	}
 
 	@Override
 	public boolean bumperIsPressed()
 	{
-		return bumper.isPressed();
+		try
+		{
+			dos.writeByte(MessageType.BUMPER_CHECK.getValue());
+			dos.flush();
+			return dis.readBoolean();
+		}
+		catch(IOException e)
+		{
+			return false;
+		}
+		catch(NullPointerException e)
+		{
+			return false;
+		}
+	}
+
+	public boolean disconnect()
+	{
+		try
+		{
+			dos.writeByte(MessageType.SHUTDOWN.getValue());
+			dos.flush();
+			return true;
+		}
+		catch(IOException e)
+		{
+			return false;
+		}
+		catch(NullPointerException e)
+		{
+			return false;
+		}
+		finally
+		{
+			slave = null;
+			dis = null;
+			dos = null;
+		}
+	}
+
+	@Override
+	public double getGoalAngle()
+	{
+		return 0;
 	}
 }

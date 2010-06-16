@@ -26,18 +26,6 @@ public abstract class SoccerRobot extends OmniCompassPilot
 
 		// this.setMoveSpeed(Float.POSITIVE_INFINITY);
 		this.ballDetector = ballDetector;
-
-		System.setOut(new PrintStream(new LCDOutputStream()) {
-			public void print(String s)
-			{
-				if(s == null)
-					s = "null";
-				for(int i = 0; i < s.length(); i++)
-				{
-					write(s.charAt(i));
-				}
-			}
-		});
 	}
 
 	public final float getHeading()
