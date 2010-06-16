@@ -17,7 +17,7 @@ import lejos.robotics.TachoMotor;
  * @author <a href="mailto:bbagnall@mts.net">Brian Bagnall</a>
  *
  */
-public class RemoteMotor implements TachoMotor, NXTProtocol {
+public class RemoteMotor extends lejos.nxt.remote.RemoteMotor {
 	
 	private int id;
 	private byte power;
@@ -29,33 +29,7 @@ public class RemoteMotor implements TachoMotor, NXTProtocol {
 	private NXTCommand nxtCommand;
 	
 	public RemoteMotor(NXTCommand nxtCommand, int id) {
-		this.id = id;
-		this.power = 80; // 80% power by default. Is this speed too?
-		this.mode = BRAKE + REGULATED; // Brake mode and regulation default
-		this.regulationMode = REGULATION_MODE_MOTOR_SPEED;
-		this.turnRatio = 0; // 0 = even power/speed distro between motors
-		this.runState = MOTOR_RUN_STATE_IDLE;
-		this.nxtCommand = nxtCommand;
-	}
-	
-	/**
-	* Get the ID of the motor. One of 'A', 'B' or 'C'.
-	*/
-	public final char getId() {
-		
-		char port = 'A';
-		switch(id) {
-			case 0:
-				port='A';
-				break;
-			case 1:
-				port='B';
-				break;
-			case 2:
-				port='C';
-				break;	
-		}
-		return port;
+		super(nxtCommand, id);
 	}
 
 	public void forward() {
@@ -174,46 +148,6 @@ public class RemoteMotor implements TachoMotor, NXTProtocol {
 		}
 	}
 	
-	/**
-	 * CURRENTLY NOT IMPLEMENTED! Use isMoving() for now.
-	   *returns true when motor is rotating toward a specified angle
-	   */ 
-	  public boolean isRotating()
-	  {
-		  // Should probably use Tacho Limit value from
-		  // get output state
-	  	return  _rotating;
-	  }
-	
-	public void rotate(int count) {
-		rotate(count, false);
-	}
-	
-	/**
-	 * This method determines if and how the motor will be regulated.
-	 * REGULATION_MODE_IDLE turns off regulation
-	 * REGULATION_MODE_MOTOR_SPEED regulates the speed (I think)
-	 * REGULATION_MODE_MOTOR_SYNC synchronizes this and any other motor with SYNC enabled.
-	 * @param mode See NXTProtocol for enumerations: REGULATION_MODE_MOTOR_SYNC, 
-	 *  REGULATION_MODE_MOTOR_SPEED,  REGULATION_MODE_IDLE
-	 */
-	public void setRegulationMode(int mode) {
-		// !! Consider removing this method! No need, confusing, makes other forward methods unreliable.
-		this.regulationMode = mode;
-	}
-	
-	public void rotateTo(int limitAngle) {
-		rotateTo(limitAngle, false);
-		
-	}
-	
-	public void rotateTo(int limitAngle, boolean returnNow) {
-		// !! Probably inaccuracy can creep into this if
-		// rotateTo is called while motor moving.
-		int tachometer = this.getTachoCount();
-		rotate(limitAngle - tachometer, returnNow);
-	}
-	
 	public void resetTachoCount() {
 		try {
 			nxtCommand.resetMotorPosition(this.id, false);
@@ -265,19 +199,4 @@ public class RemoteMotor implements TachoMotor, NXTProtocol {
 		} catch (IOException ioe) {
 		}
 	}
-	
-	public void regulateSpeed(boolean yes) {
-		// TODO Currently a dummy for remote motors.
-	}
-	
-	public void smoothAcceleration(boolean yes) {
-		// TODO Currently a dummy for remote motors.
-	}
-	
-	public int getRotationSpeed()	{
-		// TODO Currently dummy for remote motors - returns the speed that has been set.
-	     return getSpeed();
-	}
-	
-	
 }
