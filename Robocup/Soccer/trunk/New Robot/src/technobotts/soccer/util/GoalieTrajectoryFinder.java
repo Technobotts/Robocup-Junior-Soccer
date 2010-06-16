@@ -1,10 +1,15 @@
 package technobotts.soccer.util;
 
+import technobotts.util.Timer;
+
 public class GoalieTrajectoryFinder extends Timer
 {
 	private double xComp, yComp;
+	private double yBias;
 	private double factor;
 	private double speed;
+	
+	private double maxBias = 1.5;
 
 	public GoalieTrajectoryFinder(double degreesPerSecond, double speed)
 	{
@@ -26,7 +31,14 @@ public class GoalieTrajectoryFinder extends Timer
 	{
 		double ballAngleRad = Math.toRadians(ballAngle);
 		xComp = Math.sin(ballAngleRad);
-		yComp = Math.cos(ballAngleRad) - getTime() * factor;
+		yBias = getTime() * factor;
+		if(atMaximum())
+			yBias = maxBias;
+		yComp = Math.cos(ballAngleRad) - yBias;
+	}
 
+	public boolean atMaximum()
+	{
+		return yBias >= maxBias;
 	}
 }
