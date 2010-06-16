@@ -1,9 +1,13 @@
 package technobotts.soccer.robot;
 
+import java.io.PrintStream;
+
 import technobotts.robotics.LightSourceFinder;
 import technobotts.robotics.navigation.OmniCompassPilot;
 import technobotts.util.AngleSmoother;
 import technobotts.util.DataProcessor;
+import lejos.nxt.LCD;
+import lejos.nxt.LCDOutputStream;
 import lejos.nxt.comm.NXTConnection;
 import lejos.robotics.DirectionFinder;
 
@@ -13,17 +17,27 @@ public abstract class SoccerRobot extends OmniCompassPilot
 	private DirectionFinder   compass;
 	protected NXTConnection   slave;
 
-	private DataProcessor     ballSmoother = new AngleSmoother(0.15);
+	protected DataProcessor   ballSmoother = new AngleSmoother(0.15);
 
-	public SoccerRobot(DirectionFinder compass,
-	                           LightSourceFinder ballDetector,
-	                           OmniMotor... motors)
+	public SoccerRobot(DirectionFinder compass, LightSourceFinder ballDetector, OmniMotor... motors)
 	{
 		super(compass, motors);
 		this.compass = compass;
 
 		// this.setMoveSpeed(Float.POSITIVE_INFINITY);
 		this.ballDetector = ballDetector;
+
+		System.setOut(new PrintStream(new LCDOutputStream()) {
+			public void print(String s)
+			{
+				if(s == null)
+					s = "null";
+				for(int i = 0; i < s.length(); i++)
+				{
+					write(s.charAt(i));
+				}
+			}
+		});
 	}
 
 	public final float getHeading()
