@@ -1,4 +1,4 @@
-package technobotts.sensors;
+package technobotts.nxt.addon;
 
 import technobotts.robotics.ImprovedRangeReadings;
 import technobotts.robotics.LightSourceFinder;
