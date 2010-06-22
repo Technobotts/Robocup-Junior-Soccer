@@ -1,6 +1,6 @@
-import technobotts.nxt.addon.IRSeekerV2;
-import technobotts.nxt.addon.IRSeekerV2.Mode;
 import technobotts.robotics.ImprovedRangeReadings;
+import technobotts.sensors.IRSeekerV2;
+import technobotts.sensors.IRSeekerV2.Mode;
 import lejos.nxt.Button;
 import lejos.nxt.LCD;
 import lejos.nxt.SensorPort;
@@ -37,7 +37,7 @@ public class IRTest
 			RangeReading totalReading = readings.getRangeReading();
 			LCD.drawString(Math.round(totalReading.getAngle()) + ": " + Math.round(totalReading.getRange() * 10) / 10,
 			               0, 7);
-			//LCD.drawString("A: "+ir.getAngle(), 0, 7);
+			LCD.drawString("A: "+ir.getAngle(), 0, 7);
 			LCD.refresh();
 			Thread.sleep(100);
 		}

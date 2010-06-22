@@ -1,4 +1,4 @@
-import technobotts.nxt.addon.LineLeader;
+import technobotts.sensors.LineLeader;
 import lejos.nxt.Button;
 import lejos.nxt.LCD;
 import lejos.nxt.SensorPort;

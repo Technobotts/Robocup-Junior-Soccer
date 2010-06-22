@@ -2,5 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry exported="true" kind="lib" path="C:/Program Files/LeJOS NXJ/lib/classes.jar"/>
+	<classpathentry kind="src" path="/Data Manipulation"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

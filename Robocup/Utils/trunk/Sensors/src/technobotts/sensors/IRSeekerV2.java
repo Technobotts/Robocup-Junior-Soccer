@@ -1,4 +1,4 @@
-package technobotts.nxt.addon;
+package technobotts.sensors;
 
 import technobotts.robotics.ImprovedRangeReadings;
 import technobotts.robotics.LightSourceFinder;
@@ -9,10 +9,9 @@ import lejos.robotics.RangeReadings;
 
 public class IRSeekerV2 extends I2CSensor implements LightSourceFinder
 {
-	public static enum Mode {
-		AC_600Hz(true, 600),
-		AC_1200Hz(true, 1200),
-		DC(false, 9999);
+	public static enum Mode
+	{
+		AC_600Hz(true, 600), AC_1200Hz(true, 1200), DC(false, 9999);
 
 		public final boolean pulsed;
 		public final int     frequency;
@@ -64,7 +63,7 @@ public class IRSeekerV2 extends I2CSensor implements LightSourceFinder
 	 * Returns the direction of the target (1 to 9) or 0 if no target.
 	 * @return direction
 	 */
-	public synchronized int getDirectionId()
+	public synchronized int getDirectionID()
 	{
 		int register = 0;
 		if(mode.pulsed)
@@ -85,7 +84,7 @@ public class IRSeekerV2 extends I2CSensor implements LightSourceFinder
 	 * Returns the angle of the target (-180 to 180) or NaN.
 	 * @return direction
 	 */
-	public float getAngle(boolean blocking)
+	/*public float getAngle(boolean blocking)
 	{
 		while(true)
 		{
@@ -95,16 +94,19 @@ public class IRSeekerV2 extends I2CSensor implements LightSourceFinder
 			else
 				return (dir - 5) * 30;
 		}
-	}
+	}*/
 
 	public float getAngle()
 	{
-		return getAngle(false);
+		if(getDirectionID() <= 0)
+			return Float.NaN;
+		else
+			return getRangeReading().getAngle();
 	}
 
 	public boolean hasDirection()
 	{
-		return getDirectionId() != 0;
+		return getDirectionID() != 0;
 	}
 
 	/**
@@ -143,7 +145,7 @@ public class IRSeekerV2 extends I2CSensor implements LightSourceFinder
 		if(result != 0)
 			return null;
 
-		ImprovedRangeReadings readings = new ImprovedRangeReadings(5);
+		ImprovedRangeReadings readings = new ImprovedRangeReadings(6);
 
 		int angle = -120;
 		for(int i = 0; i < 5; i++)
@@ -151,6 +153,7 @@ public class IRSeekerV2 extends I2CSensor implements LightSourceFinder
 			readings.set(i, new RangeReading(angle, 0xFF & ranges[i]));
 			angle += 60;
 		}
+		readings.set(5, new RangeReading(angle, (ranges[0] + ranges[4]) / 2));
 		return readings;
 	}
 
@@ -163,7 +166,7 @@ public class IRSeekerV2 extends I2CSensor implements LightSourceFinder
 	public float getRange()
 	{
 		RangeReadings r = getRangeValues();
-		switch(getDirectionId()) {
+		switch(getDirectionID()) {
 		case 1:
 			return r.getRange(0);
 		case 2:

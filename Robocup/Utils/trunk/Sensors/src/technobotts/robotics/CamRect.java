@@ -22,7 +22,7 @@ public class CamRect extends Rectangle
 
 	public boolean intersects(Rectangle r)
 	{
-		final int tolerance = 3;
+		final int tolerance = 10;
 		return super.intersects(new Rectangle(r.x - tolerance,
 		                                      r.y - tolerance,
 		                                      r.width + 2 * tolerance,
