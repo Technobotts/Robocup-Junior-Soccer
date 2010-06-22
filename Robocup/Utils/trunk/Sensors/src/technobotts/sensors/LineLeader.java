@@ -1,4 +1,4 @@
-package technobotts.nxt.addon;
+package technobotts.sensors;
 
 import technobotts.util.Fraction;
 
