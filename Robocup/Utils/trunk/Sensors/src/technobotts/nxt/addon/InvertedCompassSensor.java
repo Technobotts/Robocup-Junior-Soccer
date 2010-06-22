@@ -1,4 +1,4 @@
-package technobotts.sensors;
+package technobotts.nxt.addon;
 
 
 import lejos.nxt.I2CPort;
