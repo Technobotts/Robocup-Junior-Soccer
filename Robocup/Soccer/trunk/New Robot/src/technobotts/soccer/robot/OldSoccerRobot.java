@@ -6,27 +6,21 @@ import java.io.IOException;
 
 import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
-import lejos.nxt.TouchSensor;
 import lejos.nxt.UltrasonicSensor;
 import lejos.nxt.comm.NXTConnection;
 import lejos.nxt.comm.RS485;
-import lejos.nxt.remote.RemoteMotor;
-import lejos.nxt.remote.RemoteNXT;
-import lejos.util.Delay;
 import technobotts.nxt.addon.IRSeekerV2;
 import technobotts.nxt.addon.InvertedCompassSensor;
-import technobotts.nxt.addon.IRSeekerV2.Mode;
 import technobotts.robotics.navigation.SimpleOmniPilot;
 import technobotts.soccer.util.MessageType;
-import technobotts.util.AngleSmoother;
-import technobotts.util.Timer;
+//import technobotts.util.AngleSmoother;
 
 public class OldSoccerRobot extends SoccerRobot
 {
 	public static final SensorPort COMPASS_PORT = SensorPort.S1;
 	public static final SensorPort IR_PORT      = SensorPort.S2;
 	public static final SensorPort US_PORT      = SensorPort.S3;
-	public static final Mode       IR_MODE      = Mode.AC_1200Hz;
+	public static final  IRSeekerV2.Mode       IR_MODE      =  technobotts.nxt.addon.IRSeekerV2.Mode.DC;
 
 	public static final String     SLAVE_NAME   = "Lewis B";
 
@@ -42,11 +36,17 @@ public class OldSoccerRobot extends SoccerRobot
 		      new SimpleOmniPilot.OmniMotor(Motor.A, 306.8699f, 6.4f, 1, 9.6f));
 
 		US = new UltrasonicSensor(US_PORT);
-		ballSmoother = new AngleSmoother(0);
+		//ballSmoother = new AngleSmoother(0);
 	}
 
 	private DataOutputStream dos;
 	private DataInputStream  dis;
+	
+	public float getBallAngle()
+	{
+		return getBallDetector().getAngle();
+		
+	}
 
 	@Override
 	public boolean hasBall()
@@ -103,21 +103,21 @@ public class OldSoccerRobot extends SoccerRobot
 	}
 
 	@Override
-	public boolean bumperIsPressed()
+	public float getRearWallDist()
 	{
 		try
 		{
-			dos.writeByte(MessageType.BUMPER_CHECK.getValue());
+			dos.writeByte(MessageType.GOAL_DIST.getValue());
 			dos.flush();
-			return dis.readBoolean();
+			return dis.readFloat();
 		}
 		catch(IOException e)
 		{
-			return false;
+			return Float.NaN;
 		}
 		catch(NullPointerException e)
 		{
-			return false;
+			return Float.NaN;
 		}
 	}
 

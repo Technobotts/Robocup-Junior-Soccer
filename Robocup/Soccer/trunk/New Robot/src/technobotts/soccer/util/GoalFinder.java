@@ -3,10 +3,10 @@ package technobotts.soccer.util;
 import java.awt.Rectangle;
 import java.util.List;
 
-import technobotts.robotics.CamRect;
 import technobotts.util.RectGroup;
 
 import lejos.nxt.addon.NXTCam;
+import technobotts.robotics.CamRect;
 import lejos.robotics.DirectionFinder;
 
 public class GoalFinder implements DirectionFinder
@@ -26,7 +26,7 @@ public class GoalFinder implements DirectionFinder
 
 	private float getAngle(float xCoord)
 	{
-		final float offset = 72;
+		final float offset = 86;
 		final float scale = 0.01f;
 		return (float) (Math.toDegrees(Math.atan(scale * (xCoord - offset))));
 	}

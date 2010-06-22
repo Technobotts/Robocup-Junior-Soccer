@@ -2,43 +2,38 @@ package technobotts.soccer.slave;
 
 import technobotts.util.Timer;
 import lejos.nxt.Motor;
-import lejos.nxt.TouchSensor;
 import lejos.nxt.UltrasonicSensor;
 import lejos.util.Delay;
 
-public class SoccerSlaveRobot
+public abstract class SoccerSlaveRobot
 {
-	private UltrasonicSensor US;
+	private UltrasonicSensor ballDetector;
+
 	private Motor            kickerMotor;
 
 	private boolean          isKicking = false;
-	private TouchSensor      bumper;
 
-	public SoccerSlaveRobot(UltrasonicSensor US, Motor kickerMotor, TouchSensor bumper)
+	public SoccerSlaveRobot(UltrasonicSensor ballDetector, Motor kickerMotor)
 	{
-		this.US = US;
+		this.ballDetector = ballDetector;
 		this.kickerMotor = kickerMotor;
-		this.bumper = bumper;
 		kickerMotor.smoothAcceleration(false);
 		kickerMotor.setSpeed(1000);
 		kickerMotor.regulateSpeed(false);
 
-		if(US!=null)
-			this.US.off();
+		if(ballDetector != null)
+			this.ballDetector.off();
 	}
 
 	public boolean hasBall()
 	{
-		if(US == null)
+		if(ballDetector == null || isKicking)
 			return false;
-		
-		if(isKicking)
-			return true;
 
-		US.ping();
+		ballDetector.ping();
 
 		int[] dists = new int[8];
-		if(US.getDistances(dists) == 0)
+		if(ballDetector.getDistances(dists) == 0)
 			for(int dist : dists)
 				if(dist < 10)
 					return true;
@@ -170,18 +165,5 @@ public class SoccerSlaveRobot
 
 		isKicking = false;
 	}*/
-
-	public double getGoalAngle()
-	{
-		return Double.NaN;
-	}
-
-	public boolean bumperIsPressed()
-	{
-		if(bumper == null)
-			return false;
-		
-		return bumper.isPressed();
-	}
 
 }

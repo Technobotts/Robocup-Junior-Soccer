@@ -1,20 +1,21 @@
 package technobotts.soccer.util;
 
-import technobotts.util.Timer;
+import technobotts.util.SimplePID;
 
-public class GoalieTrajectoryFinder extends Timer
+public class GoalieTrajectoryFinder extends SimplePID
 {
 	private double xComp, yComp;
 	private double yBias;
-	private double factor;
+	private double targetDist;
 	private double speed;
-	
-	private double maxBias = 1.5;
 
-	public GoalieTrajectoryFinder(double degreesPerSecond, double speed)
+	private double maxBias = 500;
+
+	public GoalieTrajectoryFinder(double speed, double targetDist, double p, double i, double d)
 	{
-		factor = degreesPerSecond / 1000;
+		super(p, i, d);
 		this.speed = speed;
+		this.targetDist = targetDist;
 	}
 
 	public float getHeading()
@@ -24,17 +25,26 @@ public class GoalieTrajectoryFinder extends Timer
 
 	public float getSpeed()
 	{
-		return (float) (Math.sqrt(xComp * xComp + yComp * yComp) * speed);
+		return (float) Math.sqrt(xComp * xComp + yComp * yComp);
 	}
 
-	public void setInput(float ballAngle)
+	public void setInput(float ballAngle, float goalDist)
 	{
-		double ballAngleRad = Math.toRadians(ballAngle);
-		xComp = Math.sin(ballAngleRad);
-		yBias = getTime() * factor;
+		if(Float.isNaN(ballAngle))
+		{
+			xComp = 0;
+			yComp = 0;
+		}
+		else
+		{
+			double ballAngleRad = Math.toRadians(ballAngle);
+			xComp = Math.sin(ballAngleRad) * speed*2;
+			yComp = Math.cos(ballAngleRad) * speed;
+		}
+		yBias = getOutput(targetDist - goalDist);
 		if(atMaximum())
 			yBias = maxBias;
-		yComp = Math.cos(ballAngleRad) - yBias;
+		yComp += yBias;
 	}
 
 	public boolean atMaximum()
