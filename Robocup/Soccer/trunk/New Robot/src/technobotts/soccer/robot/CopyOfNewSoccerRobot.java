@@ -4,6 +4,11 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import lejos.nxt.Motor;
+import lejos.nxt.SensorPort;
+import lejos.nxt.comm.NXTConnection;
+import lejos.nxt.comm.RS485;
+
 import technobotts.nxt.addon.IRSeekerV2;
 import technobotts.nxt.addon.InvertedCompassSensor;
 import technobotts.nxt.addon.IRSeekerV2.Mode;
@@ -11,14 +16,8 @@ import technobotts.robotics.navigation.SimpleOmniPilot;
 import technobotts.soccer.util.DualLSFinder;
 import technobotts.soccer.util.MessageType;
 
-import lejos.nxt.Motor;
-import lejos.nxt.SensorPort;
-import lejos.nxt.comm.NXTConnection;
-import lejos.nxt.comm.RS485;
-
-public class NewSoccerRobot extends SoccerRobot
+public class CopyOfNewSoccerRobot extends SoccerRobot
 {
-	
 	public static final SensorPort COMPASS_PORT  = SensorPort.S1;
 	public static final SensorPort RIGHT_IR_PORT = SensorPort.S2;
 	public static final SensorPort LEFT_IR_PORT  = SensorPort.S3;
@@ -29,7 +28,7 @@ public class NewSoccerRobot extends SoccerRobot
 	private DataOutputStream       dos;
 	private DataInputStream        dis;
 
-	public NewSoccerRobot()
+	public CopyOfNewSoccerRobot()
 	{
 		super(new InvertedCompassSensor(COMPASS_PORT),
 		      new DualLSFinder(new IRSeekerV2(LEFT_IR_PORT, IR_MODE),

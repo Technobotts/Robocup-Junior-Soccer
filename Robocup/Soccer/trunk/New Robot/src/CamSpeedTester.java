@@ -5,6 +5,7 @@ import lejos.nxt.Sound;
 import lejos.nxt.addon.NXTCam;
 import lejos.util.TextMenu;
 import technobotts.soccer.util.GoalFinder;
+import technobotts.util.Smoother;
 
 public class CamSpeedTester
 {
@@ -17,14 +18,13 @@ public class CamSpeedTester
 
 		GoalFinder gFinder = new GoalFinder(cam, goalColor);
 
-//		Smoother s = new Smoother(1);
+		Smoother s = new Smoother(1);
 
 //		Graphics g = new Graphics();
 		long startTime = System.currentTimeMillis();
 		
 		for(int i=0;i<1000;i++)
 		{
-			LCD.clear();
 /*			Rectangle largest = gFinder.getGoalRectangle();
 			if(largest != null)
 			{
@@ -35,14 +35,16 @@ public class CamSpeedTester
 				g.fillRect(x, y, width, height);
 			}*/
 			float raw = gFinder.getDegreesCartesian();
-//			double angle = s.getOutput(raw);
-//			LCD.drawString("Angle:" + angle, 0, 0);
+			double angle = s.getOutput(raw);
+			LCD.clear();
+			LCD.drawString("Angle:" + angle, 0, 0);
 			LCD.drawString("RAWR:" + raw, 0, 1);
 			LCD.refresh();
 			if(i%100 == 0)
 			{
 				Sound.beep();
 			}
+			Thread.yield();
 		}
 		long endTime = System.currentTimeMillis();
 		LCD.clear();

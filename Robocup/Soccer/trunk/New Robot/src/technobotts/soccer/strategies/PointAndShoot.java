@@ -24,7 +24,7 @@ public class PointAndShoot extends Strategy
 			double goalAngle = robot.getGoalAngle();
 
 			LCD.clear();
-			LCD.drawString("GoalAngle: " + Math.floor(goalAngle), 0, 0);
+			LCD.drawString("GoalAngle: " + goalAngle, 0, 0);
 			LCD.refresh();
 
 			if(robot.hasBall())

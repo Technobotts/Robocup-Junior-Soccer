@@ -1,12 +1,8 @@
 package technobotts.soccer.strategies;
 
-import java.awt.geom.Point2D;
-
-import lejos.geom.Point;
 import lejos.nxt.Button;
 import lejos.nxt.LCD;
 import lejos.nxt.Sound;
-import lejos.util.Delay;
 import technobotts.soccer.Strategy;
 import technobotts.soccer.robot.OldSoccerRobot;
 import technobotts.soccer.robot.SoccerRobot;
@@ -19,66 +15,96 @@ public class GoalieV2 extends Strategy
 		Strategy s = new GoalieV2();
 		s.executeWith(new OldSoccerRobot());
 	}
+	boolean isRunning = true;
 
-	GoalieTrajectoryFinder headingCalculator = new GoalieTrajectoryFinder(0.8, 500);
-	private boolean           ballLost          = false;
+	public float           targetDist        = 17.5f; // Distance
+	// to
+	// maintain
+	// from
+	// goal
+
+	GoalieTrajectoryFinder headingCalculator = new GoalieTrajectoryFinder(200, targetDist, 5, 0.01, 0);
+	private boolean        ballLost          = false;
+	private boolean        backHome          = true;
 
 	protected void executeWithConnected(SoccerRobot robot) throws InterruptedException
 	{
-		headingCalculator.start();
 		int loopCount = 0;
 		while(!Button.ESCAPE.isPressed())
 		{
-			float ballAngle = robot.getBallAngle();
-
-			boolean noball = Float.isNaN(ballAngle);
-
-			if(robot.bumperIsPressed())
+			if(isRunning)
 			{
-				headingCalculator.restart();
-				if(noball)
-					robot.stop();
-				else
-					robot.travel(0);
-			}
-			else if(!noball)
-			{
-				headingCalculator.resume();
-				headingCalculator.setInput(ballAngle);
-
-				robot.setMoveSpeed(headingCalculator.getSpeed());
-				robot.travel(headingCalculator.getHeading());
-
-				if(robot.hasBall())
-				{
-					robot.setMoveSpeed(300);
-					robot.travel(0);
-					Thread.sleep(250);
-						
-					if(headingCalculator.atMaximum())
-						robot.stop();
-					
-					robot.kick();
-					robot.travel(180);
-				}
-				ballLost = false;
+    			float ballAngle = robot.getBallAngle();
+    			float wallDist = robot.getRearWallDist();
+    			headingCalculator.setInput(ballAngle, wallDist);
+    
+    			// Robot is near to wall again
+    			if(backHome)
+    			{
+    				robot.setMoveSpeed(headingCalculator.getSpeed());
+    				robot.travel(headingCalculator.getHeading());
+    			}
+    
+    			// Robot is too near to wall
+    			if(wallDist < targetDist / 2)
+    				headingCalculator.reset();
+    
+    			// Robot can kick the ball
+    			if(robot.hasBall())
+    			{
+    				robot.setMoveSpeed(300);
+    				robot.travel(0);
+    				Thread.sleep(250);
+    
+    				if(headingCalculator.atMaximum())
+    					robot.stop();
+    
+    				robot.kick();
+    				robot.travel(180);
+    			}
+    
+    			// Robot has just got near the wall
+    			if(!backHome && wallDist < targetDist)
+    			{
+    				backHome = true;
+    				robot.stop();
+    			}
+    
+    			// Keep track of whether the ball has been lost
+    			if(!Float.isNaN(ballAngle))
+    			{
+    				ballLost = false;
+    			}
+    			else if(!ballLost)
+    			{
+    				robot.setMoveSpeed(300);
+    				robot.travel(Math.random() > 0.5 ? -150 : 150);
+    				ballLost = true;
+    				backHome = false;
+    			}
+    			
+    			// Profiling code
+    			loopCount++;
+    			if(loopCount % 10 == 0)
+    				LCD.drawInt(loopCount, 0, 7);
+    			if(loopCount % 100 == 0)
+    				Sound.beep();
+    
+    			LCD.drawString(wallDist + ":" + headingCalculator.getOutput() + "            ", 0, 0);
 			}
 			else
 			{
-				if(!ballLost)
-				{
-					robot.setMoveSpeed(300);
-					robot.travel(Math.random() > 0.5 ? -135 : 135);
-					ballLost = true;
-				}
-				headingCalculator.pause();
+				robot.stop();
+				headingCalculator.reset();
+				ballLost = false;
+				backHome = true;
 			}
-			
-			loopCount++;
-			if(loopCount%10 == 0)
-				LCD.drawInt(loopCount, 0, 7);
-			if(loopCount%100 == 0)
-				Sound.beep();
+			if(Button.ENTER.isPressed())
+			{
+				isRunning = !isRunning;
+				while(Button.readButtons() != 0)
+					Thread.yield();
+			}
 			Thread.yield();
 		}
 	}

@@ -3,7 +3,7 @@ package technobotts.soccer.util;
 public enum MessageType {
 	KICK(0x01),
 	US_PING(0x02),
-	BUMPER_CHECK(0x02),
+	GOAL_DIST(0x04),
 	GOAL_POS(0x08),
 	SHUTDOWN(0x10);
 

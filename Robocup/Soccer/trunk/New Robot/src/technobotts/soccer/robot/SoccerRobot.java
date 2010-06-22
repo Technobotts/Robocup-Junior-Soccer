@@ -1,15 +1,11 @@
 package technobotts.soccer.robot;
 
-import java.io.PrintStream;
-
+import lejos.nxt.comm.NXTConnection;
+import lejos.robotics.DirectionFinder;
 import technobotts.robotics.LightSourceFinder;
 import technobotts.robotics.navigation.OmniCompassPilot;
 import technobotts.util.AngleSmoother;
 import technobotts.util.DataProcessor;
-import lejos.nxt.LCD;
-import lejos.nxt.LCDOutputStream;
-import lejos.nxt.comm.NXTConnection;
-import lejos.robotics.DirectionFinder;
 
 public abstract class SoccerRobot extends OmniCompassPilot
 {
@@ -22,6 +18,7 @@ public abstract class SoccerRobot extends OmniCompassPilot
 	public SoccerRobot(DirectionFinder compass, LightSourceFinder ballDetector, OmniMotor... motors)
 	{
 		super(compass, motors);
+		setMoveSpeed(200);
 		this.compass = compass;
 
 		// this.setMoveSpeed(Float.POSITIVE_INFINITY);
@@ -40,7 +37,7 @@ public abstract class SoccerRobot extends OmniCompassPilot
 
 	public abstract boolean hasBall();
 
-	public final float getBallAngle()
+	public float getBallAngle()
 	{
 		if(hasBall())
 			return 0;
@@ -59,7 +56,7 @@ public abstract class SoccerRobot extends OmniCompassPilot
 	public abstract boolean disconnect();
 
 	public abstract boolean kick();
-
-	public abstract boolean bumperIsPressed();
+	
+	public abstract float getRearWallDist();
 
 }
