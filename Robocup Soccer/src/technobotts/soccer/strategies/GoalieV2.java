@@ -15,7 +15,7 @@ public class GoalieV2 extends Strategy
 		Strategy s = new GoalieV2();
 		s.executeWith(new OldSoccerRobot());
 	}
-	boolean isRunning = true;
+	boolean isRunning = false;
 
 	public float           targetDist        = 17.5f; // Distance
 	// to
@@ -43,6 +43,7 @@ public class GoalieV2 extends Strategy
     			{
     				robot.setMoveSpeed(headingCalculator.getSpeed());
     				robot.travel(headingCalculator.getHeading());
+    				
     			}
     
     			// Robot is too near to wall
@@ -92,18 +93,22 @@ public class GoalieV2 extends Strategy
     
     			LCD.drawString(wallDist + ":" + headingCalculator.getOutput() + "            ", 0, 0);
 			}
-			else
-			{
-				robot.stop();
-				headingCalculator.reset();
-				ballLost = false;
-				backHome = true;
-			}
+			
 			if(Button.ENTER.isPressed())
 			{
 				isRunning = !isRunning;
 				while(Button.readButtons() != 0)
 					Thread.yield();
+				if(isRunning)
+				{
+					ballLost = false;
+					backHome = true;
+					headingCalculator.reset();
+				}
+				else
+				{
+					robot.stop();
+				}
 			}
 			Thread.yield();
 		}

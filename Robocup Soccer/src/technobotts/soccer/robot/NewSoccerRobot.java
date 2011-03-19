@@ -18,11 +18,10 @@ import lejos.nxt.comm.RS485;
 
 public class NewSoccerRobot extends SoccerRobot
 {
-	
+
 	public static final SensorPort COMPASS_PORT  = SensorPort.S1;
 	public static final SensorPort RIGHT_IR_PORT = SensorPort.S2;
 	public static final SensorPort LEFT_IR_PORT  = SensorPort.S3;
-	public static final Mode       IR_MODE       = Mode.DC;
 
 	public static final String     SLAVE_NAME    = "John B";
 
@@ -31,12 +30,11 @@ public class NewSoccerRobot extends SoccerRobot
 
 	public NewSoccerRobot()
 	{
-		super(new InvertedCompassSensor(COMPASS_PORT),
-		      new DualLSFinder(new IRSeekerV2(LEFT_IR_PORT, IR_MODE),
-		                                53.1301f,
-		                                new IRSeekerV2(RIGHT_IR_PORT, IR_MODE),
-		                                53.1301f),
-		      new SimpleOmniPilot.OmniMotor(Motor.C,  53.1301f, 6.4f, 1, 9.6f, true),
+		super(new InvertedCompassSensor(COMPASS_PORT), new DualLSFinder(new IRSeekerV2(LEFT_IR_PORT, IR_MODE),
+		                                                                53.1301f,
+		                                                                new IRSeekerV2(RIGHT_IR_PORT, IR_MODE),
+		                                                                53.1301f),
+		      new SimpleOmniPilot.OmniMotor(Motor.C, 53.1301f, 6.4f, 1, 9.6f, true),
 		      new SimpleOmniPilot.OmniMotor(Motor.B, 180.0000f, 6.4f, 1, 8.8f),
 		      new SimpleOmniPilot.OmniMotor(Motor.A, 306.8699f, 6.4f, 1, 9.6f));
 	}
@@ -65,6 +63,8 @@ public class NewSoccerRobot extends SoccerRobot
 		}
 		catch(IOException e)
 		{
+			if(connectToSlave())
+				return kick();
 			return false;
 		}
 		catch(NullPointerException e)
@@ -83,6 +83,8 @@ public class NewSoccerRobot extends SoccerRobot
 		}
 		catch(IOException e)
 		{
+			if(connectToSlave())
+				return getGoalAngle();
 			return Double.NaN;
 		}
 		catch(NullPointerException e)
@@ -101,6 +103,8 @@ public class NewSoccerRobot extends SoccerRobot
 		}
 		catch(IOException e)
 		{
+			if(connectToSlave())
+				return hasBall();
 			return false;
 		}
 		catch(NullPointerException e)
@@ -110,25 +114,26 @@ public class NewSoccerRobot extends SoccerRobot
 	}
 
 	/*
-	@Override
-    public boolean bumperIsPressed()
-    {
-		try
-		{
-			dos.writeByte(MessageType.BUMPER_CHECK.getValue());
-			dos.flush();
-			return dis.readBoolean();
-		}
-		catch(IOException e)
-		{
-			return false;
-		}
-		catch(NullPointerException e)
-		{
-			return false;
-		}
-    }*/
-	
+	 * @Override
+	 * public boolean bumperIsPressed()
+	 * {
+	 * try
+	 * {
+	 * dos.writeByte(MessageType.BUMPER_CHECK.getValue());
+	 * dos.flush();
+	 * return dis.readBoolean();
+	 * }
+	 * catch(IOException e)
+	 * {
+	 * return false;
+	 * }
+	 * catch(NullPointerException e)
+	 * {
+	 * return false;
+	 * }
+	 * }
+	 */
+
 	public float distanceToGoal()
 	{
 		try
@@ -172,8 +177,8 @@ public class NewSoccerRobot extends SoccerRobot
 	}
 
 	@Override
-    public float getRearWallDist()
-    {
-	    return Float.NaN;
-    }
+	public float getRearWallDist()
+	{
+		return Float.NaN;
+	}
 }

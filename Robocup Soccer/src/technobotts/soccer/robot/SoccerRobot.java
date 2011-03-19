@@ -2,6 +2,7 @@ package technobotts.soccer.robot;
 
 import lejos.nxt.comm.NXTConnection;
 import lejos.robotics.DirectionFinder;
+import technobotts.nxt.addon.IRSeekerV2.Mode;
 import technobotts.robotics.LightSourceFinder;
 import technobotts.robotics.navigation.OmniCompassPilot;
 import technobotts.util.AngleSmoother;
@@ -12,6 +13,8 @@ public abstract class SoccerRobot extends OmniCompassPilot
 	private LightSourceFinder ballDetector;
 	private DirectionFinder   compass;
 	protected NXTConnection   slave;
+
+	public static final Mode  IR_MODE      = Mode.AC_600Hz;
 
 	protected DataProcessor   ballSmoother = new AngleSmoother(0.15);
 

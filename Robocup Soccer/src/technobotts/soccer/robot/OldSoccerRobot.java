@@ -11,6 +11,7 @@ import lejos.nxt.comm.NXTConnection;
 import lejos.nxt.comm.RS485;
 import technobotts.nxt.addon.IRSeekerV2;
 import technobotts.nxt.addon.InvertedCompassSensor;
+import technobotts.nxt.addon.IRSeekerV2.Mode;
 import technobotts.robotics.navigation.SimpleOmniPilot;
 import technobotts.soccer.util.MessageType;
 //import technobotts.util.AngleSmoother;
@@ -20,8 +21,8 @@ public class OldSoccerRobot extends SoccerRobot
 	public static final SensorPort COMPASS_PORT = SensorPort.S1;
 	public static final SensorPort IR_PORT      = SensorPort.S2;
 	public static final SensorPort US_PORT      = SensorPort.S3;
-	public static final  IRSeekerV2.Mode       IR_MODE      =  technobotts.nxt.addon.IRSeekerV2.Mode.DC;
-
+	
+	
 	public static final String     SLAVE_NAME   = "Lewis B";
 
 	private UltrasonicSensor       US;

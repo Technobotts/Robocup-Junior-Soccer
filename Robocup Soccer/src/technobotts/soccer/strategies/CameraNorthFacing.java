@@ -13,7 +13,10 @@ public class CameraNorthFacing extends Strategy
 {
 	DataProcessor robotHeadingModifier = new RobotDirectionModifier(0.75);
 	
-	boolean isRunning = true;
+	boolean isRunning = false;
+	
+	float NaNHeading = Float.NaN;
+	
 	
 	@Override
 	protected void executeWithConnected(SoccerRobot robot)
@@ -27,14 +30,14 @@ public class CameraNorthFacing extends Strategy
     			if(robot.hasBall())
     			{
     				robot.setMoveSpeed(200);
-    				float goalAngle = (float) robot.getGoalAngle();
-        			LCD.drawString("goalAngle: " + Math.rint(goalAngle), 0, 0);
-    				goalAngle = Float.isNaN(goalAngle) ? 0 : goalAngle;
-    				robot.rotate((float) robot.getGoalAngle(), true);
+    				//float goalAngle = (float) robot.getGoalAngle();
+        			//LCD.drawString("goalAngle: " + Math.rint(goalAngle), 0, 0);
+    				//goalAngle = Float.isNaN(goalAngle) ? 0 : goalAngle;
+    				//robot.rotate((float) robot.getGoalAngle(), true);
     				robot.travel(0);
     				Delay.msDelay(500);
     				robot.kick();
-    				robot.rotateTo(0);
+    				robot.rotateTo(0,false);
     			}
     
     			float ballAngle = robot.getBallAngle();
@@ -47,11 +50,18 @@ public class CameraNorthFacing extends Strategy
     			{
     				//if(robot.isStalled())
     				//	Sound.beepSequence();
-    				robot.setMoveSpeed(150);//robot.isStalled()? -25: 200);
-    				robot.travel(180);
+    				//robot.isStalled()? -25: 200);
+    				//robot.travel(180);
+//    				if(Float.isNaN(NaNHeading))
+//    					NaNHeading = robot.getTargetHeading();
+//    				NaNHeading+
+//    				robot.setMoveSpeed(150);
+//    				robot.travel()NaNHeading
+    				robot.stop();
     			}
     			else
     			{
+    				NaNHeading = Float.NaN;
     				robot.setMoveSpeed(200);
     				robot.travel((float) robotHeadingModifier.getOutput(heading));
     			}
