@@ -2,6 +2,7 @@ package technobotts.soccer.slave;
 
 import technobotts.util.Timer;
 import lejos.nxt.Motor;
+import lejos.nxt.Sound;
 import lejos.nxt.UltrasonicSensor;
 import lejos.util.Delay;
 
@@ -20,9 +21,36 @@ public abstract class SoccerSlaveRobot
 		kickerMotor.smoothAcceleration(false);
 		kickerMotor.setSpeed(1000);
 		kickerMotor.regulateSpeed(false);
+		kickerMotor.setBrakePower(100);
 
+		
+		resetKicker();
+		
+		kickerMotor.resetTachoCount();
 		if(ballDetector != null)
 			this.ballDetector.off();
+	}
+	
+	public void beepSequenceUp()
+	{
+		new Thread() {
+			public void run()
+			{
+				Sound.beepSequenceUp();
+			}
+		}.start();
+	}
+	
+
+	
+	public void beepSequenceDown()
+	{
+		new Thread() {
+			public void run()
+			{
+				Sound.beepSequence();
+			}
+		}.start();
 	}
 
 	public boolean hasBall()
@@ -43,6 +71,13 @@ public abstract class SoccerSlaveRobot
 	
 	KickerThread kThread = new KickerThread();
 
+	private void resetKicker()
+	{
+		kickerMotor.backward();
+		Delay.msDelay(500);
+		kickerMotor.lock(100);
+	}
+	
 	public boolean kick()
 	{
 		if(isKicking || kickerMotor == null)
@@ -109,9 +144,10 @@ public abstract class SoccerSlaveRobot
 							continue;
 						}
 					}
-					
+
 					kickerMotor.setPower(100);
 					kickerMotor.forward();
+					beepSequenceUp();
 					// Set the kicker going
 
 					t.restart();
@@ -132,8 +168,7 @@ public abstract class SoccerSlaveRobot
 				kickerMotor.flt();
 
 				Delay.msDelay(100);
-				kickerMotor.setPower(50);
-				kickerMotor.rotateTo(0);
+				resetKicker();
 				// Move the kicker back
 				isKicking = false;
 			}
