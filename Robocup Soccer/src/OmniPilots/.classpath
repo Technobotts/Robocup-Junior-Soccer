@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry kind="src" path=""/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/LeJOS NXJ V0.85 + Color"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/Data Manipulation"/>
-	<classpathentry kind="lib" path="C:/Program Files/leJOS NXJ/lib/classes.jar"/>
-	<classpathentry kind="output" path=""/>
-</classpath>
