@@ -14,9 +14,10 @@ public abstract class SoccerRobot extends OmniCompassPilot
 	private DirectionFinder   compass;
 	protected NXTConnection   slave;
 
-	public static final Mode  IR_MODE      = Mode.AC_600Hz;
+	public static final Mode  IR_MODE      = Mode.AC_1200Hz;
+	public final float MAX_SPEED = 300;
 
-	protected DataProcessor   ballSmoother = new AngleSmoother(0.15);
+	protected DataProcessor   ballSmoother = DataProcessor.IDENTITY;//new AngleSmoother(0.15);
 
 	public SoccerRobot(DirectionFinder compass, LightSourceFinder ballDetector, OmniMotor... motors)
 	{

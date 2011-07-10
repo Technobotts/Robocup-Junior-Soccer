@@ -10,7 +10,7 @@ public class GoalieTrajectoryFinder extends SimplePID
 	private double targetDist;
 	private double speed;
 
-	private double maxBias = 500;
+	private double maxBias = 1.2;
 	private Timer t = new Timer();
 
 	public GoalieTrajectoryFinder(double speed, double targetDist, double p, double i, double d)
@@ -45,8 +45,10 @@ public class GoalieTrajectoryFinder extends SimplePID
 			yComp = Math.cos(ballAngleRad) * speed;
 		}
 		yBias = getOutput(targetDist - goalDist);
-		if(atMaximum())
-			yBias = maxBias;
+		yBias =
+			yBias > maxBias ? maxBias :
+			yBias < -maxBias ? -maxBias :
+				yBias;
 		yComp += yBias;
 		
 		xBias = 0;//Math.sin(t.getTimeSeconds()*Math.toRadians(20))*20;
@@ -58,10 +60,5 @@ public class GoalieTrajectoryFinder extends SimplePID
 		if(t!=null)
 			t.restart();
 		super.reset();
-	}
-
-	public boolean atMaximum()
-	{
-		return yBias >= maxBias;
 	}
 }

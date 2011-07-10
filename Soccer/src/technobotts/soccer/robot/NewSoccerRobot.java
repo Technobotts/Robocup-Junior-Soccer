@@ -31,7 +31,7 @@ public class NewSoccerRobot extends SoccerRobot
 	public NewSoccerRobot()
 	{
 		super(new InvertedCompassSensor(COMPASS_PORT), new DualLSFinder(new IRSeekerV2(LEFT_IR_PORT, IR_MODE),
-		                                                                53.1301f,
+		                                                                -53.1301f,
 		                                                                new IRSeekerV2(RIGHT_IR_PORT, IR_MODE),
 		                                                                53.1301f),
 		      new SimpleOmniPilot.OmniMotor(Motor.C, 53.1301f, 6.4f, 1, 9.6f, true),

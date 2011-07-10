@@ -5,7 +5,7 @@ import technobotts.soccer.strategies.*;
 
 public class OldMasterMain
 {
-	public static void main(String[] args) throws InterrupteddException
+	public static void main(String[] args) throws InterruptedException
 	{
 		Strategy s = new GoalieV2();
 		s.executeWith(new OldSoccerRobot());

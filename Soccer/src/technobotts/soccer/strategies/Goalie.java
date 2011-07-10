@@ -30,7 +30,7 @@ public class Goalie extends Strategy
 			float ballAngle = robot.getBallAngle();
 			float robotSpeed = (float) pid.getOutput(ballAngle);
 
-			if(robot.bumperIsPressed())
+			if(/*robot.bumperIsPressed()*/ false)
 			{
 				headingCalculator.reset();
 				robot.travel(0);
